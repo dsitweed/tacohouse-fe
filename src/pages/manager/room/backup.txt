@@ -1,0 +1,152 @@
+const roomsTableColumns: ColumnsType<RoomEntity> = [
+    {
+      title: "Room",
+      dataIndex: "name",
+    },
+    {
+      title: "Tenants",
+      dataIndex: "tenant_name",
+      render: (_, record) => <p>{record.tenant_name.join(", ")}</p>,
+    },
+    {
+      title: "Room price",
+      dataIndex: "price",
+      render: (_, record) => <p>{record.price.toLocaleString()}</p>,
+    },
+    {
+      title: (
+        <span>
+          Current
+          <br />
+          electricity
+        </span>
+      ),
+      dataIndex: "current_electricity",
+      render: (_, record) => (
+        <p>{record.current_electricity.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: (
+        <span>
+          Previous
+          <br />
+          electricity
+        </span>
+      ),
+      dataIndex: "previous_electricity",
+      render: (_, record) => (
+        <p>{record.previous_electricity.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: (
+        <span>
+          Total
+          <br />
+          electricity
+        </span>
+      ),
+      dataIndex: "total_electricity",
+      render: (value, record, index) => {
+        const consume =
+          record.current_electricity - record.previous_electricity;
+        return <p>{consume.toLocaleString()}</p>;
+      },
+    },
+    {
+      title: (
+        <span>
+          Electricity
+          <br />
+          price
+        </span>
+      ),
+      dataIndex: "electricity_price",
+      render: (_, record) => <p>{record.electricity_price.toLocaleString()}</p>,
+    },
+    {
+      title: (
+        <span>
+          Electricity
+          <br />
+          fee
+        </span>
+      ),
+      dataIndex: "electricity_fee",
+      render: (value, record, index) => {
+        const totalCost =
+          (record.current_electricity - record.previous_electricity) *
+          record.electricity_price;
+        return <p>{totalCost.toLocaleString()}</p>;
+      },
+    },
+    {
+      title: (
+        <span>
+          Water
+          <br />
+          price
+        </span>
+      ),
+      dataIndex: "water_price",
+      render: (_, record) => <p>{record.water_price.toLocaleString()}</p>,
+    },
+    {
+      title: (
+        <span>
+          Wifi
+          <br />
+          price
+        </span>
+      ),
+      dataIndex: "wifi_price",
+      render: (_, record) => <p>{record.wifi_price?.toLocaleString() || 0}</p>,
+    },
+    {
+      title: (
+        <span>
+          Light
+          <br />
+          price
+        </span>
+      ),
+      dataIndex: "light_price",
+      render: (_, record) => <p>{record.light_price.toLocaleString()}</p>,
+    },
+    {
+      title: (
+        <span>
+          Environment
+          <br />
+          price
+        </span>
+      ),
+      dataIndex: "environment_price",
+      render: (_, record) => <p>{record.environment_price.toLocaleString()}</p>,
+    },
+    {
+      title: (
+        <span>
+          Tenant's <br /> debt
+        </span>
+      ),
+      dataIndex: "debt",
+      render: (_, record) => <p>{record.debt?.toLocaleString() || 0}</p>,
+    },
+    {
+      title: "Deposit",
+      dataIndex: "deposit",
+      render: (_, record) => <p>{record.debt?.toLocaleString() || 0}</p>,
+    },
+    {
+      title: "Total money",
+      dataIndex: "environment_price",
+      render: (_, record) => <p>{record.debt?.toLocaleString() || 0}</p>,
+    },
+    {
+      title: "Paid",
+      dataIndex: "paid",
+      render: (_, record) => <p>{record.paid ? "Paid" : "Pending"}</p>,
+    },
+  ];
