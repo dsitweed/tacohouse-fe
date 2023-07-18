@@ -20,3 +20,6 @@ Cần thêm lazy load các ảnh nặng
 # Tham khảo thêm github repo: [finefoods-antd](https://github.com/refinedev/refine/tree/master/examples/finefoods-antd)
 
 - Link demo: https://example.admin.refine.dev/
+
+## Note:
+- Develop mock api: https://jsonplaceholder.typicode.com/

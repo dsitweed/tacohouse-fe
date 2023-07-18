@@ -1,25 +1,36 @@
-import { Link } from "react-router-dom";
-import {
-  Button,
-  Row,
-  Col,
-  Typography,
-  Form,
-  Input,
-  Select,
-} from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Row, Col, Typography, Form, Input, Select, App } from "antd";
 
 // images
-import signinbg from "@/assets/images/sign_up_bg.jpg";
+import bgImg from "@/assets/images/sign_up_bg.jpg";
+import { useApiClient } from "@/shared/hooks/api";
+import axios from "axios";
 
-function onChange(checked: boolean) {
-  console.log(`switch to ${checked}`);
-}
 const { Title } = Typography;
 
 export default function SignUp() {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+  const { notification } = App.useApp();
+  const apiSignUp = useApiClient("/auth/sign-up");
+
+  const handleSignUp = async (values: {
+    email: string;
+    password: string;
+    role: string;
+  }) => {
+    const { email, password, role } = values;
+
+    try {
+      const response = await apiSignUp.create({
+        email,
+        password,
+        role,
+      });
+      console.log({ response });
+      notification.success({ message: "Sign up successful!" });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -30,38 +41,27 @@ export default function SignUp() {
     <div className="px-6 bg-white">
       <Row gutter={[24, 0]} justify="space-around">
         <Col
-          sm={{ span: 24 }}
-          md={{ span: 24, offset: 0 }}
-          lg={{ span: 12 }}
-          style={{ paddingLeft: 40 }}
+          xs={{ span: 24, offset: 0 }}
+          lg={{ span: 6, offset: 2 }}
+          md={{ span: 12 }}
         >
-          <Title className="mt-4" style={{ fontSize: 48 }}>
+          <Title className="mt-8" style={{ fontSize: 48 }}>
             Sign Up
           </Title>
-          <p className="text-sm mb-4" style={{ marginTop: '-4px'}}>
-            If you already have an account register
-            <br />
-            You can{" "}
-            <Link
-              to={"/auth/sign-in"}
-              className="font-bold text-blue-600 text-base"
-            >
-              Sign in here!
-            </Link>
-          </p>
+          <Title level={5}>Enter your email and password to sign up</Title>
           <Form
             initialValues={{ remember: true }}
-            onFinish={onFinish}
+            onFinish={handleSignUp}
             onFinishFailed={onFinishFailed}
             layout="vertical"
           >
             <Form.Item
               label="Email"
               name="email"
-              style={{ marginBottom: 8 }}
               rules={[
                 {
                   required: true,
+                  type: "email",
                   message: "Please input your email!",
                 },
               ]}
@@ -72,11 +72,14 @@ export default function SignUp() {
             <Form.Item
               label="Password"
               name="password"
-              style={{ marginBottom: "8px" }}
               rules={[
                 {
                   required: true,
                   message: "Please input your password!",
+                },
+                {
+                  min: 6,
+                  message: "Password should be at least 6 characters",
                 },
               ]}
             >
@@ -86,12 +89,25 @@ export default function SignUp() {
             <Form.Item
               label="Confirm password"
               name="confirm_password"
-              style={{ marginBottom: 8 }}
+              hasFeedback
+              dependencies={["password"]}
               rules={[
                 {
                   required: true,
                   message: "Please input your password!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
               ]}
             >
               <Input.Password placeholder="Confirm password" />
@@ -100,94 +116,27 @@ export default function SignUp() {
             <Form.Item
               label="Role"
               name="role"
-              style={{ marginBottom: 8 }}
               rules={[
                 {
                   required: true,
-                  message: "Please select your role!",
+                  message: "Please input your role!",
                 },
               ]}
+              initialValue={'MANAGER'}
             >
               <Select
+                placeholder="Select your role"
                 options={[
                   {
-                    value: "tenant",
                     label: "Tenant",
+                    value: "TENANT",
                   },
                   {
-                    value: "manager",
-                    label: "Manger",
+                    label: "Manager",
+                    value: "MANAGER",
                   },
                 ]}
-                defaultValue={"tenant"}
               />
-            </Form.Item>
-
-            <Form.Item label="Name" style={{ marginBottom: 0 }}>
-              <Form.Item
-                name="first_name"
-                rules={[{ required: true }]}
-                style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-              >
-                <Input placeholder="First name" />
-              </Form.Item>
-              <Form.Item
-                name="month"
-                rules={[{ required: true }]}
-                style={{
-                  display: "inline-block",
-                  width: "calc(50%)",
-                  marginLeft: "8px",
-                }}
-              >
-                <Input placeholder="Last name" />
-              </Form.Item>
-            </Form.Item>
-
-            <Form.Item style={{ marginBottom: 0 }}>
-              <Form.Item
-                label="Phone number"
-                name="phone_number"
-                style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your phone number!",
-                  },
-                ]}
-              >
-                <Input placeholder="Phone number" />
-              </Form.Item>
-              <Form.Item
-                label="address"
-                name="address"
-                style={{
-                  display: "inline-block",
-                  width: "calc(50%)",
-                  marginLeft: "8px",
-                }}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your address!",
-                  },
-                ]}
-              >
-                <Input placeholder="Address" />
-              </Form.Item>
-            </Form.Item>
-
-            <Form.Item
-              label="Citizen number"
-              name="citizen_number"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Citizen number!",
-                },
-              ]}
-            >
-              <Input placeholder="Citizen number" />
             </Form.Item>
 
             <Form.Item>
@@ -200,18 +149,25 @@ export default function SignUp() {
                 SIGN UP
               </Button>
             </Form.Item>
+            <p className="font-semibold text-slate-600">
+              If you already have an account register{" "}
+              <Link
+                to="/auth/sign-in"
+                className="font-bold text-base text-blue-600"
+              >
+                Sign In
+              </Link>
+            </p>
           </Form>
         </Col>
-        <Col
-          xs={{ span: 24 }}
-          lg={{ span: 12 }}
-          md={{ span: 12 }}
-          xl={{ span: 12 }}
-        >
+        <Col xs={{ span: 24 }} lg={{ span: 12 }} md={{ span: 12 }}>
           <img
-            src={signinbg}
+            src={bgImg}
             alt="sign image"
-            className="w-full max-w-lg block m-auto rounded-lg"
+            className="m-auto rounded-lg"
+            style={{
+              maxHeight: "79vh",
+            }}
           />
         </Col>
       </Row>

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
 
-axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_API_URL;
 
 // check authentication - use a call back
 axios.interceptors.request.use((config) => {
@@ -19,7 +19,7 @@ export interface IResponse<T = any> {
     // Custom variable
     success?: boolean;
     message?: string,
-};
+}
 
 // handle response
 axios.interceptors.response.use(

@@ -1,21 +1,49 @@
-import { Link } from "react-router-dom";
-import { Button, Row, Col, Typography, Form, Input, Switch } from "antd";
-
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Row, Col, Typography, Form, Input, Switch, App } from "antd";
 // images
-import signinbg from "@/assets/images/login_1.jpg";
+import signinBg from "@/assets/images/login_1.jpg";
+
 import googleLogo from "@/assets/images/Google_logo.png";
 import facebookLogo from "@/assets/images/Facebook_logo.png";
 import githubLogo from "@/assets/images/Github_logo.png";
+import { useApiClient } from "@/shared/hooks/api";
+import { useAppDispatch } from "@/store/hooks";
+import { signIn } from "@/store/slices/authSlice";
 
-function onChange(checked: boolean) {
-  console.log(`switch to ${checked}`);
-}
 const { Title } = Typography;
 
 export default function SignIn() {
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+  const { notification } = App.useApp();
+  const apiLogIn = useApiClient("auth/sign-in");
+  const dispatch = useAppDispatch();
+
+  const handleSignIn = async (values: { email: string; password: string }) => {
+    const { email, password } = values;
+
+    try {
+      const response = await apiLogIn.create({
+        email,
+        password,
+      });
+      if (response) {
+        // save state to store type in slice
+        dispatch(signIn(response.data));
+        notification.success({
+          message: "Login successful. Enjoy your stay!",
+          duration: 2,
+        });
+        // redirect
+        navigate('/');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  function onChange(checked: boolean) {
+    console.log(`switch to ${checked}`);
+  }
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -35,7 +63,7 @@ export default function SignIn() {
           <Title level={5}>Enter your email and password to sign in</Title>
           <Form
             initialValues={{ remember: true }}
-            onFinish={onFinish}
+            onFinish={handleSignIn}
             onFinishFailed={onFinishFailed}
             layout="vertical"
           >
@@ -45,9 +73,11 @@ export default function SignIn() {
               rules={[
                 {
                   required: true,
+                  type: "email",
                   message: "Please input your email!",
                 },
               ]}
+              initialValue={'a@gmail.com'}
             >
               <Input placeholder="Email" />
             </Form.Item>
@@ -60,7 +90,12 @@ export default function SignIn() {
                   required: true,
                   message: "Please input your password!",
                 },
+                {
+                  min: 6,
+                  message: "Password should be at least 6 characters",
+                },
               ]}
+              initialValue={'123456'}
             >
               <Input.Password placeholder="Password" />
             </Form.Item>
@@ -118,16 +153,19 @@ export default function SignIn() {
             </div>
 
             {/* forgot password */}
-            <Link to={"/"} className="flex justify-center mt-10">
+            <Link to={"/"} className="flex justify-center mt-6">
               Forgot Password ?
             </Link>
           </Form>
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 12 }} md={{ span: 12 }}>
           <img
-            src={signinbg}
+            src={signinBg}
             alt="sign image"
-            className="w-full max-w-lg block m-auto rounded-lg"
+            className="m-auto rounded-lg"
+            style={{
+              maxHeight: "79vh",
+            }}
           />
         </Col>
       </Row>

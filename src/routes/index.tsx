@@ -8,6 +8,7 @@ import SignIn from "@/pages/auth/SignIn";
 import AuthLayout from "@/layouts/auth";
 import SingUp from "@/pages/auth/SignUp";
 import Invoice from "@/pages/manager/invoice";
+import Test from "@/pages/test";
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             element: <SingUp />,
         }
        ]
+    },
+    {
+        path: 'test',
+        element: <Test />
     }
 ]);
 

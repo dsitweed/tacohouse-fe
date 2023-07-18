@@ -13,7 +13,7 @@ import { theme } from "./assets/theme";
 
 function App() {
   const [language, setLanguage] = useState<I18nType.Language>("en");
-  const test = import.meta.env.VITE_APP_API_URL;
+  const test = import.meta.env.VITE_BACKEND_API_URL;
 
   const getLocate = (language: I18nType.Language) => {
     switch (language) {

@@ -1,17 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./slices/counterSlice";
-import authReducer from "./slices/authSlice";
+import authSlice from "./slices/authSlice";
 
 export const store = configureStore({
     reducer: {
         // posts: postsReducer,
         // comments: commentsReducer,
         // users: usersReducer,
-        counter: counterReducer,
-        auth: authReducer,
+        auth: authSlice.reducer,
+        // Add the generated reducer as a specific top-level slice
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware({
-        serializableCheck: false
+        serializableCheck: false,
     }),
 });
 
