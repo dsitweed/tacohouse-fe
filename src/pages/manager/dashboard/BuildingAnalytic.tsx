@@ -12,6 +12,9 @@ import {
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
+import CreateBuilding from "../building/CreateBuilding";
+import { useApiClient } from "@/shared/hooks/api";
+import { useAppSelector } from "@/store/hooks";
 
 const { Title, Paragraph } = Typography;
 
@@ -21,35 +24,21 @@ interface BuildingAnalyticProps {
 
 export default function BuildingAnalytic(props: BuildingAnalyticProps) {
   const [data, setData] = useState<BuildingEntity[]>([]);
+  const buildingAPI = useApiClient('/building');
+  const auth = useAppSelector(state => state.auth);
 
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await BuildingService.getBuildings("Nguyen Thi Mung");
-      setData(data);
+      const response = await buildingAPI.getAll();
+      console.log(response);
+
+      setData(response.data)
     };
 
     fetchData();
   }, []);
-
-  const uploadProps = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info: any) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
 
   const columns: ColumnsType<BuildingEntity> = [
     {
@@ -76,7 +65,7 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
     {
       title: "Income",
       dataIndex: "income",
-      render: (text, record) => <p>{record.income.toLocaleString()}$</p>,
+      render: (text, record) => <p>{record.income?.toLocaleString()}$</p>,
     },
     {
       title: "COMPLETION",
@@ -93,7 +82,7 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <Title level={4}>Projects</Title>
+          <Title level={4}>Buildings</Title>
           <Paragraph>
             Done this month{" "}
             <span className="text-blue-600 font-bold text-base">40%</span>
@@ -119,13 +108,7 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
       </div>
 
       <div className="w-full">
-        <Upload {...uploadProps}>
-          <Button icon={<ToTopOutlined />} className="border border-black">
-            <span>
-              Click to Upload <span className="font-bold">new building</span>
-            </span>
-          </Button>
-        </Upload>
+        <CreateBuilding />
       </div>
     </div>
   );

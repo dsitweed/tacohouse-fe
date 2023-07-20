@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders } from 'axios';
+import { getCookie } from '@/store/slices/authSlice';
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_API_URL;
 
 // check authentication - use a call back
 axios.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = getCookie('access_token');
     config.headers.Authorization = `Bearer ${token}`;
     return config;
 });

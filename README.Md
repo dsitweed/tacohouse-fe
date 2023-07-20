@@ -21,5 +21,22 @@ Cần thêm lazy load các ảnh nặng
 
 - Link demo: https://example.admin.refine.dev/
 
+# Tham khảo thiết kế giao diện
+-Link gốc - design template for user - guest hoặc người đi thuê trọ
+https://websitedemos.net/budget-hotel-04/
+
+- link gốc - design template for manager - chủ nhà trọ
++ https://lineone.piniastudio.com/dashboards-orders.html
++ https://travl.dexignlab.com/react/demo/dashboard
+
+- Thiết kế trang web chạy thực sự
++ Của Nhật: https://www.homes.co.jp/
++ Của Mỹ: https://www.zillow.com/
+
+
 ## Note:
 - Develop mock api: https://jsonplaceholder.typicode.com/
+
+## Những điều học được
+- Bảo vệ route bằng cách xử lý ở Outlet 
+- Sử dụng cookie - gắn vào trong axios thông qua interceptors

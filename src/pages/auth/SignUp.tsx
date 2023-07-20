@@ -26,7 +26,6 @@ export default function SignUp() {
         password,
         role,
       });
-      console.log({ response });
       notification.success({ message: "Sign up successful!" });
     } catch (error) {
       console.error(error);

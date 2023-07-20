@@ -77,7 +77,7 @@ export default function SignIn() {
                   message: "Please input your email!",
                 },
               ]}
-              initialValue={'a@gmail.com'}
+              initialValue={'test@gmail.com'}
             >
               <Input placeholder="Email" />
             </Form.Item>

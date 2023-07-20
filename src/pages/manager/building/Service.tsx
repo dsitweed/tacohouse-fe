@@ -30,7 +30,7 @@ export default function Service(props: ServiceProps) {
 
     if (!data) return [];
     list = Object.keys(data).map((item, index) => {
-      if (item !== "id" && item !== "building_id") console.log(item);
+      // if (item !== "id" && item !== "building_id") console.log(item);
       return {
         title: mapToTitle[item],
         value: data[item as keyof ServiceEntity],
@@ -52,8 +52,6 @@ export default function Service(props: ServiceProps) {
     fetchData();
     dataToList();
   }, [data]);
-
-  console.log(listData);
 
   return (
     <div>

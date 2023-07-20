@@ -1,7 +1,6 @@
 
 export interface BuildingEntity {
   id: number;
-  building: string;
   name: string;
   room: number; // number of rooms
   tenant: number; // number of tenants
