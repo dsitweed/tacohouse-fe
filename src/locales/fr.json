@@ -1,0 +1,66 @@
+{
+  "common": {
+    "welcome": "Welcome to Hostel Management",
+    "search": "Search",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "confirmDelete": "Are you sure you want to delete?"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "hostels": "Hostels",
+    "rooms": "Rooms",
+    "tenants": "Tenants",
+    "payments": "Payments",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalHostels": "Total Hostels",
+    "totalRooms": "Total Rooms",
+    "totalTenants": "Total Tenants",
+    "totalPayments": "Total Payments"
+  },
+  "hostels": {
+    "title": "Hostels",
+    "name": "Name",
+    "address": "Address",
+    "owner": "Owner",
+    "actions": "Actions"
+  },
+  "rooms": {
+    "title": "Rooms",
+    "roomNumber": "Room Number",
+    "hostel": "Hostel",
+    "rent": "Rent",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "fullName": "Full Name",
+    "room": "Room",
+    "moveInDate": "Move-in Date",
+    "actions": "Actions"
+  },
+  "payments": {
+    "title": "Payments",
+    "amount": "Amount",
+    "date": "Date",
+    "tenant": "Tenant",
+    "actions": "Actions"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  }
+}

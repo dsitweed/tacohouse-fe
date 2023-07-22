@@ -3,7 +3,7 @@ import { RoomService } from "@/services/Room.service";
 import { Card, Col, List, Row, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import BuildingAnalytic from "../dashboard/BuildingAnalytic";
+import BuildingAnalytic from "../building/BuildingAnalytic";
 import Service from "../building/Service";
 
 export default function ManageRoom() {

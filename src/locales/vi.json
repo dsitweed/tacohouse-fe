@@ -32,5 +32,36 @@
       "forgotPasswordHint": "Nhập địa chỉ mail của bạn và chúng tôi sẽ gửi một email hướng dẫn bạn khôi phục mật khẩu",
       "backToSignIn": "Quay về đăng nhập"
     }
+  },
+  "placeholder": {
+    "search": "Search...",
+    "select": "Select..."
+  },
+  "uploadImage": {
+    "upload": "Tải lên",
+    "errorSize5M": "Hình ảnh phải nhỏ hơn 5MB!",
+    "errorSize1M": "Hình ảnh phải nhỏ hơn 1MB!"
+  },
+  "building": {
+    "create": "Tạo tòa nhà mới",
+    "buildingAddress": "Địa chỉ tòa nhà",
+    "buildingName": "Tên tòa nhà",
+    "buildingLogo": "Biểu tượng của tòa nhà"
+  },
+  "common": {
+    "pleaseEnter": "Vui lòng nhập",
+    "welcome": "Welcome to Tacohouse",
+    "search": "Search",
+    "action": "Hành động",
+    "add": "Add",
+    "edit": "Edit",
+    "create": "Tạo",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "confirmDelete": "Are you sure you want to delete?"
   }
 }

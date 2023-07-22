@@ -3,21 +3,13 @@ import { useCallback, useState } from "react";
 // logo
 import logo from "@/assets/images/logo.jpg";
 
-import {
-  LogoutOutlined,
-} from "@ant-design/icons";
+import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const items = [
   {
     key: "/",
     label: "Dashboard",
-    icon: null,
-    children: null,
-  },
-  {
-    key: "/tenant",
-    label: "Manage Tenants",
     icon: null,
     children: null,
   },
@@ -33,6 +25,12 @@ const items = [
     icon: null,
     children: null,
   },
+  {
+    key: "/tenant",
+    label: "Manage Tenants",
+    icon: null,
+    children: null,
+  },
 ];
 
 export default function Sider() {
@@ -44,7 +42,7 @@ export default function Sider() {
       items.map((item) => ({
         ...item,
         label: item.label,
-        onClick: () => navigate(item.key)
+        onClick: () => navigate(item.key),
       })),
     [navigate]
   );

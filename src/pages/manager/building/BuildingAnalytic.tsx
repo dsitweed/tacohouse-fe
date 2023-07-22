@@ -9,12 +9,14 @@ import {
   Typography,
   message,
   Progress,
+  Space,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import CreateBuilding from "../building/CreateBuilding";
+import CreateBuilding from "./CreateBuilding";
 import { useApiClient } from "@/shared/hooks/api";
 import { useAppSelector } from "@/store/hooks";
+import { useTranslation } from "react-i18next";
 
 const { Title, Paragraph } = Typography;
 
@@ -23,6 +25,8 @@ interface BuildingAnalyticProps {
 }
 
 export default function BuildingAnalytic(props: BuildingAnalyticProps) {
+  const { t } = useTranslation();
+
   const [data, setData] = useState<BuildingEntity[]>([]);
   const buildingAPI = useApiClient('/building');
   const auth = useAppSelector(state => state.auth);
@@ -31,10 +35,9 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await buildingAPI.getAll();
-      console.log(response);
+      const response = await BuildingService.getBuildings('Nguyen Van Ky');
 
-      setData(response.data)
+      setData(response);
     };
 
     fetchData();

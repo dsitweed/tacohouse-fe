@@ -11,7 +11,7 @@ import Paragraph from "antd/lib/typography/Paragraph";
 import card from "@/assets/images/info-card-1.jpg";
 import BarChart from "@/components/chart/bar-chart";
 import LineChart from "@/components/chart/line-chart";
-import BuildingAnalytic from "./BuildingAnalytic";
+import BuildingAnalytic from "../building/BuildingAnalytic";
 
 type ItemTimeLine = {
   title: string;

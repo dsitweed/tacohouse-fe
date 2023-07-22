@@ -8,50 +8,50 @@ import SignIn from "@/pages/auth/SignIn";
 import AuthLayout from "@/layouts/auth";
 import SingUp from "@/pages/auth/SignUp";
 import Invoice from "@/pages/manager/invoice";
-import Test from "@/pages/test";
+import Dev from '@/pages/Dev';
 
 const router = createBrowserRouter([
-    {
+  {
+    path: "",
+    element: <AdminLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
         path: "",
-        element: <AdminLayout />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: '',
-                element: <ManageDashboard />,
-            },
-
-            {
-                path: 'tenant',
-                element: <ManageTenant />,
-            },
-            {
-                path: 'room',
-                element: <ManageRoom />,
-            },{
-                path: 'invoice',
-                element: <Invoice />,
-            },
-        ],
-    },
-    {
-       path: 'auth',
-       element: <AuthLayout />,
-       children: [
-        {
-            path: 'sign-in',
-            element: <SignIn />,
-        },
-        {
-            path: 'sign-up',
-            element: <SingUp />,
-        }
-       ]
-    },
-    {
-        path: 'test',
-        element: <Test />
-    }
+        element: <ManageDashboard />,
+      },
+      {
+        path: "room",
+        element: <ManageRoom />,
+      },
+      {
+        path: "invoice",
+        element: <Invoice />,
+      },
+      {
+        path: "tenant",
+        element: <ManageTenant />,
+      },
+    ],
+  },
+  {
+    path: "auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "sign-in",
+        element: <SignIn />,
+      },
+      {
+        path: "sign-up",
+        element: <SingUp />,
+      },
+    ],
+  },
+  {
+    path: "dev",
+    element: <Dev />,
+  },
 ]);
 
 export default router;

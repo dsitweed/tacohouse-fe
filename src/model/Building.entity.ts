@@ -7,6 +7,5 @@ export interface BuildingEntity {
   address: string;
   income: number;
   completion: number; // level of completion
-  owner: string;
   icon?: string | undefined;
 }

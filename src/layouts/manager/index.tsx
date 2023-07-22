@@ -14,7 +14,8 @@ export default function MangerLayout(): React.ReactElement {
                 <Header/>
                 <Layout.Content className="overflow-auto">
                     <div className="mx-6 my-4 ">
-                        {(auth.user_id && auth.role === 'MANAGER') ? <Outlet /> : <Navigate to={'/auth/sign-in'} replace/>}
+                        {/* {(auth.user_id && auth.role === 'MANAGER') ? <Outlet /> : <Navigate to={'/auth/sign-in'} replace/>} */}
+                        <Outlet />
                     </div>
                 </Layout.Content>
             </Layout>
