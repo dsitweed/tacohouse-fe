@@ -7,7 +7,7 @@ export const theme: ThemeConfig = {
     colorSuccess: '#22c55e',
     colorWarning: '#f97316',
     colorError: '#ef4444',
-    colorInfo: '#0ea5e9',
+    colorInfo: '#0ea5e9', // link color when hover
     colorTextBase: '#020617',
     controlHeight: 32,
     colorText: '#141414',
