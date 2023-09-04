@@ -23,7 +23,7 @@ export default function RoomUtilities() {
         },
       ]}
       renderItem={(item, index) => (
-        <List.Item>
+        <List.Item key={`room-utilities-${index}`}>
           <List.Item.Meta title={item.title} />
           {item.status ? (
             <p className="font-bold text-light-green">Have</p>

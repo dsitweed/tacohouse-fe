@@ -706,8 +706,7 @@ const mockRoomsSection: RoomEntity[] = [
 
 export class RoomService {
   static async getRooms(): Promise<RoomEntity[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mockRoomsSection);
       }, TIME_OUT);

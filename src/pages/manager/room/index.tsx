@@ -1,10 +1,5 @@
-import { Button, Card, Col, Dropdown, MenuProps, Row, Typography } from 'antd';
-import { useLoaderData } from 'react-router-dom';
+import { Card, Col, Dropdown, MenuProps, Row, Typography } from 'antd';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-
-export function loaderRoom({ params }) {
-  return params.roomId;
-}
 
 const { Title, Text } = Typography;
 const items: MenuProps['items'] = [
@@ -55,7 +50,6 @@ const items: MenuProps['items'] = [
 ];
 
 export default function Room() {
-  const roomId = useLoaderData();
   return (
     <Card>
       <Row gutter={[24, 24]} className="mb-6">

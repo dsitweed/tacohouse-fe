@@ -20,9 +20,8 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signIn: (state, action: PayloadAction<AuthState>) => {
+    signIn: (_, action: PayloadAction<AuthState>) => {
       setCookie('accessToken', action.payload.accessToken);
-      state = action.payload;
       return { ...action.payload };
     },
   },

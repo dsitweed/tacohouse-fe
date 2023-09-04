@@ -82,6 +82,10 @@ export default function UploadImage(props: UploadImageProps) {
     }
   };
 
+  const customRequest = (props: any) => {
+    return customUpload(props);
+  };
+
   const UploadButton = (
     <div>
       <PlusOutlined />
@@ -98,7 +102,7 @@ export default function UploadImage(props: UploadImageProps) {
         onPreview={handlePreview}
         onChange={handleChange}
         beforeUpload={beforeUpload}
-        customRequest={customUpload}
+        customRequest={customRequest}
       >
         {fileList.length == 1 ? null : UploadButton}
       </Upload>

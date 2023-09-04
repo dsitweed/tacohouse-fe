@@ -1,4 +1,5 @@
 import { Card, Col, Radio, Row, Tabs, TabsProps, Typography } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
 import { useEffect, useState } from 'react';
 import BuildingAnalytic from './BuildingAnalytic';
 import BuildingService from './BuildingService';
@@ -8,7 +9,7 @@ import { BuildingService as MockService } from '@/services/Building.service';
 
 export default function ManagerBuilding() {
   const [buildings, setBuildings] = useState<BuildingEntity[]>([]);
-  const [tabsBuilding, setTabsBuilding] = useState([]);
+  const [tabsBuilding, setTabsBuilding] = useState<Tab[]>([]);
 
   useEffect(() => {
     const handleData = async () => {

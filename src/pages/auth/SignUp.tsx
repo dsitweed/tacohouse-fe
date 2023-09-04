@@ -67,7 +67,7 @@ export default function SignUp() {
                   message: t('auth.requiredPassword'),
                 },
                 ({ getFieldValue }) => ({
-                  validator(rule, value) {
+                  validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }

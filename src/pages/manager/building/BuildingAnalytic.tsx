@@ -31,7 +31,7 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
     {
       title: 'Building',
       dataIndex: 'build',
-      render: (text, record) => (
+      render: (_, record) => (
         <div className="flex gap-2 items-center">
           <img className="h-6 w-6" src={record.icon} alt="building logo" />
           <a>
@@ -54,12 +54,12 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
     {
       title: 'Income',
       dataIndex: 'income',
-      render: (text, record) => <p>{record.income?.toLocaleString()}$</p>,
+      render: (_, record) => <p>{record.income?.toLocaleString()}$</p>,
     },
     {
       title: 'COMPLETION',
       dataIndex: 'completion',
-      render: (text, record) => <Progress percent={record.completion} />,
+      render: (_, record) => <Progress percent={record.completion} />,
     },
   ];
 

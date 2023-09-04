@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-const lngs = {
+const lngs: Record<string, { nativeName: string }> = {
   en: { nativeName: 'English' },
   vi: { nativeName: 'Viet Nam' },
 };

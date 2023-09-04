@@ -23,7 +23,7 @@ export default function CreateBuilding() {
   const { notification } = App.useApp();
 
   const handleCreate = async (values: CreateBuildingForm) => {
-    values.manager_id = auth.personal_id;
+    values.manager_id = auth.personalId;
 
     try {
       const response = await buildingAPI.create(values);

@@ -4,8 +4,8 @@ import face from '@/assets/images/face-1.jpg';
 import face2 from '@/assets/images/face-2.jpg';
 import face3 from '@/assets/images/face-3.jpg';
 import face4 from '@/assets/images/face-4.jpg';
-import face5 from '@/assets/images/face-5.jpeg';
-import face6 from '@/assets/images/face-6.jpeg';
+// import face5 from '@/assets/images/face-5.jpeg';
+// import face6 from '@/assets/images/face-6.jpeg';
 import { TIME_OUT } from './settings';
 
 const mockTenantSection: TenantEntity[] = [
@@ -57,7 +57,7 @@ const mockTenantSection: TenantEntity[] = [
 
 export class TenantService {
   static async getTenants(): Promise<TenantEntity[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mockTenantSection);
       }, TIME_OUT);

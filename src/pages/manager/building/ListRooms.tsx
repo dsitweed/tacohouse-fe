@@ -56,7 +56,7 @@ const roomsTableColumns: ColumnsType<RoomEntity> = [
       </span>
     ),
     dataIndex: 'total_electricity',
-    render: (value, record) => {
+    render: (_, record) => {
       const consume = record.current_electricity - record.previous_electricity;
       return <p>{consume.toLocaleString()}</p>;
     },
@@ -81,7 +81,7 @@ const roomsTableColumns: ColumnsType<RoomEntity> = [
       </span>
     ),
     dataIndex: 'electricity_fee',
-    render: (value, record) => {
+    render: (_, record) => {
       const totalCost =
         (record.current_electricity - record.previous_electricity) *
         record.electricity_price;
