@@ -121,7 +121,7 @@ export default function SignIn() {
             alt="sign in image"
             className="m-auto rounded-lg h-full"
             style={{
-              maxHeight: '80vh',
+              maxHeight: '76vh',
             }}
           />
         </Col>

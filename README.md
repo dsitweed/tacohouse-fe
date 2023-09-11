@@ -169,6 +169,9 @@ yarn add axios
 # Fire base
 yarn add firebase
 
+# Google map
+yarn add @react-google-maps/api
+
 ```
 
 ### `Firebase`

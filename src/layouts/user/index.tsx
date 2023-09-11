@@ -1,19 +1,19 @@
 import { Layout } from 'antd';
 import { Outlet } from 'react-router';
-import AuthHeader from './AuthHeader';
-import AuthFooter from './AuthFooter';
+import UserHeader from './UserHeader';
+import UserFooter from './UserFooter';
 
-export default function AuthLayout() {
+export default function UserLayout() {
   return (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header style={{ backgroundColor: '#fafafa' }}>
-        <AuthHeader />
+        <UserHeader />
       </Layout.Header>
-      <Layout.Content className="h-full overflow-auto">
+      <Layout.Content className="h-full px-6 py-4">
         <Outlet />
       </Layout.Content>
       <Layout.Footer className="h-12 py-3">
-        <AuthFooter />
+        <UserFooter />
       </Layout.Footer>
     </Layout>
   );

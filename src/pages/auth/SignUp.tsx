@@ -22,6 +22,7 @@ export default function SignUp() {
 
           <Form layout="vertical">
             <Form.Item
+              className="mb-2"
               label="Email"
               name="email"
               rules={[
@@ -36,6 +37,7 @@ export default function SignUp() {
             </Form.Item>
 
             <Form.Item
+              className="mb-2"
               label={t('auth.password')}
               name="password"
               rules={[
@@ -57,6 +59,7 @@ export default function SignUp() {
             </Form.Item>
 
             <Form.Item
+              className="mb-2"
               label={t('auth.confirmPassword')}
               name="confirmPassword"
               hasFeedback
@@ -131,7 +134,7 @@ export default function SignUp() {
             alt="sign in image"
             className="m-auto rounded-lg h-full"
             style={{
-              maxHeight: '80vh',
+              maxHeight: '76vh',
             }}
           />
         </Col>

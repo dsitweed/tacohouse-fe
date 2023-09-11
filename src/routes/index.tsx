@@ -1,67 +1,59 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Dev from '../pages/Dev';
 import ErrorPage from './ErrorPage';
-import AuthLayout from '@/layouts/auth';
+import UserLayout from '@/layouts/user';
 import SignIn from '@/pages/auth/SignIn';
 import SignUp from '@/pages/auth/SignUp';
 import ManagerLayout from '@/layouts/manager';
 import ManagerDashboard from '@/pages/manager/dashboard';
 import ManagerBuilding from '@/pages/manager/building';
 import Room from '@/pages/manager/room';
+import UserDashboard from '@/pages/user/dashboard';
+// import Dev from '../pages/Dev';
 
 const isUserLoggedIn = true;
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         // Public routes
         index: true,
-        element: <Dev />,
+        element: <UserDashboard />,
       },
       {
-        path: 'auth',
-        element: <AuthLayout />,
-        children: [
-          {
-            index: true,
-            path: 'sign-in',
-            element: <SignIn />,
-          },
-          {
-            path: 'sign-up',
-            element: <SignUp />,
-          },
-        ],
+        path: 'auth/sign-in',
+        element: <SignIn />,
+      },
+      {
+        path: 'auth/sign-up',
+        element: <SignUp />,
       },
       isUserLoggedIn && {
         // Routes for logged in User
         path: 'users',
       },
+    ],
+  },
+  {
+    // Routes for logged in Manager
+    path: 'managers',
+    element: <ManagerLayout />,
+    errorElement: <ErrorPage />,
+    children: [
       {
-        // Routes for logged in Manager
-        path: 'managers',
-        element: <ManagerLayout />,
-        children: [
-          {
-            index: true,
-            element: <ManagerDashboard />,
-          },
-          {
-            path: 'buildings',
-            element: <ManagerBuilding />,
-          },
-          {
-            path: 'rooms/:roomId',
-            element: <Room />,
-          },
-        ],
+        index: true,
+        element: <ManagerDashboard />,
       },
-      isUserLoggedIn && {
-        // Routes for logged in Admin
-        path: 'admin',
+      {
+        path: 'buildings',
+        element: <ManagerBuilding />,
+      },
+      {
+        path: 'rooms/:roomId',
+        element: <Room />,
       },
     ],
   },

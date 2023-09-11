@@ -3,7 +3,7 @@ import Github_logo from '@/assets/images/Github_logo.png';
 import { useTranslation } from 'react-i18next';
 import { Typography } from 'antd';
 
-export default function AuthFooter() {
+export default function UserFooter() {
   const { t } = useTranslation();
   return (
     <div>
