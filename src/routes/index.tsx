@@ -1,56 +1,74 @@
-import AdminLayout from "@/layouts/manager";
-import { createBrowserRouter } from "react-router-dom";
-import ErrorPage from "./ErrorPage";
-import ManageTenant from "@/pages/manager/tenant";
-import ManageRoom from "@/pages/manager/room";
-import ManageDashboard from "@/pages/manager/dashboard";
-import SignIn from "@/pages/auth/SignIn";
-import AuthLayout from "@/layouts/auth";
-import SingUp from "@/pages/auth/SignUp";
-import Invoice from "@/pages/manager/invoice";
-import Dev from '@/pages/Dev';
+import { createBrowserRouter } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
+import UserLayout from '@/layouts/user';
+import SignIn from '@/pages/auth/SignIn';
+import SignUp from '@/pages/auth/SignUp';
+import ManagerLayout from '@/layouts/manager';
+import ManagerDashboard from '@/pages/manager/dashboard';
+import ManagerBuilding from '@/pages/manager/building';
+import Room from '@/pages/manager/room';
+import UserDashboard from '@/pages/user/dashboard';
+import AuthLayout from '@/layouts/user/AuthLayout';
+// import Dev from '../pages/Dev';
+
+const isUserLoggedIn = true;
 
 const router = createBrowserRouter([
   {
-    path: "",
-    element: <AdminLayout />,
+    path: '/auth',
+    element: <AuthLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "",
-        element: <ManageDashboard />,
-      },
-      {
-        path: "room",
-        element: <ManageRoom />,
-      },
-      {
-        path: "invoice",
-        element: <Invoice />,
-      },
-      {
-        path: "tenant",
-        element: <ManageTenant />,
-      },
-    ],
-  },
-  {
-    path: "auth",
-    element: <AuthLayout />,
-    children: [
-      {
-        path: "sign-in",
+        // To prevent user accesses the /auth path
+        index: true,
         element: <SignIn />,
       },
       {
-        path: "sign-up",
-        element: <SingUp />,
+        path: 'sign-in',
+        element: <SignIn />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
       },
     ],
   },
   {
-    path: "dev",
-    element: <Dev />,
+    path: '/',
+    element: <UserLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        // Public routes
+        index: true,
+        element: <UserDashboard />,
+      },
+      isUserLoggedIn && {
+        // Routes for logged in User
+        path: 'users',
+      },
+    ],
+  },
+  {
+    // Routes for logged in Manager
+    path: 'managers',
+    element: <ManagerLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <ManagerDashboard />,
+      },
+      {
+        path: 'buildings',
+        element: <ManagerBuilding />,
+      },
+      {
+        path: 'rooms/:roomId',
+        element: <Room />,
+      },
+    ],
   },
 ]);
 

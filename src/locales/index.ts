@@ -1,36 +1,5 @@
-import i18n from "i18next";
+import en from './en.json';
+import ja from './ja.json';
+import vi from './vi.json';
 
-import en from "./en.json";
-import ja from "./ja.json";
-import vi from "./vi.json";
-import { initReactI18next } from "react-i18next";
-
-const resources = {
-    en: {
-        translation: en,
-    },
-    ja: {
-        translation: ja,
-    },
-    vi: {
-        translation: vi,
-    },
-};
-
-export const initLanguage: I18nType.Language = (localStorage.getItem(
-    "language"
-) || "vi") as I18nType.Language;
-
-i18n
-    .use(initReactI18next) // passes i18n down to react-i18next
-    .init({
-        resources,
-        lng: initLanguage,
-        fallbackLng: "en",
-        interpolation: {
-            escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-        },
-        returnNull: false,
-    });
-
-export default i18n;
+export { en, ja, vi };

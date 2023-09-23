@@ -1,24 +1,22 @@
-import { Layout } from "antd";
-import Header from "./Header";
-import Sider from "./Sider";
-import { Navigate, Outlet } from "react-router-dom";
-import React from "react";
-import { useAppSelector } from "@/store/hooks";
+import { Layout } from 'antd';
+import { Outlet } from 'react-router-dom';
+import ManagerSider from './ManagerSider';
+import ManagerHeader from './ManagerHeader';
 
-export default function MangerLayout(): React.ReactElement {
-    const auth = useAppSelector(state => state.auth);
-    return (
-        <Layout style={{ height: "100vh" }}>
-            <Sider />
-            <Layout>
-                <Header/>
-                <Layout.Content className="overflow-auto">
-                    <div className="mx-6 my-4 ">
-                        {/* {(auth.user_id && auth.role === 'MANAGER') ? <Outlet /> : <Navigate to={'/auth/sign-in'} replace/>} */}
-                        <Outlet />
-                    </div>
-                </Layout.Content>
-            </Layout>
-        </Layout>
-    );
+export default function ManagerLayout() {
+  return (
+    <Layout className="h-screen">
+      <Layout.Sider theme="light" trigger={null}>
+        <ManagerSider />
+      </Layout.Sider>
+      <Layout>
+        <Layout.Header className="bg-white">
+          <ManagerHeader />
+        </Layout.Header>
+        <Layout.Content className="h-full overflow-auto px-6 py-4">
+          <Outlet />
+        </Layout.Content>
+      </Layout>
+    </Layout>
+  );
 }

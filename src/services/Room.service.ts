@@ -1,11 +1,11 @@
-import { RoomEntity } from "@/model/Room.entity";
-import { TIME_OUT } from "./settings";
+import { RoomEntity } from '@/models/Room.entity';
+import { TIME_OUT } from './settings';
 
 const mockRoomsSection: RoomEntity[] = [
   {
     id: 1,
     name: 201,
-    tenant_name: ["TRƯỜNG THỦY"],
+    tenant_name: ['TRƯỜNG THỦY'],
     price: 1700000,
     current_electricity: 1104,
     previous_electricity: 1043,
@@ -18,7 +18,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 2,
     name: 202,
-    tenant_name: ["LƯƠNG LAI SE.y"],
+    tenant_name: ['LƯƠNG LAI SE.y'],
     price: 1600000,
     current_electricity: 4461,
     previous_electricity: 4418,
@@ -31,7 +31,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 3,
     name: 203,
-    tenant_name: ["QUANG BÁC NINH"],
+    tenant_name: ['QUANG BÁC NINH'],
     price: 1700000,
     current_electricity: 4047,
     previous_electricity: 3945,
@@ -43,7 +43,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 4,
     name: 204,
-    tenant_name: ["TRẦN MINH HIẾU"],
+    tenant_name: ['TRẦN MINH HIẾU'],
     price: 1400000,
     current_electricity: 1708,
     previous_electricity: 1686,
@@ -55,7 +55,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 5,
     name: 205,
-    tenant_name: ["LING THANH HÓAlắp đh 1tr"],
+    tenant_name: ['LING THANH HÓAlắp đh 1tr'],
     price: 1500000,
     current_electricity: 1419,
     previous_electricity: 1375,
@@ -68,7 +68,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 6,
     name: 206,
-    tenant_name: ["NGỌC HOA ."],
+    tenant_name: ['NGỌC HOA .'],
     price: 1600000,
     current_electricity: 2692,
     previous_electricity: 2369,
@@ -81,7 +81,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 7,
     name: 207,
-    tenant_name: ["THÀNH LAN"],
+    tenant_name: ['THÀNH LAN'],
     price: 1400000,
     current_electricity: 3598,
     previous_electricity: 3409,
@@ -94,7 +94,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 8,
     name: 208,
-    tenant_name: ["HẢI"],
+    tenant_name: ['HẢI'],
     price: 1600000,
     current_electricity: 2931,
     previous_electricity: 2770,
@@ -106,7 +106,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 9,
     name: 301,
-    tenant_name: ["HIỆP "],
+    tenant_name: ['HIỆP '],
     price: 1700000,
     current_electricity: 2981,
     previous_electricity: 2726,
@@ -118,7 +118,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 10,
     name: 302,
-    tenant_name: ["NGUYỄN THỊ MỲ"],
+    tenant_name: ['NGUYỄN THỊ MỲ'],
     price: 1500000,
     current_electricity: 2924,
     previous_electricity: 2692,
@@ -131,7 +131,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 11,
     name: 303,
-    tenant_name: ["EM  CÚC."],
+    tenant_name: ['EM  CÚC.'],
     price: 1500000,
     current_electricity: 2079,
     previous_electricity: 2006,
@@ -143,7 +143,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 12,
     name: 304,
-    tenant_name: ["RA NÔ.BA 304"],
+    tenant_name: ['RA NÔ.BA 304'],
     price: 1900000,
     current_electricity: 3222,
     previous_electricity: 2963,
@@ -156,7 +156,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 13,
     name: 305,
-    tenant_name: ["BẢO ,VINH..coc.1.200k"],
+    tenant_name: ['BẢO ,VINH..coc.1.200k'],
     price: 1600000,
     current_electricity: 1838,
     previous_electricity: 1732,
@@ -169,7 +169,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 14,
     name: 306,
-    tenant_name: ["ĐÔNG "],
+    tenant_name: ['ĐÔNG '],
     price: 1600000,
     current_electricity: 2199,
     previous_electricity: 1912,
@@ -181,7 +181,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 15,
     name: 307,
-    tenant_name: ["DUYÊN "],
+    tenant_name: ['DUYÊN '],
     price: 1400000,
     current_electricity: 3646,
     previous_electricity: 3419,
@@ -193,7 +193,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 16,
     name: 308,
-    tenant_name: ["TRANG"],
+    tenant_name: ['TRANG'],
     price: 1400000,
     current_electricity: 1809,
     previous_electricity: 1711,
@@ -205,7 +205,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 17,
     name: 401,
-    tenant_name: ["THÀNH  HUYỀN"],
+    tenant_name: ['THÀNH  HUYỀN'],
     price: 1500000,
     current_electricity: 3009,
     previous_electricity: 2557,
@@ -218,7 +218,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 18,
     name: 402,
-    tenant_name: ["TUẤN "],
+    tenant_name: ['TUẤN '],
     price: 1500000,
     current_electricity: 4403,
     previous_electricity: 3987,
@@ -232,7 +232,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 19,
     name: 403,
-    tenant_name: ["THIỆN.LONG."],
+    tenant_name: ['THIỆN.LONG.'],
     price: 1500000,
     current_electricity: 2301,
     previous_electricity: 1877,
@@ -244,7 +244,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 20,
     name: 404,
-    tenant_name: ["QUYẾN THÁI NGUYÊ"],
+    tenant_name: ['QUYẾN THÁI NGUYÊ'],
     price: 1300000,
     current_electricity: 1780,
     previous_electricity: 1694,
@@ -256,7 +256,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 21,
     name: 405,
-    tenant_name: ["HOÀNG VĂN THÁI .tùng .nam"],
+    tenant_name: ['HOÀNG VĂN THÁI .tùng .nam'],
     price: 1500000,
     current_electricity: 2390,
     previous_electricity: 2243,
@@ -268,7 +268,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 22,
     name: 406,
-    tenant_name: ["ANH,NAM,CHO "],
+    tenant_name: ['ANH,NAM,CHO '],
     price: 1200000,
     current_electricity: 2820,
     previous_electricity: 2657,
@@ -280,7 +280,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 23,
     name: 407,
-    tenant_name: ["THỊNH,VỢ,CÔ "],
+    tenant_name: ['THỊNH,VỢ,CÔ '],
     price: 1200000,
     current_electricity: 4177,
     previous_electricity: 4029,
@@ -292,7 +292,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 24,
     name: 408,
-    tenant_name: ["THẢO THÁI BÌNH"],
+    tenant_name: ['THẢO THÁI BÌNH'],
     price: 1400000,
     current_electricity: 3278,
     previous_electricity: 3158,
@@ -305,7 +305,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 25,
     name: 501,
-    tenant_name: ["HUY.ZA LÔ.VINH PHÚC"],
+    tenant_name: ['HUY.ZA LÔ.VINH PHÚC'],
     price: 1200000,
     current_electricity: 2511,
     previous_electricity: 2509,
@@ -317,7 +317,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 26,
     name: 502,
-    tenant_name: ["HUY.TUYÊN QUANG"],
+    tenant_name: ['HUY.TUYÊN QUANG'],
     price: 1100000,
     current_electricity: 887,
     previous_electricity: 764,
@@ -329,7 +329,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 27,
     name: 503,
-    tenant_name: ["SƠN.BẠN "],
+    tenant_name: ['SƠN.BẠN '],
     price: 1500000,
     current_electricity: 1646,
     previous_electricity: 1446,
@@ -341,7 +341,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 28,
     name: 504,
-    tenant_name: ["láng hạ.bao."],
+    tenant_name: ['láng hạ.bao.'],
     price: 1400000,
     current_electricity: 3378,
     previous_electricity: 3162,
@@ -353,7 +353,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 29,
     name: 505,
-    tenant_name: ["RA NÔ.TRÚC 505CỌC 1.500K"],
+    tenant_name: ['RA NÔ.TRÚC 505CỌC 1.500K'],
     price: 1600000,
     current_electricity: 1816,
     previous_electricity: 1539,
@@ -365,7 +365,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 30,
     name: 506,
-    tenant_name: ["nguyễn thị thắm"],
+    tenant_name: ['nguyễn thị thắm'],
     price: 1100000,
     current_electricity: 2746,
     previous_electricity: 2680,
@@ -377,7 +377,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 31,
     name: 507,
-    tenant_name: ["  ANH .NGHĨA"],
+    tenant_name: ['  ANH .NGHĨA'],
     price: 1500000,
     current_electricity: 3885,
     previous_electricity: 3550,
@@ -390,7 +390,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 32,
     name: 508,
-    tenant_name: ["LONG  . Ban"],
+    tenant_name: ['LONG  . Ban'],
     price: 1400000,
     current_electricity: 2768,
     previous_electricity: 2564,
@@ -402,7 +402,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 33,
     name: 601,
-    tenant_name: ["TUẤN ZA LÔ.0973.128129"],
+    tenant_name: ['TUẤN ZA LÔ.0973.128129'],
     price: 800000,
     current_electricity: 1333,
     previous_electricity: 1332,
@@ -414,7 +414,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 34,
     name: 101,
-    tenant_name: ["DUNG .TRỒNG"],
+    tenant_name: ['DUNG .TRỒNG'],
     price: 1200000,
     current_electricity: 3564,
     previous_electricity: 3464,
@@ -426,7 +426,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 35,
     name: 102,
-    tenant_name: ["mai trồng h v nguyên"],
+    tenant_name: ['mai trồng h v nguyên'],
     price: 1400000,
     current_electricity: 2575,
     previous_electricity: 2500,
@@ -438,7 +438,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 36,
     name: 103,
-    tenant_name: ["VINH .  k"],
+    tenant_name: ['VINH .  k'],
     price: 1400000,
     current_electricity: 4489,
     previous_electricity: 4466,
@@ -450,7 +450,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 37,
     name: 104,
-    tenant_name: ["khiển vĩnh"],
+    tenant_name: ['khiển vĩnh'],
     price: 1600000,
     current_electricity: 5452,
     previous_electricity: 5149,
@@ -462,7 +462,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 38,
     name: 105,
-    tenant_name: ["NG tiền thành"],
+    tenant_name: ['NG tiền thành'],
     price: 1400000,
     current_electricity: 4800,
     previous_electricity: 4678,
@@ -474,7 +474,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 39,
     name: 106,
-    tenant_name: ["TUẤN PHÚ THỌ."],
+    tenant_name: ['TUẤN PHÚ THỌ.'],
     price: 1300000,
     current_electricity: 1760,
     previous_electricity: 1691,
@@ -486,7 +486,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 40,
     name: 107,
-    tenant_name: ["nguyệt LÂM"],
+    tenant_name: ['nguyệt LÂM'],
     price: 1300000,
     current_electricity: 2861,
     previous_electricity: 2788,
@@ -498,7 +498,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 41,
     name: 108,
-    tenant_name: ["AN HOA"],
+    tenant_name: ['AN HOA'],
     price: 1200000,
     current_electricity: 2188,
     previous_electricity: 2100,
@@ -510,7 +510,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 42,
     name: 201,
-    tenant_name: ["ly thị xum.HÙNG"],
+    tenant_name: ['ly thị xum.HÙNG'],
     price: 1100000,
     current_electricity: 2740,
     previous_electricity: 2628,
@@ -522,7 +522,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 43,
     name: 202,
-    tenant_name: ["hà ming nghĩa"],
+    tenant_name: ['hà ming nghĩa'],
     price: 1400000,
     current_electricity: 4060,
     previous_electricity: 3980,
@@ -535,7 +535,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 44,
     name: 203,
-    tenant_name: ["ĐOÀN TUYÊN QUANG"],
+    tenant_name: ['ĐOÀN TUYÊN QUANG'],
     price: 1200000,
     current_electricity: 1593,
     previous_electricity: 1568,
@@ -547,7 +547,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 45,
     name: 204,
-    tenant_name: ["DUNG,CHIH,TRƯỞNG"],
+    tenant_name: ['DUNG,CHIH,TRƯỞNG'],
     price: 1200000,
     current_electricity: 5492,
     previous_electricity: 5225,
@@ -559,7 +559,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 46,
     name: 205,
-    tenant_name: ["ĐÁNG VỢ"],
+    tenant_name: ['ĐÁNG VỢ'],
     price: 1300000,
     current_electricity: 6405,
     previous_electricity: 6246,
@@ -571,7 +571,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 47,
     name: 206,
-    tenant_name: ["Nguyễn thanh tùng"],
+    tenant_name: ['Nguyễn thanh tùng'],
     price: 1400000,
     current_electricity: 4798,
     previous_electricity: 4552,
@@ -583,7 +583,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 48,
     name: 207,
-    tenant_name: ["SANG   LIÊN"],
+    tenant_name: ['SANG   LIÊN'],
     price: 1200000,
     current_electricity: 1416,
     previous_electricity: 1225,
@@ -595,7 +595,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 49,
     name: 208,
-    tenant_name: ["THÁI"],
+    tenant_name: ['THÁI'],
     price: 1200000,
     current_electricity: 7425,
     previous_electricity: 7258,
@@ -607,7 +607,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 50,
     name: 301,
-    tenant_name: ["LÒ VĂN QUỲNH."],
+    tenant_name: ['LÒ VĂN QUỲNH.'],
     price: 1400000,
     current_electricity: 8216,
     previous_electricity: 8020,
@@ -619,7 +619,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 51,
     name: 302,
-    tenant_name: ["TRƯỜNG ,DƯƠNG"],
+    tenant_name: ['TRƯỜNG ,DƯƠNG'],
     price: 1300000,
     current_electricity: 7181,
     previous_electricity: 7043,
@@ -631,7 +631,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 52,
     name: 303,
-    tenant_name: ["NHUNG"],
+    tenant_name: ['NHUNG'],
     price: 1400000,
     current_electricity: 18125,
     previous_electricity: 17935,
@@ -643,7 +643,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 53,
     name: 304,
-    tenant_name: ["NAM THANH cọc 296k"],
+    tenant_name: ['NAM THANH cọc 296k'],
     price: 1300000,
     current_electricity: 5982,
     previous_electricity: 5769,
@@ -655,7 +655,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 54,
     name: 305,
-    tenant_name: ["thức HẠNH"],
+    tenant_name: ['thức HẠNH'],
     price: 1300000,
     current_electricity: 3794,
     previous_electricity: 3447,
@@ -668,7 +668,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 55,
     name: 306,
-    tenant_name: ["HỒNG ZA LÔ CỌC 1.200k"],
+    tenant_name: ['HỒNG ZA LÔ CỌC 1.200k'],
     price: 1200000,
     current_electricity: 3212,
     previous_electricity: 2998,
@@ -681,7 +681,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 56,
     name: 307,
-    tenant_name: ["ZA LÔ .LONG.ANH .THIM.BẠN"],
+    tenant_name: ['ZA LÔ .LONG.ANH .THIM.BẠN'],
     price: 1400000,
     current_electricity: 2992,
     previous_electricity: 2744,
@@ -693,7 +693,7 @@ const mockRoomsSection: RoomEntity[] = [
   {
     id: 57,
     name: 308,
-    tenant_name: ["TRỊNH THƠM"],
+    tenant_name: ['TRỊNH THƠM'],
     price: 1100000,
     current_electricity: 6157,
     previous_electricity: 5957,
@@ -706,7 +706,7 @@ const mockRoomsSection: RoomEntity[] = [
 
 export class RoomService {
   static async getRooms(): Promise<RoomEntity[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mockRoomsSection);
       }, TIME_OUT);

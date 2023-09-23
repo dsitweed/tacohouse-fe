@@ -1,17 +1,17 @@
-import { Card, Col, Row, Typography, Button, Timeline } from "antd";
+import { Card, Col, Row, Typography, Button, Timeline } from 'antd';
 import {
   RightOutlined,
   ShoppingCartOutlined,
   HeartFilled,
   UsergroupAddOutlined,
   DollarTwoTone,
-} from "@ant-design/icons";
-import Paragraph from "antd/lib/typography/Paragraph";
+} from '@ant-design/icons';
+import Paragraph from 'antd/lib/typography/Paragraph';
 
-import card from "@/assets/images/info-card-1.jpg";
-import BarChart from "@/components/chart/bar-chart";
-import LineChart from "@/components/chart/line-chart";
-import BuildingAnalytic from "../building/BuildingAnalytic";
+import card from '@/assets/images/info-card-1.jpg';
+import LineChart from '@/components/chart/line-chart';
+import BarChart from '@/components/chart/bar-chart';
+import BuildingAnalytic from '../building/BuildingAnalytic';
 
 type ItemTimeLine = {
   title: string;
@@ -21,93 +21,95 @@ type ItemTimeLine = {
 
 const timelineList: ItemTimeLine[] = [
   {
-    title: "$2,400 - Redesign store",
-    time: "09 JUN 7:20 PM",
-    color: "green",
+    title: '$2,400 - Redesign store',
+    time: '09 JUN 7:20 PM',
+    color: 'green',
   },
   {
-    title: "New order #3654323",
-    time: "08 JUN 12:20 PM",
-    color: "green",
+    title: 'New order #3654323',
+    time: '08 JUN 12:20 PM',
+    color: 'green',
   },
   {
-    title: "Company server payments",
-    time: "04 JUN 3:10 PM",
-    color: "green",
+    title: 'Company server payments',
+    time: '04 JUN 3:10 PM',
+    color: 'green',
   },
   {
-    title: "New card added for order #4826321",
-    time: "02 JUN 2:45 PM",
-    color: "red",
+    title: 'New card added for order #4826321',
+    time: '02 JUN 2:45 PM',
+    color: 'red',
   },
   {
-    title: "Unlock folders for development",
-    time: "18 MAY 1:30 PM",
-    color: "red",
+    title: 'Unlock folders for development',
+    time: '18 MAY 1:30 PM',
+    color: 'red',
   },
   {
-    title: "New order #46282344",
-    time: "14 MAY 3:30 PM",
-    color: "gray",
+    title: 'New order #46282344',
+    time: '14 MAY 3:30 PM',
+    color: 'gray',
   },
 ];
 
-function Home() {
+export default function ManagerDashboard() {
   const { Title, Text } = Typography;
 
   const count = [
     {
-      today: "Today’s Sales",
-      title: "$53,000",
-      persent: "+30%",
-      icon: <DollarTwoTone style={{ fontSize: 24, color: "white"}}/>,
-      color: "#52c41a", // green
+      today: 'Today’s Sales',
+      title: '$53,000',
+      persent: '+30%',
+      icon: <DollarTwoTone style={{ fontSize: 24, color: 'white' }} />,
+      color: '#52c41a', // green
     },
     {
-      today: "Today’s Users",
-      title: "3,200",
-      persent: "+20%",
-      icon: <UsergroupAddOutlined style={{ fontSize: 24, color: "white"}} />,
-      color: "#52c41a", // green
+      today: 'Today’s Users',
+      title: '3,200',
+      persent: '+20%',
+      icon: <UsergroupAddOutlined style={{ fontSize: 24, color: 'white' }} />,
+      color: '#52c41a', // green
     },
     {
-      today: "New Clients",
-      title: "+1,200",
-      persent: "-20%",
-      icon: <HeartFilled style={{ fontSize: 24, color: "white"}} />,
-      color: "red",
+      today: 'New Clients',
+      title: '+1,200',
+      persent: '-20%',
+      icon: <HeartFilled style={{ fontSize: 24, color: 'white' }} />,
+      color: 'red',
     },
     {
-      today: "New Orders",
-      title: "$13,200",
-      persent: "10%",
-      icon: <ShoppingCartOutlined style={{ fontSize: 24, color: "white"}} />,
-      color: "#52c41a", // green
+      today: 'New Orders',
+      title: '$13,200',
+      persent: '10%',
+      icon: <ShoppingCartOutlined style={{ fontSize: 24, color: 'white' }} />,
+      color: '#52c41a', // green
     },
   ];
 
   return (
     <div>
+      {/* OVER VIEW CARDS */}
       <Row gutter={[24, 24]}>
         {count.map((c, index) => (
           <Col key={index} xs={24} sm={24} md={12} lg={6} xl={6}>
             <Card bordered={false}>
-              <div className="number">
-                <Row align="middle" gutter={[24, 0]}>
-                  <Col xs={18}>
-                    <span>{c.today}</span>
-                    <Title level={3}>
-                      {c.title}{" "}
-                      <small style={{ color: `${c.color}` }}>{c.persent}</small>
-                    </Title>
-                  </Col>
-                  <Col xs={6} className="flex justify-end">
-                    <div className="flex justify-center items-center rounded-lg p-3"
-                      style={{ backgroundColor: '#1890ff' }}
-                    >{c.icon}</div>
-                  </Col>
-                </Row>
-              </div>
+              <Row align="middle" gutter={[24, 0]}>
+                <Col xs={18}>
+                  <span>{c.today}</span>
+                  <Title level={3}>
+                    {c.title}{' '}
+                    <small style={{ color: `${c.color}` }}>{c.persent}</small>
+                  </Title>
+                </Col>
+                <Col xs={6} className="flex justify-end">
+                  <div
+                    className="flex justify-center items-center rounded-lg p-3"
+                    style={{ backgroundColor: '#1890ff' }}
+                  >
+                    {c.icon}
+                  </div>
+                </Col>
+              </Row>
             </Card>
           </Col>
         ))}
@@ -138,7 +140,7 @@ function Home() {
             <div>
               <Title level={5}>Orders History</Title>
               <Paragraph className="lastweek" style={{ marginBottom: 24 }}>
-                This month{" "}
+                This month{' '}
                 <span className="text-light-green font-bold text-base">
                   20%
                 </span>
@@ -195,7 +197,7 @@ function Home() {
                     src={card}
                     alt="card"
                     className="rounded-xl w-auto object-cover"
-                    style={{ height: "180px" }}
+                    style={{ height: '180px' }}
                   />
                 </div>
               </Col>
@@ -226,5 +228,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

@@ -1,175 +1,148 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Row, Col, Typography, Form, Input, Select, App } from "antd";
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // images
-import bgImg from "@/assets/images/sign_up_bg.jpg";
-import { useApiClient } from "@/shared/hooks/api";
-import axios from "axios";
-
-const { Title } = Typography;
+import signUpBg from '@/assets/images/sign_up_bg.jpg';
+const { Title, Text } = Typography;
 
 export default function SignUp() {
-  const navigate = useNavigate();
-  const { notification } = App.useApp();
-  const apiSignUp = useApiClient("/auth/sign-up");
-
-  const handleSignUp = async (values: {
-    email: string;
-    password: string;
-    role: string;
-  }) => {
-    const { email, password, role } = values;
-
-    try {
-      const response = await apiSignUp.create({
-        email,
-        password,
-        role,
-      });
-      notification.success({ message: "Sign up successful!" });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
+  const { t } = useTranslation();
   return (
-    <div className="px-6 bg-white">
-      <Row gutter={[24, 0]} justify="space-around">
-        <Col
-          xs={{ span: 24, offset: 0 }}
-          lg={{ span: 6, offset: 2 }}
-          md={{ span: 12 }}
-        >
-          <Title className="mt-8" style={{ fontSize: 48 }}>
-            Sign Up
-          </Title>
-          <Title level={5}>Enter your email and password to sign up</Title>
-          <Form
-            initialValues={{ remember: true }}
-            onFinish={handleSignUp}
-            onFinishFailed={onFinishFailed}
-            layout="vertical"
+    <Row gutter={[0, 24]} justify="center" className="px-6 bg-white h-full">
+      <Col
+        xs={{ span: 24, offset: 0 }}
+        md={{ span: 12 }}
+        lg={{ span: 8, offset: 2 }}
+        xxl={{ span: 6, offset: 2 }}
+      >
+        <Title level={1} className="mt-4 text-center">
+          {t('auth.signUp')}
+        </Title>
+
+        <Form layout="vertical">
+          <Form.Item
+            className="mb-2"
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                type: 'email',
+                message: t('auth.requiredEmail'),
+              },
+            ]}
           >
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
+            <Input placeholder="Email" />
+          </Form.Item>
+
+          <Form.Item
+            className="mb-2"
+            label={t('auth.password')}
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: t('auth.requiredPassword'),
+              },
+              {
+                min: 6,
+                message: t('auth.passwordMin6'),
+              },
+              {
+                max: 20,
+                message: t('auth.passwordMax20'),
+              },
+            ]}
+          >
+            <Input.Password placeholder={t('auth.password')} />
+          </Form.Item>
+
+          <Form.Item
+            className="mb-2"
+            label={t('auth.confirmPassword')}
+            name="confirmPassword"
+            hasFeedback
+            dependencies={['password']}
+            rules={[
+              {
+                required: true,
+                message: t('auth.requiredPassword'),
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      'The confirm password that you entered do not match!',
+                    ),
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder={t('auth.password')} />
+          </Form.Item>
+
+          <Form.Item
+            name="role"
+            label="Role"
+            rules={[
+              {
+                required: true,
+                message: 'Please choose your role',
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select your role"
+              options={[
                 {
-                  required: true,
-                  type: "email",
-                  message: "Please input your email!",
+                  label: 'Tenant',
+                  value: 'TENANT',
+                },
+                {
+                  label: 'Manager',
+                  value: 'MANAGER',
                 },
               ]}
-            >
-              <Input placeholder="Email" />
-            </Form.Item>
+            />
+          </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-                {
-                  min: 6,
-                  message: "Password should be at least 6 characters",
-                },
-              ]}
+          <Form.Item className="mb-2">
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: '100%' }}
+              className="bg-primary py-2 text-base flex justify-center items-center"
             >
-              <Input.Password placeholder="Password" />
-            </Form.Item>
+              {t('auth.signUp')}
+            </Button>
+          </Form.Item>
 
-            <Form.Item
-              label="Confirm password"
-              name="confirm_password"
-              hasFeedback
-              dependencies={["password"]}
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-                ({ getFieldValue }) => ({
-                  validator(rule, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error(
-                        "The new password that you entered do not match!"
-                      )
-                    );
-                  },
-                }),
-              ]}
-            >
-              <Input.Password placeholder="Confirm password" />
-            </Form.Item>
-
-            <Form.Item
-              label="Role"
-              name="role"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your role!",
-                },
-              ]}
-              initialValue={'MANAGER'}
-            >
-              <Select
-                placeholder="Select your role"
-                options={[
-                  {
-                    label: "Tenant",
-                    value: "TENANT",
-                  },
-                  {
-                    label: "Manager",
-                    value: "MANAGER",
-                  },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "100%" }}
-                className="bg-primary text-base py-5 flex justify-center items-center "
-              >
-                SIGN UP
-              </Button>
-            </Form.Item>
-            <p className="font-semibold text-slate-600">
-              If you already have an account register{" "}
-              <Link
-                to="/auth/sign-in"
-                className="font-bold text-base text-blue-600"
-              >
-                Sign In
-              </Link>
-            </p>
-          </Form>
-        </Col>
-        <Col xs={{ span: 24 }} lg={{ span: 12 }} md={{ span: 12 }}>
-          <img
-            src={bgImg}
-            alt="sign image"
-            className="m-auto rounded-lg"
-            style={{
-              maxHeight: "79vh",
-            }}
-          />
-        </Col>
-      </Row>
-    </div>
+          <Text className="font-semibold">
+            {t('auth.hadAccount')}{' '}
+            <Link to={'/auth/sign-in'}>{t('auth.signIn')}</Link>
+          </Text>
+        </Form>
+      </Col>
+      <Col
+        xs={{ span: 24 }}
+        md={{ span: 12 }}
+        lg={{ span: 12 }}
+        className="md:pl-10"
+      >
+        <img
+          src={signUpBg}
+          alt="sign in image"
+          className="m-auto rounded-lg"
+          style={{
+            maxHeight: '76vh',
+          }}
+        />
+      </Col>
+    </Row>
   );
 }

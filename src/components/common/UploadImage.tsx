@@ -1,16 +1,12 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { PlusOutlined } from "@ant-design/icons";
-import { App, Modal, Upload } from "antd";
-import type { RcFile, UploadProps } from "antd/es/upload";
-import type { UploadFile } from "antd/es/upload/interface";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { PlusOutlined } from '@ant-design/icons';
+import { App, Modal, Upload } from 'antd';
+import type { RcFile, UploadProps } from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-} from "firebase/storage";
-import { storage } from "@/plugins/firebase/config";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/plugins/firebase/config';
 
 const getBase64 = (file: RcFile): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -26,14 +22,13 @@ interface UploadImageProps {
   setImageUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
 export default function UploadImage(props: UploadImageProps) {
   const { t } = useTranslation();
   const { message } = App.useApp();
 
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handleCancel = () => setPreviewOpen(false);
@@ -46,19 +41,19 @@ export default function UploadImage(props: UploadImageProps) {
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+      file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
     );
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
 
   const beforeUpload = (file: UploadFile) => {
     if (!file.size) return false;
-    const isLt1M = (file.size / 1024 / 1024) < 1;
+    const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
-      message.error(t("uploadImage.errorSize1M"));
+      message.error(t('uploadImage.errorSize1M'));
     }
 
     return isLt1M || Upload.LIST_IGNORE;
@@ -83,14 +78,18 @@ export default function UploadImage(props: UploadImageProps) {
       onSuccess(null, file);
     } catch (error) {
       console.error(error);
-      onError()
+      onError();
     }
+  };
+
+  const customRequest = (props: any) => {
+    return customUpload(props);
   };
 
   const UploadButton = (
     <div>
       <PlusOutlined />
-      <p>{t("uploadImage.upload")}</p>
+      <p>{t('uploadImage.upload')}</p>
     </div>
   );
 
@@ -103,7 +102,7 @@ export default function UploadImage(props: UploadImageProps) {
         onPreview={handlePreview}
         onChange={handleChange}
         beforeUpload={beforeUpload}
-        customRequest={customUpload}
+        customRequest={customRequest}
       >
         {fileList.length == 1 ? null : UploadButton}
       </Upload>
@@ -115,7 +114,7 @@ export default function UploadImage(props: UploadImageProps) {
       >
         <img
           alt="uploaded image"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           src={previewImage}
         />
       </Modal>

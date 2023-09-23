@@ -1,22 +1,9 @@
-import { BuildingEntity } from "@/model/Building.entity";
-import { BuildingService } from "@/services/Building.service";
-import { ToTopOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Radio,
-  Table,
-  Upload,
-  Typography,
-  message,
-  Progress,
-  Space,
-} from "antd";
-import { ColumnsType } from "antd/es/table";
-import { useEffect, useState } from "react";
-import CreateBuilding from "./CreateBuilding";
-import { useApiClient } from "@/shared/hooks/api";
-import { useAppSelector } from "@/store/hooks";
-import { useTranslation } from "react-i18next";
+import { BuildingEntity } from '@/models/Building.entity';
+import { BuildingService } from '@/services/Building.service';
+import { Radio, Table, Typography, Progress } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { useEffect, useState } from 'react';
+import CreateBuilding from './CreateBuilding';
 
 const { Title, Paragraph } = Typography;
 
@@ -25,12 +12,9 @@ interface BuildingAnalyticProps {
 }
 
 export default function BuildingAnalytic(props: BuildingAnalyticProps) {
-  const { t } = useTranslation();
-
   const [data, setData] = useState<BuildingEntity[]>([]);
-  const buildingAPI = useApiClient('/building');
-  const auth = useAppSelector(state => state.auth);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 
   useEffect(() => {
@@ -45,49 +29,48 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
 
   const columns: ColumnsType<BuildingEntity> = [
     {
-      title: "Building",
-      dataIndex: "build",
-      render: (text, record, index) => (
+      title: 'Building',
+      dataIndex: 'build',
+      render: (_, record) => (
         <div className="flex gap-2 items-center">
           <img className="h-6 w-6" src={record.icon} alt="building logo" />
           <a>
             <p>{record.name}</p>
-            <p className=" text-gray-500 hover:text-inherit">{record.address}</p>
+            <p className=" text-gray-500 hover:text-inherit">
+              {record.address}
+            </p>
           </a>
         </div>
       ),
     },
     {
-      title: "Room",
-      dataIndex: "room",
+      title: 'Room',
+      dataIndex: 'room',
     },
     {
-      title: "Tenant",
-      dataIndex: "tenant",
+      title: 'Tenant',
+      dataIndex: 'tenant',
     },
     {
-      title: "Income",
-      dataIndex: "income",
-      render: (text, record) => <p>{record.income?.toLocaleString()}$</p>,
+      title: 'Income',
+      dataIndex: 'income',
+      render: (_, record) => <p>{record.income?.toLocaleString()}$</p>,
     },
     {
-      title: "COMPLETION",
-      dataIndex: "completion",
-      render: (text, record) => (
-        <Progress
-          percent={record.completion}
-        />
-      ),
+      title: 'COMPLETION',
+      dataIndex: 'completion',
+      render: (_, record) => <Progress percent={record.completion} />,
     },
   ];
 
   return (
     <div>
+      {/* BUILDING OVERVIEW HEADER */}
       <div className="flex items-center justify-between">
         <div>
           <Title level={4}>Buildings</Title>
           <Paragraph>
-            Done this month{" "}
+            Done this month{' '}
             <span className="text-blue-600 font-bold text-base">40%</span>
           </Paragraph>
         </div>
@@ -99,9 +82,10 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
           </Radio.Group>
         </div>
       </div>
+      {/* LIST BUILDINGS */}
       <div className="ant-list-box table-responsive">
         <Table
-          rowKey={"id"}
+          rowKey={'id'}
           columns={columns}
           dataSource={data}
           pagination={{

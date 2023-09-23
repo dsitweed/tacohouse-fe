@@ -1,5 +1,4 @@
-import { Typography } from "antd";
-import { MinusOutlined } from "@ant-design/icons";
+import { Typography } from 'antd';
 
 import {
   Chart as ChartJS,
@@ -10,8 +9,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +19,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export const options = {
@@ -32,29 +31,29 @@ export const options = {
   plugins: {
     legend: {
       display: true,
-      position: "top" as const,
+      position: 'top' as const,
     },
     title: {
       display: false,
-      text: "Chart.js Line Chart",
+      text: 'Chart.js Line Chart',
     },
   },
 };
 
 export const data = {
-  labels: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+  labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
   datasets: [
     {
-      label: "Mobile apps",
+      label: 'Mobile apps',
       data: [350, 40, 300, 220, 500, 250, 400, 230, 500],
-      borderColor: "#1890ff",
-      backgroundColor: "#1890ff",
+      borderColor: '#1890ff',
+      backgroundColor: '#1890ff',
     },
     {
-      label: "Websites",
+      label: 'Websites',
       data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-      borderColor: "green",
-      backgroundColor: "green",
+      borderColor: 'green',
+      backgroundColor: 'green',
     },
   ],
 };
@@ -70,12 +69,12 @@ export default function LineChart() {
             Active Users
           </Title>
           <Paragraph className="text-gray-400">
-            Than last week{" "}
+            Than last week{' '}
             <span className="font-bold text-base text-light-green">+30%</span>
           </Paragraph>
         </div>
         <div>
-          <Line options={options} data={data}/>
+          <Line options={options} data={data} />
         </div>
       </div>
     </>

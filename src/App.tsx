@@ -1,38 +1,20 @@
-import { RouterProvider } from "react-router-dom";
-import router from "./routes";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
-import { App as AntApp, ConfigProvider } from "antd";
+import { App as AntApp, ConfigProvider } from 'antd';
+import { Provider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
 
-// Language support
-import vi from "antd/locale/vi_VN";
-import en from "antd/locale/en_US";
-import ja from "antd/locale/ja_JP";
-import { useState } from "react";
-import { theme } from "./assets/theme";
+import router from './routes';
+import { store } from './store/store';
+import { theme } from './assets/theme';
+import { LoadScript } from '@react-google-maps/api';
 
 function App() {
-  const [language, setLanguage] = useState<I18nType.Language>("en");
-  const test = import.meta.env.VITE_BACKEND_API_URL;
-
-  const getLocate = (language: I18nType.Language) => {
-    switch (language) {
-      case "en":
-        return en;
-      case "vi":
-        return vi;
-      case "ja":
-        return ja;
-      default:
-        return en;
-    }
-  };
-
   return (
     <AntApp>
-      <ConfigProvider theme={theme} locale={getLocate(language)}>
+      <ConfigProvider theme={theme}>
         <Provider store={store}>
-          <RouterProvider router={router} />
+          <LoadScript googleMapsApiKey="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8">
+            <RouterProvider router={router} />
+          </LoadScript>
         </Provider>
       </ConfigProvider>
     </AntApp>

@@ -1,68 +1,11 @@
 {
-  "auth": {
-    "action": {
-      "signIn": "Sign In",
-      "signUp": "Sign Up",
-      "signOut": "Sign Out"
-    },
-    "form": {
-      "name": {
-        "label": "Name",
-        "placeholder": "Enter name"
-      },
-      "email": {
-        "label": "Email",
-        "placeholder": "Enter email"
-      },
-      "password": {
-        "label": "Password",
-        "placeholder": "Enter password"
-      },
-      "phone": {
-        "label": "Phone",
-        "placeholder": "Enter phone"
-      },
-      "nationality": {
-        "label": "Nationality",
-        "placeholder": "Select nationality"
-      },
-      "languageSkills": {
-        "label": "Language Skills",
-        "placeholder": "Select language skills"
-      },
-      "age": {
-        "label": "Age",
-        "placeholder": "Enter age"
-      }
-    },
-    "message": {
-      "signInSuccess": "Sign in success",
-      "signUpSuccess": "Sign up success"
-    },
-    "text": {
-      "forgotPassword": "Forgot password",
-      "doNotHaveAccount": "Don't have account?",
-      "alreadyHaveAccount": "Already have an account?",
-      "createNewAccount": "Create new account",
-      "signInNow": "Sign in now!",
-      "forgotPasswordHint": "Enter your email and we'll send you instructions to reset your password",
-      "backToSignIn": "Back to sign in"
+  "helloWorld": "Hello World!",
+  "webName": "Tacohouse",
+  "routes": {
+    "errorsPage": {
+      "report": "Sorry, an unexpected error has occurred.",
+      "backToHome": "Back to Home"
     }
-  },
-  "placeholder": {
-    "search": "Search...",
-    "select": "Select..."
-  },
-  "uploadImage": {
-    "upload": "Up load",
-    "errorSize5M": "Image must be less than 5MB!",
-    "errorSize1M": "Image must be less than 1MB!"
-  },
-  "building": {
-    "create": "Create new building",
-    "buildingAddress": "Building Address",
-    "buildingName": "Building name",
-    "buildingLogo": "Logo of building"
   },
   "common": {
     "pleaseEnter": "Please enter",
@@ -79,5 +22,39 @@
     "loading": "Loading...",
     "noData": "No data available",
     "confirmDelete": "Are you sure you want to delete?"
+  },
+  "auth": {
+    "footer": {
+      "company": "Company",
+      "aboutUs": "About Us",
+      "teams": "Teams",
+      "products": "Products",
+      "blogs": "Blogs",
+      "pricing": "Pricing"
+    },
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "continueWith": "Continue with",
+    "requiredEmail": "Please input your email!",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "requiredPassword": "Please in put your password!",
+    "passwordMin6": "Password should be at least 6 characters",
+    "passwordMax20": "Password should be max 20 characters",
+    "rememberMe": "Remember me",
+    "inviteSentence": "Don't have an account?",
+    "forgotPassword": "Forgot password",
+    "hadAccount": "If you already have an account"
+  },
+  "building": {
+    "create": "Create new building",
+    "buildingAddress": "Building Address",
+    "buildingName": "Building name",
+    "buildingLogo": "Logo of building"
+  },
+  "uploadImage": {
+    "upload": "Up load",
+    "errorSize5M": "Image must be less than 5MB!",
+    "errorSize1M": "Image must be less than 1MB!"
   }
 }

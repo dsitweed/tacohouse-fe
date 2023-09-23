@@ -1,9 +1,9 @@
-import UploadImage from "@/components/common/UploadImage";
-import { useApiClient } from "@/shared/hooks/api";
-import { useAppSelector } from "@/store/hooks";
-import { App, Button, Form, Input, Modal } from "antd";
-import { t } from "i18next";
-import { useState } from "react";
+import UploadImage from '@/components/common/UploadImage';
+import { useApiClient } from '@/shared/hooks/api';
+import { useAppSelector } from '@/store/hooks';
+import { App, Button, Form, Input, Modal } from 'antd';
+import { t } from 'i18next';
+import { useState } from 'react';
 
 interface CreateBuildingForm {
   name: string;
@@ -14,24 +14,24 @@ interface CreateBuildingForm {
 
 export default function CreateBuilding() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [buildingLogo, setBuildingLogo] = useState<string>("");
+  const [buildingLogo, setBuildingLogo] = useState<string>('');
 
   const [form] = Form.useForm();
-  const buildingAPI = useApiClient("/building");
+  const buildingAPI = useApiClient('/building');
   const auth = useAppSelector((state) => state.auth);
 
   const { notification } = App.useApp();
 
   const handleCreate = async (values: CreateBuildingForm) => {
-    values.manager_id = auth.personal_id;
+    values.manager_id = auth.personalId;
 
     try {
       const response = await buildingAPI.create(values);
 
       values.logo = buildingLogo;
       console.log(values);
-      if (!response) return; 
-      notification.success({ message: "Building successfully created" });
+      if (!response) return;
+      notification.success({ message: 'Building successfully created' });
       setIsOpen(false);
       form.resetFields();
     } catch (error) {
@@ -80,22 +80,19 @@ export default function CreateBuilding() {
         >
           <Form.Item
             name="address"
-            label={t("building.buildingAddress")}
-            rules={[{ required: true, message: t("common.pleaseEnter") }]}
+            label={t('building.buildingAddress')}
+            rules={[{ required: true, message: t('common.pleaseEnter') }]}
           >
             <Input placeholder="Building address" />
           </Form.Item>
           <Form.Item
             name="name"
-            label={t("building.buildingName")}
-            rules={[{ required: true, message: t("common.pleaseEnter") }]}
+            label={t('building.buildingName')}
+            rules={[{ required: true, message: t('common.pleaseEnter') }]}
           >
             <Input placeholder="Input building name" />
           </Form.Item>
-          <Form.Item
-            name={"logo"}
-            label={t("building.buildingLogo")}
-          >
+          <Form.Item name={'logo'} label={t('building.buildingLogo')}>
             <UploadImage
               imageUrl={buildingLogo}
               setImageUrl={setBuildingLogo}
