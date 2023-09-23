@@ -1,10 +1,9 @@
 import { Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import viFlag from '@/assets/icons/VN-flag.svg';
-import usFlag from '@/assets/icons/US-flag.svg';
-import jpFlag from '@/assets/icons/JP-flag.svg';
-import { GrLanguage } from 'react-icons/gr';
+import viFlag from '@/assets/images/vi.png';
+import enFlag from '@/assets/images/en.png';
+import jpFlag from '@/assets/images/jp.png';
 
 interface LanguageInterface {
   key: I18nType.Language;
@@ -14,7 +13,7 @@ interface LanguageInterface {
 
 const languages: LanguageInterface[] = [
   { key: 'vi', nativeName: 'Tiếng Việt', flag: viFlag },
-  { key: 'en', nativeName: 'English', flag: usFlag },
+  { key: 'en', nativeName: 'English', flag: enFlag },
   { key: 'ja', nativeName: '日本語', flag: jpFlag },
 ];
 
@@ -25,7 +24,7 @@ export default function ChangeLanguage() {
     key: lang.key,
     label: (
       <p onClick={() => i18n.changeLanguage(lang.key)} className="flex gap-2">
-        <img src={lang.flag} height={12} width={18} alt="flag" />
+        <img src={lang.flag} height={24} width={24} alt="flag" />
         {lang.nativeName}
       </p>
     ),
@@ -37,7 +36,13 @@ export default function ChangeLanguage() {
       placement={'bottomRight'}
       trigger={['click']}
     >
-      <GrLanguage size={18} className="hover:cursor-pointer" />
+      <img
+        src={languages.find((item) => item.key === i18n.language)?.flag}
+        height={24}
+        width={24}
+        alt="flag"
+        className="hover:cursor-pointer"
+      />
     </Dropdown>
   );
 }

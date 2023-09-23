@@ -1,3 +1,60 @@
 {
-  "helloWorld": "Xin chào cả thế giới!"
+  "helloWorld": "Xin chào thế giới!",
+  "webName": "Tacohouse",
+  "routes": {
+    "errorsPage": {
+      "report": "Xin lỗi, đã xảy ra một lỗi không mong muốn.",
+      "backToHome": "Quay lại Trang chủ"
+    }
+  },
+  "common": {
+    "pleaseEnter": "Vui lòng nhập",
+    "welcome": "Chào mừng bạn đến với Tacohouse",
+    "search": "Tìm kiếm",
+    "action": "Hành động",
+    "add": "Thêm",
+    "edit": "Sửa",
+    "create": "Tạo mới",
+    "delete": "Xóa",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "submit": "Gửi",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa không?"
+  },
+  "auth": {
+    "footer": {
+      "company": "Công ty",
+      "aboutUs": "Về chúng tôi",
+      "teams": "Nhóm",
+      "products": "Sản phẩm",
+      "blogs": "Bài viết",
+      "pricing": "Giá cả"
+    },
+    "signIn": "Đăng nhập",
+    "signUp": "Đăng ký",
+    "continueWith": "Tiếp tục với",
+    "requiredEmail": "Vui lòng nhập email của bạn!",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "requiredPassword": "Vui lòng nhập mật khẩu của bạn!",
+    "passwordMin6": "Mật khẩu phải có ít nhất 6 ký tự",
+    "passwordMax20": "Mật khẩu tối đa 20 ký tự",
+    "rememberMe": "Ghi nhớ tôi",
+    "inviteSentence": "Chưa có tài khoản?",
+    "forgotPassword": "Quên mật khẩu",
+    "hadAccount": "Nếu bạn đã có tài khoản"
+  },
+  "building": {
+    "create": "Tạo tòa nhà mới",
+    "buildingAddress": "Địa chỉ tòa nhà",
+    "buildingName": "Tên tòa nhà",
+    "buildingLogo": "Logo của tòa nhà"
+  },
+  "uploadImage": {
+    "upload": "Tải lên",
+    "errorSize5M": "Hình ảnh phải nhỏ hơn 5MB!",
+    "errorSize1M": "Hình ảnh phải nhỏ hơn 1MB!"
+  }
 }

@@ -1,11 +1,6 @@
 import { Button, Col, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-// images
-import bgImg from '@/assets/images/mountain_2.jpg';
-import aboutHotel from '@/assets/images/about-hotel.jpg';
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { BsCursorFill } from 'react-icons/bs';
 import {
   FaParking,
   FaWifi,
@@ -16,7 +11,14 @@ import {
   FaBicycle,
   FaMapMarkedAlt,
 } from 'react-icons/fa';
+// images
+import bgImg from '@/assets/images/mountain_2.jpg';
+import aboutHotel from '@/assets/images/about-hotel.jpg';
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
+import { BsCursorFill } from 'react-icons/bs';
 import HotelInformation from './HotelInfomation';
+import AttractionPlace from './AtractionPlace';
+import Review from './Review';
 
 const marketingsNumber = [
   {
@@ -93,8 +95,8 @@ export default function UserDashboard() {
         className="relative"
         style={{
           height: '86vh',
-          marginLeft: '-24px',
-          marginRight: '-24px',
+          marginLeft: '-40px',
+          marginRight: '-40px',
         }}
       >
         <Col md={24} lg={16} className="z-10 text-white m-8">
@@ -137,8 +139,10 @@ export default function UserDashboard() {
             auctor arcu turpis elementum, nam venenatis nibh fusce pellentesque
             habitant donec consequat.
           </Typography.Paragraph>
-          <Button className="border-primary border-2 mt-6">
-            Discover More
+          <Button className="border-primary border-2 mt-6 p-6 flex items-center hover:bg-slate-200">
+            <Typography className="text-base font-semibold">
+              Discover More
+            </Typography>
           </Button>
         </Col>
       </Row>
@@ -212,23 +216,10 @@ export default function UserDashboard() {
       </Row>
 
       {/* Best place for play */}
-      <Row gutter={[12, 12]}>
-        <Col
-          sm={24}
-          md={18}
-          className="flex items-center justify-center md:justify-start"
-        >
-          <Typography className="text-4xl">Best of Ha Noi</Typography>
-        </Col>
-        <Col sm={24} md={6} className="flex justify-center md:justify-end">
-          <Button
-            className="border-2 py-2 px-4 h-fit w-fit border-purple-600 hover:bg-indigo-50 font-bold text-base"
-            icon={<BsCursorFill size={15} />}
-          >
-            See all
-          </Button>
-        </Col>
-      </Row>
+      <AttractionPlace />
+
+      {/* HOTEL REVIEW */}
+      <Review />
 
       {/* HOTEL INFORMATION */}
       <HotelInformation />

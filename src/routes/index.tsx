@@ -8,11 +8,32 @@ import ManagerDashboard from '@/pages/manager/dashboard';
 import ManagerBuilding from '@/pages/manager/building';
 import Room from '@/pages/manager/room';
 import UserDashboard from '@/pages/user/dashboard';
+import AuthLayout from '@/layouts/user/AuthLayout';
 // import Dev from '../pages/Dev';
 
 const isUserLoggedIn = true;
 
 const router = createBrowserRouter([
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        // To prevent user accesses the /auth path
+        index: true,
+        element: <SignIn />,
+      },
+      {
+        path: 'sign-in',
+        element: <SignIn />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
+      },
+    ],
+  },
   {
     path: '/',
     element: <UserLayout />,
@@ -22,14 +43,6 @@ const router = createBrowserRouter([
         // Public routes
         index: true,
         element: <UserDashboard />,
-      },
-      {
-        path: 'auth/sign-in',
-        element: <SignIn />,
-      },
-      {
-        path: 'auth/sign-up',
-        element: <SignUp />,
       },
       isUserLoggedIn && {
         // Routes for logged in User
