@@ -1,56 +1,12 @@
 import { RoomEntity } from '@/models/Room.entity';
 import { RoomService } from '@/services/Room.service';
-import { Form, Input, InputNumber, Table } from 'antd';
+import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 
 interface ListRoomsProps {
   idBuilding: number;
 }
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: RoomEntity;
-  index: number;
-  children: React.ReactNode;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const roomsTableColumns: ColumnsType<RoomEntity> = [
   {
@@ -233,17 +189,13 @@ const roomsTableColumns: ColumnsType<RoomEntity> = [
 
 /**
  * Return view of list all rooms of specific Building
- * Not is mock but future in props id building
  */
 export default function ListRooms(props: ListRoomsProps) {
   const [rooms, setRooms] = useState<RoomEntity[]>([]);
-  const [form] = Form.useForm();
-  const [editingKey, setEditingKey] = useState(0);
 
   // GET FIRST TIME DATA
   useEffect(() => {
     const fetchData = async () => {
-      // Later, we will get a list of rooms in a building
       console.log(props);
       const roomsData = await RoomService.getRooms();
       setRooms(roomsData);
@@ -251,18 +203,6 @@ export default function ListRooms(props: ListRoomsProps) {
 
     fetchData();
   }, [rooms]);
-
-  const isEditing = (record: RoomEntity) => record.id === editingKey;
-  const edit = (record: Partial<RoomEntity> & { key: React.Key }) => {
-    form.setFieldsValue({ current_electricity: 0, ...record });
-    setEditingKey(record.id);
-  };
-
-  const cancel = () => {
-    setEditingKey(0);
-  };
-
-  const save = async (key: React.Key) => {};
 
   return (
     <div>
