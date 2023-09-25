@@ -117,10 +117,11 @@ export default function UserDashboard() {
           src={bgImg}
           className="w-full h-full absolute object-cover"
           alt="background image"
+          loading="lazy"
         />
       </Row>
 
-      {/* REVIEW INFORMATION */}
+      {/* OVERVIEW INFORMATION */}
       <Row gutter={[24, 24]}>
         <Col md={24} lg={12}>
           <img
@@ -128,6 +129,7 @@ export default function UserDashboard() {
             width={500}
             height={500}
             className="object-cover rounded-md"
+            loading="lazy"
           />
         </Col>
         <Col md={24} lg={12}>
@@ -148,8 +150,9 @@ export default function UserDashboard() {
       </Row>
 
       <Row gutter={[12, 24]}>
-        {marketingsNumber.map((item) => (
+        {marketingsNumber.map((item, index) => (
           <Col
+            key={`overview-info-${index}`}
             xs={24}
             sm={12}
             md={6}
@@ -207,8 +210,13 @@ export default function UserDashboard() {
             elementum nec
           </Typography.Paragraph>
         </div>
-        {facilities.map((item) => (
-          <Col xs={12} md={6} className="flex flex-col items-center">
+        {facilities.map((item, index) => (
+          <Col
+            key={`marketing-facility-${index}`}
+            xs={12}
+            md={6}
+            className="flex flex-col items-center"
+          >
             {item.icon}
             <Typography className="pt-2 text-lg">{item.name}</Typography>
           </Col>

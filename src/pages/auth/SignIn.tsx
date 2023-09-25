@@ -1,5 +1,5 @@
-import { Button, Col, Form, Input, Row, Switch, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { App, Button, Col, Form, Input, Row, Switch, Typography } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // images
@@ -7,10 +7,50 @@ import signInBg from '@/assets/images/sign_in_bg.jpg';
 import googleLogo from '@/assets/images/Google_logo.png';
 import facebookLogo from '@/assets/images/Facebook_logo.png';
 import githubLogo from '@/assets/images/Github_logo.png';
+import { useEffect } from 'react';
+import { useApiClient } from '@/shared/hooks/api';
+import { useAppDispatch } from '@/store/hooks';
+import { authActions } from '@/store/slices/auth.slice';
 const { Title, Text } = Typography;
 
 export default function SignIn() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { notification } = App.useApp();
+  const dispatch = useAppDispatch();
+  const apiSignIn = useApiClient('/auth/sign-in');
+
+  useEffect(() => {}, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const signIn = async (values: any) => {
+    const { email, password, remember } = values;
+    console.log({
+      values,
+    });
+
+    try {
+      const response = await apiSignIn.create({
+        email,
+        password,
+      });
+      if (response) {
+        const { data } = response.data;
+        // Save state => redux + show notification + redirect
+        dispatch(authActions.signIn(data));
+        notification.success({
+          message: t('auth.signInSuccess'),
+          duration: 1,
+        });
+
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    console.log({ remember });
+  };
+
   return (
     <Row gutter={[0, 24]} justify="center" className="h-full px-6 bg-white">
       <Col
@@ -47,7 +87,7 @@ export default function SignIn() {
             className="w-8 h-8 cursor-pointer"
           />
         </div>
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={signIn}>
           <Form.Item
             label="Email"
             name="email"
@@ -58,7 +98,6 @@ export default function SignIn() {
                 message: t('auth.requiredEmail'),
               },
             ]}
-            initialValue={'test@gmail.com'}
           >
             <Input placeholder="Email" />
           </Form.Item>
@@ -80,12 +119,12 @@ export default function SignIn() {
                 message: t('auth.passwordMax20'),
               },
             ]}
-            initialValue={'123456'}
           >
             <Input.Password placeholder={t('auth.password')} />
           </Form.Item>
 
           <Form.Item
+            label={t('auth.rememberMe')}
             name="remember"
             valuePropName="checked"
             style={{
@@ -93,7 +132,6 @@ export default function SignIn() {
             }}
           >
             <Switch className="bg-slate-400 mr-2" />
-            <Text>{t('auth.rememberMe')}</Text>
           </Form.Item>
 
           <Form.Item className="mb-2">

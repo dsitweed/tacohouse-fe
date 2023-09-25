@@ -44,7 +44,8 @@
     "rememberMe": "Ghi nhớ tôi",
     "inviteSentence": "Chưa có tài khoản?",
     "forgotPassword": "Quên mật khẩu",
-    "hadAccount": "Nếu bạn đã có tài khoản"
+    "hadAccount": "Nếu bạn đã có tài khoản",
+    "signInSuccess": "Đăng nhập thành công. Chúc bạn ngày mới vui vẻ!"
   },
   "building": {
     "create": "Tạo tòa nhà mới",

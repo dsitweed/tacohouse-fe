@@ -3,10 +3,13 @@ import logo from '@/assets/logo.png';
 import { Button, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangeLanguage from '@/components/common/ChangeLanguage';
+import { selectUser } from '@/store/slices/auth.slice';
+import { useAppSelector } from '@/store/hooks';
 
 export default function UserHeader() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentUser = useAppSelector(selectUser);
 
   return (
     <div className="flex justify-between">
@@ -27,16 +30,34 @@ export default function UserHeader() {
           <Link to="#" className=" text-lg">
             Chat
           </Link>
+          <Link to="/managers" className=" text-lg">
+            Manager Dashboard
+          </Link>
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-6">
+      <div className="flex items-center justify-end gap-3">
         <ChangeLanguage />
-        <Button className="border border-primary">
-          <Link to={'/auth/sign-in'} className="font-bold">
-            {t('auth.signIn')}
-          </Link>
-        </Button>
+        {currentUser ? (
+          <Button className="border border-primary font-bold">
+            {t('auth.signOut')}
+          </Button>
+        ) : (
+          <>
+            <Button
+              className="border border-primary font-bold"
+              onClick={() => navigate('/auth/sign-in')}
+            >
+              {t('auth.signIn')}
+            </Button>
+            <Button
+              className="border border-primary font-bold"
+              onClick={() => navigate('/auth/sign-up')}
+            >
+              {t('auth.signUp')}
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

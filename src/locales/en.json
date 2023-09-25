@@ -34,6 +34,7 @@
     },
     "signIn": "Sign In",
     "signUp": "Sign Up",
+    "signOut": "Sign Out",
     "continueWith": "Continue with",
     "requiredEmail": "Please input your email!",
     "password": "Password",
@@ -44,7 +45,10 @@
     "rememberMe": "Remember me",
     "inviteSentence": "Don't have an account?",
     "forgotPassword": "Forgot password",
-    "hadAccount": "If you already have an account"
+    "hadAccount": "If you already have an account",
+    "signInSuccess": "Sign in successful. Enjoy your stay!",
+    "signUpSuccess": "Sign up successful!",
+    "signInRequired": "Please sign in with an account have valid permissions!"
   },
   "building": {
     "create": "Create new building",

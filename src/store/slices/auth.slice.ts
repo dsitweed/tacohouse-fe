@@ -1,33 +1,42 @@
+import { UserRole } from '@/shared/constants';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+
+interface AuthUser {
+  personalId: number; // for id in admins or tenants or manager tables
+  userId: number; // for user object in users tables
+  email: string;
+  role: UserRole;
+}
 
 interface AuthState {
-  userId: string;
-  email: string;
-  personalId: string;
-  role: 'MANAGER' | 'TENANT' | 'ADMIN' | '';
   accessToken: string;
+  refreshToken: string;
+  user: AuthUser | null;
 }
 
 const initialState: AuthState = {
-  userId: '', // for user object in users tables
-  personalId: '', // for id in admins or tenants or manager tables
-  email: '',
-  role: '',
-  accessToken: '', // for storing the JWT
+  accessToken: getCookie('accessToken'), // for storing the JWT
+  refreshToken: getCookie('refreshToken'),
+  user: null,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    signIn: (_, action: PayloadAction<AuthState>) => {
-      setCookie('accessToken', action.payload.accessToken);
-      return { ...action.payload };
+    signIn: (state, action: PayloadAction<AuthState>) => {
+      const { payload } = action;
+      setCookie('accessToken', payload.accessToken);
+      setCookie('refreshToken', payload.refreshToken);
+      state.user = payload.user;
     },
   },
 });
 
-export const { signIn } = authSlice.actions;
+export const authActions = authSlice.actions;
+
+export const selectUser = (state: RootState) => state.auth.user;
 
 export default authSlice;
 

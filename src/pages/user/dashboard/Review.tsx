@@ -74,8 +74,8 @@ export default function Review() {
         </div>
       </Col>
       {/* LIST COMMENTS */}
-      {listComments.map((item) => (
-        <Col sm={24} lg={12}>
+      {listComments.map((item, index) => (
+        <Col key={`comment-${index}`} sm={24} lg={12}>
           <Card title={<Rate disabled allowHalf defaultValue={item.rate} />}>
             <Typography.Paragraph>{item.comment}</Typography.Paragraph>
             <span>
