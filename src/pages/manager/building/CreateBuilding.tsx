@@ -8,7 +8,7 @@ import { useState } from 'react';
 interface CreateBuildingForm {
   name: string;
   address: string;
-  manager_id: string;
+  manager_id: number | undefined;
   logo: string;
 }
 
@@ -23,7 +23,7 @@ export default function CreateBuilding() {
   const { notification } = App.useApp();
 
   const handleCreate = async (values: CreateBuildingForm) => {
-    values.manager_id = auth.personalId;
+    values.manager_id = auth.user?.personalId;
 
     try {
       const response = await buildingAPI.create(values);

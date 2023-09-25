@@ -1,13 +1,37 @@
-import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { App, Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // images
 import signUpBg from '@/assets/images/sign_up_bg.jpg';
+import { useApiClient } from '@/shared/hooks/api';
 const { Title, Text } = Typography;
 
 export default function SignUp() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { notification } = App.useApp();
+  const apiSignUp = useApiClient('/auth/sign-up');
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const signUp = async (values: any) => {
+    const { email, password, role } = values;
+    try {
+      const response = await apiSignUp.create({
+        email,
+        password,
+        role,
+      });
+      if (response) {
+        notification.success({
+          message: t('auth.signUpSuccess'),
+        });
+        navigate('/auth/sign-in');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Row gutter={[0, 24]} justify="center" className="px-6 bg-white h-full">
       <Col
@@ -20,7 +44,7 @@ export default function SignUp() {
           {t('auth.signUp')}
         </Title>
 
-        <Form layout="vertical">
+        <Form layout="vertical" onFinish={signUp}>
           <Form.Item
             className="mb-2"
             label="Email"

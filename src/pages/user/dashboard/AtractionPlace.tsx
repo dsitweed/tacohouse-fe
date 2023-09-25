@@ -61,9 +61,9 @@ export default function AttractionPlace() {
       </Col>
       {/* show all portfolio */}
       <Row gutter={[24, 24]} className="px-2">
-        {portfolioImages.map((item) => (
-          <Col xs={24} md={12} lg={6}>
-            <Card cover={<img src={item.image} />}>
+        {portfolioImages.map((item, index) => (
+          <Col key={`atraction-place-${index}`} xs={24} md={12} lg={6}>
+            <Card cover={<img src={item.image} loading="lazy" />}>
               <Typography className="text-xl mb-2">{item.title}</Typography>
               <Typography.Paragraph
                 ellipsis={{
