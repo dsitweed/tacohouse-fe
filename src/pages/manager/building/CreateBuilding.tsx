@@ -1,6 +1,6 @@
-import UploadImage from '@/components/common/UploadImage';
 import { useApiClient } from '@/shared/hooks/api';
 import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
 import { App, Button, Form, Input, Modal } from 'antd';
 import { t } from 'i18next';
 import { useState } from 'react';
@@ -8,32 +8,36 @@ import { useState } from 'react';
 interface CreateBuildingForm {
   name: string;
   address: string;
-  manager_id: number | undefined;
-  logo: string;
+  ownerId: number | undefined;
 }
 
 export default function CreateBuilding() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [buildingLogo, setBuildingLogo] = useState<string>('');
-
   const [form] = Form.useForm();
-  const buildingAPI = useApiClient('/building');
-  const auth = useAppSelector((state) => state.auth);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const apiBuilding = useApiClient('/buildings');
+
+  const currentUser = useAppSelector(selectUser);
 
   const { notification } = App.useApp();
 
   const handleCreate = async (values: CreateBuildingForm) => {
-    values.manager_id = auth.user?.personalId;
+    values.ownerId = currentUser?.userId;
 
     try {
-      const response = await buildingAPI.create(values);
-
-      values.logo = buildingLogo;
       console.log(values);
-      if (!response) return;
-      notification.success({ message: 'Building successfully created' });
-      setIsOpen(false);
+      const newBuilding = await apiBuilding.create({
+        ...values,
+      });
+      if (newBuilding?.status === 201) {
+        notification.success({ message: t('building.new.success') });
+      } else {
+        notification.error({ message: t('building.new.failed') });
+      }
+      console.log({
+        newBuilding,
+      });
       form.resetFields();
+      setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -52,7 +56,7 @@ export default function CreateBuilding() {
       </Button>
       {/* popup modal */}
       <Modal
-        title={t('building.create')}
+        title={t('building.new.create')}
         open={isOpen}
         onCancel={onCancel}
         width={1000}
@@ -91,12 +95,6 @@ export default function CreateBuilding() {
             rules={[{ required: true, message: t('common.pleaseEnter') }]}
           >
             <Input placeholder="Input building name" />
-          </Form.Item>
-          <Form.Item name={'logo'} label={t('building.buildingLogo')}>
-            <UploadImage
-              imageUrl={buildingLogo}
-              setImageUrl={setBuildingLogo}
-            />
           </Form.Item>
         </Form>
       </Modal>

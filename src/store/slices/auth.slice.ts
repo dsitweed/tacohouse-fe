@@ -2,8 +2,7 @@ import { UserRole } from '@/shared/constants';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface AuthUser {
-  personalId: number; // for id in admins or tenants or manager tables
+interface IUser {
   userId: number; // for user object in users tables
   email: string;
   role: UserRole;
@@ -12,13 +11,13 @@ interface AuthUser {
 interface AuthState {
   accessToken: string;
   refreshToken: string;
-  user: AuthUser | null;
+  user: IUser | null;
 }
 
 const initialState: AuthState = {
-  accessToken: getCookie('accessToken'), // for storing the JWT
-  refreshToken: getCookie('refreshToken'),
-  user: null,
+  accessToken: getAccessTokenFromStorage(), // for storing the JWT
+  refreshToken: getRefreshTokenFromStorage(),
+  user: getUserFromStorage(),
 };
 
 export const authSlice = createSlice({
@@ -27,9 +26,16 @@ export const authSlice = createSlice({
   reducers: {
     signIn: (state, action: PayloadAction<AuthState>) => {
       const { payload } = action;
-      setCookie('accessToken', payload.accessToken);
-      setCookie('refreshToken', payload.refreshToken);
+      localStorage.setItem('accessToken', payload.accessToken);
+      localStorage.setItem('refreshToken', payload.refreshToken);
+      localStorage.setItem('user', JSON.stringify(payload.user));
       state.user = payload.user;
+    },
+    signOut: (state) => {
+      localStorage.clear();
+      state.accessToken = '';
+      state.refreshToken = '';
+      state.user = null;
     },
   },
 });
@@ -40,27 +46,40 @@ export const selectUser = (state: RootState) => state.auth.user;
 
 export default authSlice;
 
-// MANIPULATION WITH COOKIE
-export function getCookie(cookieName: string) {
-  const name = cookieName + '=';
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1);
-    if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+// MANIPULATION WITH LOCAL STORAGE
+
+function getUserFromStorage() {
+  try {
+    const user = localStorage.getItem('user');
+    if (!user) return null;
+
+    return JSON.parse(user) as IUser;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
-  return '';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function setCookie(name: string, value: any, hours = 1) {
-  let expires;
-  if (hours) {
-    const date = new Date();
-    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-    expires = '; expires=' + date.toUTCString();
-  } else {
-    expires = '';
+export function getAccessTokenFromStorage() {
+  try {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return '';
+
+    return token;
+  } catch (error) {
+    console.log(error);
+    return '';
   }
-  document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+export function getRefreshTokenFromStorage() {
+  try {
+    const token = localStorage.getItem('refreshToken');
+    if (!token) return '';
+
+    return token;
+  } catch (error) {
+    console.log(error);
+    return '';
+  }
 }

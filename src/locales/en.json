@@ -48,10 +48,15 @@
     "hadAccount": "If you already have an account",
     "signInSuccess": "Sign in successful. Enjoy your stay!",
     "signUpSuccess": "Sign up successful!",
+    "signOutSuccess": "Sign out successful!",
     "signInRequired": "Please sign in with an account have valid permissions!"
   },
   "building": {
-    "create": "Create new building",
+    "new": {
+      "create": "Create new building",
+      "success": "Create new building success",
+      "failed": "Create new building failed"
+    },
     "buildingAddress": "Building Address",
     "buildingName": "Building name",
     "buildingLogo": "Logo of building"
