@@ -4,14 +4,14 @@ import axios, {
   InternalAxiosRequestConfig,
   RawAxiosResponseHeaders,
 } from 'axios';
-import { getCookie } from '@/store/slices/auth.slice';
+import { getAccessTokenFromStorage } from '@/store/slices/auth.slice';
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 // check authentication - use a call back = add access token to Header
 axios.interceptors.request.use((config) => {
-  const token = getCookie('accessToken');
-  config.headers.Authorization = `Bearer ${token}`;
+  const accessToken = getAccessTokenFromStorage();
+  config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
 

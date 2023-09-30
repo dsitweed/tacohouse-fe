@@ -22,7 +22,7 @@ export const useApiClient = <T = any>(url: string) => {
     else notification.error({ message: response.message });
   }
 
-  async function create(data: T) {
+  async function create(data?: T) {
     const response = await axios.post(url, data);
 
     if (response.success) return response;
