@@ -1,6 +1,6 @@
 export interface RoomEntity {
   id: number;
-  name: string | number; // name of room
+  name: string; // name of room
   // tenant: TenantEntity[]; // real
   tenant_name: string[]; // for demo
   max_number_tenant?: number; //

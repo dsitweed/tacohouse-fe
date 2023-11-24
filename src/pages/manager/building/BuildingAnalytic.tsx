@@ -1,9 +1,9 @@
 import { BuildingEntity } from '@/models/Building.entity';
 import { BuildingService } from '@/services/Building.service';
-import { Radio, Table, Typography, Progress } from 'antd';
+import { Radio, Table, Typography, Progress, Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
-import CreateBuilding from './CreateBuilding';
+import { Link, useNavigate } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 
@@ -11,8 +11,9 @@ interface BuildingAnalyticProps {
   pageSize?: number;
 }
 
-export default function BuildingAnalytic(props: BuildingAnalyticProps) {
+export default function ManagerBuilding(props: BuildingAnalyticProps) {
   const [data, setData] = useState<BuildingEntity[]>([]);
+  const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
@@ -34,12 +35,15 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
       render: (_, record) => (
         <div className="flex gap-2 items-center">
           <img className="h-6 w-6" src={record.icon} alt="building logo" />
-          <a>
-            <p>{record.name}</p>
-            <p className=" text-gray-500 hover:text-inherit">
-              {record.address}
-            </p>
-          </a>
+          <div>
+            <Link
+              className="font-semibold"
+              to={`/managers/buildings/${record.id}`}
+            >
+              {record.name}
+            </Link>
+            <p>{record.address}</p>
+          </div>
         </div>
       ),
     },
@@ -95,7 +99,14 @@ export default function BuildingAnalytic(props: BuildingAnalyticProps) {
       </div>
 
       <div className="w-full">
-        <CreateBuilding />
+        <Button
+          className="border border-black"
+          onClick={() => navigate('/managers/buildings/new')}
+        >
+          <span>
+            Click to Create <span className="font-bold">new building</span>
+          </span>
+        </Button>
       </div>
     </div>
   );

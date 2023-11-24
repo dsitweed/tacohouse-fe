@@ -21,7 +21,7 @@ export default function UserHeader() {
       console.log({
         response,
       });
-      if (response) {
+      if (response?.status === 200) {
         dispatch(authActions.signOut());
 
         notification.success({

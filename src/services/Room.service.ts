@@ -1,10 +1,11 @@
 import { RoomEntity } from '@/models/Room.entity';
 import { TIME_OUT } from './settings';
 
-const mockRoomsSection: RoomEntity[] = [
+export const mockRoomsSection: RoomEntity[] = [
   {
     id: 1,
-    name: 201,
+    name: '201',
+    area: 20,
     tenant_name: ['TRƯỜNG THỦY'],
     price: 1700000,
     current_electricity: 1104,
@@ -17,7 +18,8 @@ const mockRoomsSection: RoomEntity[] = [
   },
   {
     id: 2,
-    name: 202,
+    name: '202',
+    area: 20,
     tenant_name: ['LƯƠNG LAI SE.y'],
     price: 1600000,
     current_electricity: 4461,
@@ -30,7 +32,8 @@ const mockRoomsSection: RoomEntity[] = [
   },
   {
     id: 3,
-    name: 203,
+    name: '203',
+    area: 20,
     tenant_name: ['QUANG BÁC NINH'],
     price: 1700000,
     current_electricity: 4047,
@@ -710,6 +713,14 @@ export class RoomService {
       setTimeout(() => {
         resolve(mockRoomsSection);
       }, TIME_OUT);
+    });
+  }
+
+  static async getRoom(id: number) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockRoomsSection.find((item) => item.id === id));
+      });
     });
   }
 }

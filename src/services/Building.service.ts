@@ -9,7 +9,7 @@ import ava4 from '@/assets/icons/logo-spotify.svg';
 import ava5 from '@/assets/icons/logo-jira.svg';
 import ava6 from '@/assets/icons/logo-invision.svg';
 
-const mockServicesSection: ServiceEntity[] = [
+export const mockServicesSection: ServiceEntity[] = [
   {
     id: 1,
     building_id: 1,
@@ -21,7 +21,7 @@ const mockServicesSection: ServiceEntity[] = [
   },
 ];
 
-const mockBuildingSection: BuildingEntity[] = [
+export const mockBuildingSection: BuildingEntity[] = [
   {
     id: 1, // unique for define in antd table
     name: 'Building A1',
@@ -161,6 +161,14 @@ export class BuildingService {
         resolve(
           mockServicesSection.find((item) => item.building_id === building_id),
         );
+      }, TIME_OUT);
+    });
+  }
+
+  static async getBuilding(building_id: number) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockBuildingSection.find((item) => item.id === building_id));
       }, TIME_OUT);
     });
   }

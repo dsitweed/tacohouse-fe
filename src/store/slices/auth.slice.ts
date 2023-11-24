@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
 interface IUser {
-  userId: number; // for user object in users tables
+  id: number; // for user object in users tables
   email: string;
   role: UserRole;
 }

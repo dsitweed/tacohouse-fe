@@ -26,11 +26,12 @@ export default function ManagerBuilding() {
     const tabs: TabsProps['items'] = data.map((item) => ({
       key: `${item.id}`,
       label: item.name,
-      children: <ListRooms idBuilding={item.id} />,
+      children: <ListRooms buildingId={item.id} />,
     }));
     return tabs;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 
   return (
@@ -55,7 +56,7 @@ export default function ManagerBuilding() {
       <Row gutter={[12, 12]} className=" overflow-auto">
         <Card>
           <div>
-            <div className="flex justify-between w-full">
+            <div className="flex gap-4 justify-between w-full">
               <Typography.Title level={4}>List rooms</Typography.Title>
               <Radio.Group onChange={onChange} defaultValue={'a'}>
                 <Radio.Button value={'a'}>Incomplete</Radio.Button>
@@ -63,7 +64,7 @@ export default function ManagerBuilding() {
               </Radio.Group>
             </div>
             {/* SHOW LIST ROOMS OF BUILDING + CAN CHANGE BUILDINGS */}
-            <Tabs items={tabsBuilding} />
+            {/* <Tabs items={tabsBuilding} /> */}
           </div>
         </Card>
       </Row>

@@ -34,6 +34,7 @@ export default function SignIn() {
         email,
         password,
       });
+
       if (response) {
         const { data } = response.data;
         // Save state => redux + show notification + redirect

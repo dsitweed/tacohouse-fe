@@ -1,59 +1,49 @@
-import { useApiClient } from '@/shared/hooks/api';
-import { useAppSelector } from '@/store/hooks';
-import { selectUser } from '@/store/slices/auth.slice';
-import { App, Button, Card, Form, Input, InputNumber } from 'antd';
-import { t } from 'i18next';
+import { BuildingEntity } from '@/models';
+import { BuildingService } from '@/services';
+import { Form, Card, Input, InputNumber, Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface CreateBuildingForm {
-  name: string;
-  address: string;
-  ownerId: number | undefined;
-}
-
-export default function CreateBuilding() {
+export default function EditBuilding() {
+  const paths = window.location.pathname.split('/');
+  const buildingId = Number(paths[paths.length - 2]);
+  const [building, setBuilding] = useState<BuildingEntity>();
   const [form] = Form.useForm();
-  const apiBuilding = useApiClient('/buildings');
+  const { t } = useTranslation();
 
-  const currentUser = useAppSelector(selectUser);
+  useEffect(() => {
+    const fetch = async () => {
+      const building = (await BuildingService.getBuilding(
+        buildingId,
+      )) as BuildingEntity;
 
-  const { notification } = App.useApp();
+      setBuilding(building);
+    };
 
-  const handleCreate = async (values: CreateBuildingForm) => {
-    values.ownerId = currentUser?.id;
+    fetch();
+  }, [building]);
 
-    try {
-      console.log(values);
-      const newBuilding = await apiBuilding.create({
-        ...values,
-      });
-      if (newBuilding?.status === 201) {
-        notification.success({ message: t('building.new.success') });
-      } else {
-        notification.error({ message: t('building.new.failed') });
-      }
-      console.log({
-        newBuilding,
-      });
-      form.resetFields();
-    } catch (error) {
-      console.error(error);
-    }
+  const handleEdit = () => {
+    console.log(`Edit building id: ${building?.id}`);
   };
 
-  return (
+  return !building ? (
+    <Card>{paths}</Card>
+  ) : (
     <Card>
       <Form
         id="createForm"
         layout="vertical"
         autoComplete="true"
         form={form}
-        onFinish={handleCreate}
+        onFinish={handleEdit}
         onFinishFailed={(error) => console.error(error)}
       >
         <Form.Item
           name="name"
           label={t('building.buildingName')}
           rules={[{ required: true, message: t('common.pleaseEnter') }]}
+          initialValue={building.name}
         >
           <Input placeholder="Input building name" />
         </Form.Item>
@@ -62,6 +52,7 @@ export default function CreateBuilding() {
           name="address"
           label={t('building.buildingAddress')}
           rules={[{ required: true, message: t('common.pleaseEnter') }]}
+          initialValue={building.address}
         >
           <Input placeholder="Building address" />
         </Form.Item>
@@ -98,13 +89,24 @@ export default function CreateBuilding() {
           <InputNumber placeholder="Tiền điện" className="w-[200px]" />
         </Form.Item>
 
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="bg-primary submit-button"
-        >
-          Tạo tòa nhà mới
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="bg-primary submit-button"
+          >
+            Cập nhật thông tin
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{
+              backgroundColor: 'rgb(220 38 38)',
+            }}
+          >
+            Xóa tòa nhà
+          </Button>
+        </div>
       </Form>
     </Card>
   );

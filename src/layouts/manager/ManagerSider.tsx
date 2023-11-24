@@ -24,7 +24,7 @@ const items = [
     children: null,
   },
   {
-    key: '/managers/rooms/1',
+    key: '/managers/rooms',
     label: 'Rooms',
     icon: <BsDoorClosedFill size={18} />,
     children: null,
