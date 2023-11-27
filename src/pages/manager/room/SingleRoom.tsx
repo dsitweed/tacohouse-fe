@@ -1,5 +1,5 @@
 import { RoomEntity } from '@/models';
-import { RoomService } from '@/services';
+import { RoomService, mockTenantSection } from '@/services';
 import {
   Avatar,
   Button,
@@ -17,6 +17,7 @@ import { GoArrowSwitch, GoHeart, GoShareAndroid } from 'react-icons/go';
 import { TfiPrinter } from 'react-icons/tfi';
 
 import face1 from '@/assets/images/face-1.jpg';
+import { Link } from 'react-router-dom';
 
 export default function SingleRoom() {
   const paths = window.location.pathname.split('/');
@@ -40,9 +41,18 @@ export default function SingleRoom() {
   ) : (
     <div className="flex flex-col gap-8">
       <Card>
-        <Row>
+        <Row gutter={[24, 24]}>
           <Col sm={24} md={16}>
-            <Typography.Title level={4}>{room.name}</Typography.Title>
+            <div className="flex justify-between">
+              <Typography.Title level={4}>Phòng: {room.name}</Typography.Title>
+
+              <Link
+                className="bg-primary p-2 px-4 text-white rounded-md hover:text-white hover:opacity-90"
+                to={`/managers/rooms/${room.id}/edit`}
+              >
+                Chỉnh sửa thông tin phòng
+              </Link>
+            </div>
             <Typography.Text>Building.address</Typography.Text>
           </Col>
           <Col sm={24} md={8} className="flex justify-between items-center">
@@ -59,7 +69,7 @@ export default function SingleRoom() {
         </Row>
       </Card>
 
-      <Row>
+      <Row gutter={[24, 24]}>
         <Col xs={24} md={16} className="flex flex-col gap-6">
           <Card>
             <Col className="flex flex-col gap-5">
@@ -205,7 +215,31 @@ export default function SingleRoom() {
             </div>
           </Card>
         </Col>
-        <Col xs={24} md={8}></Col>
+        <Col xs={24} md={8}>
+          <Card>
+            <Typography.Title level={3}>Sô người: 3</Typography.Title>
+            <div className="flex flex-col gap-4">
+              {mockTenantSection.map((tenant, index) => {
+                if (index < 3) {
+                  return (
+                    <div
+                      key={`${tenant.id}-tenants`}
+                      className="flex gap-3 items-center"
+                    >
+                      <Avatar src={tenant.avatar} size={80} />
+                      <div>
+                        <p>{tenant.name}</p>
+                        <p>Phone: tenant.phone</p>
+                        <p>Age: tenant.dob</p>
+                        <p>Address: {tenant.address}</p>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          </Card>
+        </Col>
       </Row>
     </div>
   );

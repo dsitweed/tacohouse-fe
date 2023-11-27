@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 // images
 import signUpBg from '@/assets/images/sign_up_bg.jpg';
 import { useApiClient } from '@/shared/hooks/api';
+import { UserRole } from '@/shared/constants';
 const { Title, Text } = Typography;
 
 export default function SignUp() {
@@ -119,17 +120,14 @@ export default function SignUp() {
                 message: 'Please choose your role',
               },
             ]}
+            initialValue={UserRole.MANAGER}
           >
             <Select
               placeholder="Select your role"
               options={[
                 {
-                  label: 'Tenant',
-                  value: 'TENANT',
-                },
-                {
                   label: 'Manager',
-                  value: 'MANAGER',
+                  value: UserRole.MANAGER,
                 },
               ]}
             />

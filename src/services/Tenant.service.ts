@@ -8,7 +8,7 @@ import face4 from '@/assets/images/face-4.jpg';
 // import face6 from '@/assets/images/face-6.jpeg';
 import { TIME_OUT } from './settings';
 
-const mockTenantSection: TenantEntity[] = [
+export const mockTenantSection: TenantEntity[] = [
   {
     id: 1,
     avatar: face,
@@ -60,6 +60,14 @@ export class TenantService {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(mockTenantSection);
+      }, TIME_OUT);
+    });
+  }
+
+  static async getTenant(id: number) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockTenantSection.find((tenant) => tenant.id === id));
       }, TIME_OUT);
     });
   }

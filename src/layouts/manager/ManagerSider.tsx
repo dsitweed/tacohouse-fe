@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FaBuilding, FaHome } from 'react-icons/fa';
 import { BsDoorClosedFill } from 'react-icons/bs';
+import { BsFilePersonFill } from 'react-icons/bs';
 // images
 import logo from '@/assets/logo.png';
 import avatar from '@/assets/images/avatar.jpg';
@@ -27,6 +28,12 @@ const items = [
     key: '/managers/rooms',
     label: 'Rooms',
     icon: <BsDoorClosedFill size={18} />,
+    children: null,
+  },
+  {
+    key: '/managers/tenants',
+    label: 'Tenants',
+    icon: <BsFilePersonFill size={18} />,
     children: null,
   },
 ];

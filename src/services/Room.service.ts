@@ -6,7 +6,7 @@ export const mockRoomsSection: RoomEntity[] = [
     id: 1,
     name: '201',
     area: 20,
-    tenant_name: ['TRƯỜNG THỦY'],
+    tenant_name: ['TRƯỜNG THỦY', 'Xuân Quang'],
     price: 1700000,
     current_electricity: 1104,
     previous_electricity: 1043,

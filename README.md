@@ -201,12 +201,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 ```
 
-### Supabase for development phase
-```
-yarn add -D @supabase/supabase-js @supabase/auth-ui-react @supabase/auth-ui-shared
-
-```
-
 # Note:
 
 - Khi tạo tài khoản (Cần email, password, role) -> tạo User
@@ -231,7 +225,8 @@ yarn add -D @supabase/supabase-js @supabase/auth-ui-react @supabase/auth-ui-shar
 
 ## Bug when coding
 
-1. Bug 1
+1. Hiện tại chỉ phục vụ cho manager
+
 
 ## Tài liệu tham khảo
 

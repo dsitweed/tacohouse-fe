@@ -37,6 +37,13 @@ const dropdownItems: MenuProps['items'] = [
   },
 ];
 
+const menuDropdownItems: MenuProps['items'] = [
+  {
+    label: <Link to={'/auth/sign-out'}> Sign out</Link>,
+    key: '0',
+  },
+];
+
 export default function ManagerHeader() {
   return (
     <div className="bg-white flex justify-between mt-2 items-center">
@@ -61,11 +68,15 @@ export default function ManagerHeader() {
             </a>
           </Dropdown>
         </Badge>
-        <Avatar
-          className="ml-4"
-          size="large"
-          src={<img src={avatar} alt="avatar" />}
-        />
+        <Dropdown menu={{ items: menuDropdownItems }} trigger={['click']}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Avatar
+              className="ml-4"
+              size="large"
+              src={<img src={avatar} alt="avatar" />}
+            />
+          </a>
+        </Dropdown>
       </div>
     </div>
   );

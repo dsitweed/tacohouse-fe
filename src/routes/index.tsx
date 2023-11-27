@@ -15,6 +15,10 @@ import CreateRoom from '@/pages/manager/room/CreateRoom';
 import SingleRoom from '@/pages/manager/room/SingleRoom';
 import SingleBuilding from '@/pages/manager/building/SingleBuilding';
 import EditBuilding from '@/pages/manager/building/EditBuilding';
+import CreateTenant from '@/pages/manager/tenant/CreateTenant';
+import Tenant from '@/pages/manager/tenant';
+import EditRoom from '@/pages/manager/room/EditRoom';
+import EditTenant from '@/pages/manager/tenant/EditTenant';
 
 const isUserLoggedIn = true;
 
@@ -92,6 +96,26 @@ const router = createBrowserRouter([
       {
         path: 'rooms/new',
         element: <CreateRoom />,
+      },
+      {
+        path: 'rooms/:roomId/edit',
+        element: <EditRoom />,
+      },
+      {
+        path: 'tenants',
+        element: <Tenant />,
+      },
+      {
+        path: 'tenants/new',
+        element: <CreateTenant />,
+      },
+      {
+        path: 'tenants/:tenantId',
+        element: <EditTenant />,
+      },
+      {
+        path: 'tenants/:tenantId/edit',
+        element: <EditTenant />,
       },
       {
         path: 'dev',

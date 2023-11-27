@@ -1,4 +1,5 @@
-import { RoomEntity } from '@/models';
+import { TenantEntity } from '@/models';
+import { mockTenantSection } from '@/services';
 import {
   Button,
   Card,
@@ -11,12 +12,10 @@ import {
   Typography,
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import RoomGridItem from './RoomGridItem';
-import { mockRoomsSection } from '@/services';
-import { FaPlus } from 'react-icons/fa6';
+import { FaPlus } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
-const propertyTableColumns: ColumnsType<RoomEntity> = [
+const tenantsTableColumns: ColumnsType<TenantEntity> = [
   {
     title: 'Index',
     dataIndex: 'id',
@@ -24,23 +23,27 @@ const propertyTableColumns: ColumnsType<RoomEntity> = [
     render: (value, record, index) => <p>{index + 1}</p>,
   },
   {
-    title: 'Property',
-    render: (_, record) => <RoomGridItem room={record} />,
+    title: 'Tên',
+    dataIndex: 'name',
+    render: (_, record) => (
+      <Link to={`/managers/tenants/${record.id}/edit`}>{record.name}</Link>
+    ),
   },
   {
-    title: 'Date published',
-    dataIndex: 'datePublished',
-    render: () => <p>12/11/2023. Fake</p>,
+    title: 'Số phòng',
+    dataIndex: 'room',
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    render: () => <p>Rent. Fake</p>,
+    title: 'Số điện thoại',
+    dataIndex: 'phone',
   },
   {
-    title: 'View',
-    dataIndex: 'view',
-    render: () => <p>12. Fake</p>,
+    title: 'address',
+    dataIndex: 'address',
+  },
+  {
+    title: 'Số CCCD',
+    dataIndex: 'citizenNumber',
   },
   {
     title: 'Action',
@@ -48,21 +51,21 @@ const propertyTableColumns: ColumnsType<RoomEntity> = [
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     render: (_, record) => (
       <Space>
-        <Link to={`/managers/rooms/${record.id}/edit`}>Edit</Link>
-        <a href="">Delete</a>
+        <Link to={`/managers/tenants/${record.id}/edit`}>Edit</Link>
+        <Link to={'#'}>Delete</Link>
       </Space>
     ),
   },
 ];
 
-export default function ManagerRoom() {
+export default function Tenant() {
   const navigate = useNavigate();
 
   return (
     <Card>
-      <Row gutter={[24, 12]}>
+      <Row>
         <Col sm={24} md={24} lg={12}>
-          <Typography.Title level={2}>Danh sách các phòng</Typography.Title>
+          <Typography.Title level={2}>Danh sách người thuê</Typography.Title>
         </Col>
         <Col sm={24} md={24} lg={12}>
           <Space wrap>
@@ -75,15 +78,15 @@ export default function ManagerRoom() {
                   value: 0,
                 },
                 {
-                  label: 'Available',
+                  label: 'Has left',
                   value: 1,
                 },
               ]}
             />
 
             <Button
-              className="bg-primary"
-              onClick={() => navigate('/managers/rooms/new')}
+              type="primary"
+              onClick={() => navigate('/managers/tenants/new')}
             >
               <FaPlus color={'white'} size={20} />
             </Button>
@@ -91,11 +94,11 @@ export default function ManagerRoom() {
         </Col>
 
         <Table
-          bordered={true}
+          bordered
           rowKey={'id'}
-          className="w-full overflow-auto"
-          columns={propertyTableColumns}
-          dataSource={mockRoomsSection}
+          className="w-full"
+          columns={tenantsTableColumns}
+          dataSource={mockTenantSection}
         />
       </Row>
     </Card>

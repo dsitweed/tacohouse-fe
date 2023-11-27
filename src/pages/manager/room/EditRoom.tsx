@@ -15,8 +15,13 @@ import {
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { useState } from 'react';
-import { mockBuildingSection, mockTenantSection } from '@/services';
+import { useEffect, useState } from 'react';
+import {
+  RoomService,
+  mockBuildingSection,
+  mockTenantSection,
+} from '@/services';
+import { RoomEntity } from '@/models';
 
 const facilitiesSelectOption: SelectProps['options'] = [
   {
@@ -40,9 +45,12 @@ const buildingsSelectOptions: SelectProps['options'] = mockBuildingSection.map(
   }),
 );
 
-export default function CreateRoom() {
+export default function EditRoom() {
   const [form] = Form.useForm();
+  const [room, setRoom] = useState<RoomEntity>();
   const [isActive, setIsActive] = useState(false);
+  const paths = window.location.pathname.split('/');
+  const roomId = Number(paths[paths.length - 2]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normFile = (e: any) => {
@@ -52,7 +60,18 @@ export default function CreateRoom() {
     return e?.fileList;
   };
 
-  return (
+  useEffect(() => {
+    const fetch = async () => {
+      const room = (await RoomService.getRoom(roomId)) as RoomEntity;
+      setRoom(room);
+    };
+
+    fetch();
+  }, [room]);
+
+  return !room ? (
+    <Card>No have this room</Card>
+  ) : (
     <Card>
       {/* Basic room information + dropdown for Edit, delete func */}
       <Row gutter={[24, 24]} className="mb-6">
@@ -60,6 +79,7 @@ export default function CreateRoom() {
           <Typography.Title level={2}>Tạo phòng mới</Typography.Title>
         </Col>
       </Row>
+
       <Row>
         <Col md={24} lg={24}>
           <Form
@@ -74,6 +94,7 @@ export default function CreateRoom() {
                   name="building"
                   label="Thuộc tòa nhà"
                   rules={[{ required: true }]}
+                  initialValue="room.buildingName"
                 >
                   <Select
                     options={buildingsSelectOptions}
@@ -105,7 +126,11 @@ export default function CreateRoom() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
-                <Form.Item name="tenants" label="Chọn người đang thuê">
+                <Form.Item
+                  name="tenants"
+                  label="Chọn người đang thuê"
+                  initialValue={room.tenant_name}
+                >
                   <Select
                     mode="multiple"
                     allowClear
@@ -129,6 +154,7 @@ export default function CreateRoom() {
               label="Tên phòng"
               name="name"
               rules={[{ required: true }]}
+              initialValue={room.name}
             >
               <Input />
             </Form.Item>
@@ -137,6 +163,7 @@ export default function CreateRoom() {
               label="Diện tích"
               name="area"
               rules={[{ required: true }]}
+              initialValue={room.area}
             >
               <Input />
             </Form.Item>
@@ -145,6 +172,7 @@ export default function CreateRoom() {
               label="Số lượng người"
               name="maxTenant"
               rules={[{ required: true }]}
+              initialValue={room.max_number_tenant}
             >
               <Input />
             </Form.Item>
@@ -153,6 +181,7 @@ export default function CreateRoom() {
               label="Giá thuê"
               name="price"
               rules={[{ required: true }]}
+              initialValue={room.price}
             >
               <InputNumber
                 style={{
@@ -165,7 +194,16 @@ export default function CreateRoom() {
               label="Tiền đặt cọc"
               name="deposit"
               rules={[{ required: true }]}
+              initialValue={room.deposit}
             >
+              <InputNumber
+                style={{
+                  width: 600,
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item label="Nợ" name="debt" initialValue={room.debt}>
               <InputNumber
                 style={{
                   width: 600,
