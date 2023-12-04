@@ -8,6 +8,8 @@ import { BsFilePersonFill } from 'react-icons/bs';
 // images
 import logo from '@/assets/logo.png';
 import avatar from '@/assets/images/avatar.jpg';
+import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
 
 const { Title, Text } = Typography;
 
@@ -41,6 +43,7 @@ const items = [
 export default function ManagerSider() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentUser = useAppSelector(selectUser);
 
   const siderItems = useCallback(
     () =>
@@ -51,6 +54,7 @@ export default function ManagerSider() {
       })),
     [navigate],
   );
+
   return (
     <div>
       <div className="flex items-center">
@@ -74,7 +78,11 @@ export default function ManagerSider() {
         <Badge status="success" dot={true}>
           <Avatar shape="square" src={avatar} size={'large'} />
         </Badge>
-        <Text>Nguyễn Văn Kỳ</Text>
+        <div>
+          <Text>{currentUser?.email}</Text>
+          <br />
+          <Text className="font-bold">{currentUser?.role}</Text>
+        </div>
       </div>
     </div>
   );

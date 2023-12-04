@@ -1,39 +1,32 @@
+import { BUILDINGS_PATH, routes } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
-import { useAppSelector } from '@/store/hooks';
-import { selectUser } from '@/store/slices/auth.slice';
-import { App, Button, Card, Form, Input, InputNumber } from 'antd';
+import { App, Button, Card, Form, Input, Select } from 'antd';
 import { t } from 'i18next';
-
-interface CreateBuildingForm {
-  name: string;
-  address: string;
-  ownerId: number | undefined;
-}
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateBuilding() {
   const [form] = Form.useForm();
-  const apiBuilding = useApiClient('/buildings');
-
-  const currentUser = useAppSelector(selectUser);
-
+  const apiBuilding = useApiClient(BUILDINGS_PATH);
   const { notification } = App.useApp();
+  const navigate = useNavigate();
 
-  const handleCreate = async (values: CreateBuildingForm) => {
-    values.ownerId = currentUser?.id;
+  const [buildingType, setBuildingType] = useState('');
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCreate = async (values: any) => {
     try {
-      console.log(values);
       const newBuilding = await apiBuilding.create({
         ...values,
       });
-      if (newBuilding?.status === 201) {
+
+      if (newBuilding && newBuilding.status === 201) {
         notification.success({ message: t('building.new.success') });
+        navigate(routes.managers.buildings.index);
       } else {
         notification.error({ message: t('building.new.failed') });
       }
-      console.log({
-        newBuilding,
-      });
+
       form.resetFields();
     } catch (error) {
       console.error(error);
@@ -59,6 +52,27 @@ export default function CreateBuilding() {
         </Form.Item>
 
         <Form.Item
+          name="type"
+          label={t('building.buildingType')}
+          rules={[{ required: true, message: t('common.pleaseEnter') }]}
+        >
+          <Select
+            options={[
+              {
+                label: t('building.type.hostel'),
+                value: 'HOSTEL',
+              },
+              {
+                label: t('building.type.entireHouse'),
+                value: 'ENTIRE_HOUSE',
+              },
+            ]}
+            placeholder="Select"
+            onChange={(value) => setBuildingType(value)}
+          />
+        </Form.Item>
+
+        <Form.Item
           name="address"
           label={t('building.buildingAddress')}
           rules={[{ required: true, message: t('common.pleaseEnter') }]}
@@ -66,43 +80,7 @@ export default function CreateBuilding() {
           <Input placeholder="Building address" />
         </Form.Item>
 
-        <Form.Item
-          name="electricPrice"
-          label={'Tiền điện /1 Số'}
-          initialValue={0}
-        >
-          <InputNumber placeholder="Tiền điện" className="w-[200px]" />
-        </Form.Item>
-
-        <Form.Item name="waterPrice" label={'Tiền nước /1 Số'} initialValue={0}>
-          <InputNumber placeholder="Tiền nước" className="w-[200px]" />
-        </Form.Item>
-
-        <Form.Item name="wifiFee" label={'Tiền Wifi /1 tháng'} initialValue={0}>
-          <InputNumber placeholder="Tiền wifi" className="w-[200px]" />
-        </Form.Item>
-
-        <Form.Item
-          name="environmentPrice"
-          label={'Tiền vệ sinh /1 tháng'}
-          initialValue={0}
-        >
-          <InputNumber placeholder="Tiền điện" className="w-[200px]" />
-        </Form.Item>
-
-        <Form.Item
-          name="lightPrice"
-          label={'Tiền thắp sáng /1 tháng'}
-          initialValue={0}
-        >
-          <InputNumber placeholder="Tiền điện" className="w-[200px]" />
-        </Form.Item>
-
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="bg-primary submit-button"
-        >
+        <Button type="primary" htmlType="submit">
           Tạo tòa nhà mới
         </Button>
       </Form>

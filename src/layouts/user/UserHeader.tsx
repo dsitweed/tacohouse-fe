@@ -18,9 +18,7 @@ export default function UserHeader() {
   const handleSignOut = async () => {
     try {
       const response = await apiSignOut.create();
-      console.log({
-        response,
-      });
+
       if (response?.status === 200) {
         dispatch(authActions.signOut());
 

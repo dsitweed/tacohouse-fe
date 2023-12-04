@@ -15,8 +15,10 @@ import {
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { useState } from 'react';
-import { mockBuildingSection, mockTenantSection } from '@/services';
+import { useEffect, useState } from 'react';
+import { useApiClient } from '@/shared/hooks/api';
+import { BUILDINGS_PATH, MANAGER_PATH } from '@/routes/routeNames';
+import { BuildingEntity } from '@/models';
 
 const facilitiesSelectOption: SelectProps['options'] = [
   {
@@ -33,16 +35,31 @@ const facilitiesSelectOption: SelectProps['options'] = [
   },
 ];
 
-const buildingsSelectOptions: SelectProps['options'] = mockBuildingSection.map(
-  (item) => ({
-    label: item.name,
-    value: item.id,
-  }),
-);
-
 export default function CreateRoom() {
   const [form] = Form.useForm();
   const [isActive, setIsActive] = useState(false);
+  const apiGetAllBuildings = useApiClient(`${MANAGER_PATH}/buildings`);
+  const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const [buildings, setBuildings] = useState<BuildingEntity[]>();
+
+  useEffect(() => {
+    const fetchBuildings = async () => {
+      const response = await apiGetAllBuildings.getAll();
+
+      if (response && response.status === 200) {
+        setBuildings(response.data.data);
+      }
+    };
+
+    fetchBuildings();
+  }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handelCreate = (values: any) => {
+    console.log({
+      values,
+    });
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normFile = (e: any) => {
@@ -67,6 +84,8 @@ export default function CreateRoom() {
             layout="vertical"
             autoComplete="off"
             name="edit_room"
+            onFinish={handelCreate}
+            onFinishFailed={(err) => console.error(err)}
           >
             <Row gutter={[24, 24]}>
               <Col xs={24} sm={12}>
@@ -76,7 +95,12 @@ export default function CreateRoom() {
                   rules={[{ required: true }]}
                 >
                   <Select
-                    options={buildingsSelectOptions}
+                    options={buildings?.map((building) => {
+                      return {
+                        label: building.name,
+                        value: building.id,
+                      };
+                    })}
                     placeholder="Chọn tòa nhà"
                   />
                 </Form.Item>
@@ -105,19 +129,6 @@ export default function CreateRoom() {
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
-                <Form.Item name="tenants" label="Chọn người đang thuê">
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Chọn người đang thuê"
-                    options={mockTenantSection.map((tenant) => {
-                      return {
-                        label: `${tenant.name} - ${tenant.room}`,
-                        value: `${tenant.id}`,
-                      };
-                    })}
-                  />
-                </Form.Item>
                 <Typography.Title level={5}>
                   Chỉnh sửa lúc chọn người thuê phòng hiển thị như lúc view
                   singgleRoom
@@ -138,7 +149,11 @@ export default function CreateRoom() {
               name="area"
               rules={[{ required: true }]}
             >
-              <Input />
+              <InputNumber
+                style={{
+                  width: 600,
+                }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -146,7 +161,11 @@ export default function CreateRoom() {
               name="maxTenant"
               rules={[{ required: true }]}
             >
-              <Input />
+              <InputNumber
+                style={{
+                  width: 600,
+                }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -155,6 +174,10 @@ export default function CreateRoom() {
               rules={[{ required: true }]}
             >
               <InputNumber
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}
@@ -167,6 +190,10 @@ export default function CreateRoom() {
               rules={[{ required: true }]}
             >
               <InputNumber
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}

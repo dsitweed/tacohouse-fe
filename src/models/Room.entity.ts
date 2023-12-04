@@ -1,22 +1,23 @@
+import { BuildingEntity, UserEntity } from '.';
+
 export interface RoomEntity {
   id: number;
+  imageUrls: string[];
   name: string; // name of room
-  // tenant: TenantEntity[]; // real
-  tenant_name: string[]; // for demo
-  max_number_tenant?: number; //
+  maxTenant?: number; //
   price: number;
-  previous_electricity: number;
-  current_electricity: number;
-  electricity_price: number;
-  water_price: number;
-  wifi_price?: number;
-  light_price: number;
-  parking_price?: number;
-  environment_price: number;
-  // Phí bảo trì và phi dịch vụ
-  charing_price?: number;
-  debt?: number;
-  area?: number;
+  area: number;
+  isActive: boolean;
+  dateBecomeAvailable?: string;
+  dueDate?: string;
   deposit?: number;
-  paid?: boolean;
+  debt?: number;
+
+  buildingId: number;
+  building: BuildingEntity;
+
+  tenants: UserEntity[];
+  facilities: string[];
+  invoices: string[];
+  roomUnitPrices: string[];
 }

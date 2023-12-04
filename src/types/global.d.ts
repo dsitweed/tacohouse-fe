@@ -2,7 +2,13 @@ declare namespace Response {
   // serve for pagination
   interface IPaginationResult<T> {
     count: number;
-    items: T[];
+    data: T[];
+    message: string;
+  }
+
+  interface ISingleResult<T> {
+    data: T;
+    message: string;
   }
 }
 

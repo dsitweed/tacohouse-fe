@@ -1,8 +1,8 @@
-import { Card, Col, Radio, Row, Tabs, TabsProps, Typography } from 'antd';
+import { Card, Col, Radio, Row, TabsProps, Typography } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { useEffect, useState } from 'react';
 import BuildingAnalytic from './BuildingAnalytic';
-import BuildingService from './BuildingService';
+import BuildingUnitPrice from './buildingUnitPrice';
 import ListRooms from './ListRooms';
 import { BuildingEntity } from '@/models';
 import { BuildingService as MockService } from '@/services/Building.service';
@@ -47,7 +47,7 @@ export default function ManagerBuilding() {
             title={<p className="text-lg">Services</p>}
             className="mb-6 border"
           >
-            <BuildingService building_id={1} />
+            <BuildingUnitPrice buildingId={1} />
           </Card>
         </Col>
       </Row>
@@ -64,7 +64,6 @@ export default function ManagerBuilding() {
               </Radio.Group>
             </div>
             {/* SHOW LIST ROOMS OF BUILDING + CAN CHANGE BUILDINGS */}
-            {/* <Tabs items={tabsBuilding} /> */}
           </div>
         </Card>
       </Row>

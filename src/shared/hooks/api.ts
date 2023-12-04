@@ -16,7 +16,7 @@ export const useApiClient = <T = any>(url: string) => {
   }
 
   async function getById(id: number) {
-    const response = await axios.get<T>(`${url}/${id}`);
+    const response = await axios.get<Response.ISingleResult<T>>(`${url}/${id}`);
 
     if (response.success) return response;
     else notification.error({ message: response.message });

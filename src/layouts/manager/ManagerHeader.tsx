@@ -1,5 +1,6 @@
 import { BellFilled, SearchOutlined, SettingFilled } from '@ant-design/icons';
 import {
+  App,
   Avatar,
   Badge,
   Breadcrumb,
@@ -8,10 +9,14 @@ import {
   MenuProps,
   Typography,
 } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // images
 import avatar from '@/assets/images/avatar.jpg';
+import { useApiClient } from '@/shared/hooks/api';
+import { useAppDispatch } from '@/store/hooks';
+import { authActions } from '@/store/slices/auth.slice';
+import { useTranslation } from 'react-i18next';
 
 const breadcrumbItems = [
   {
@@ -37,14 +42,44 @@ const dropdownItems: MenuProps['items'] = [
   },
 ];
 
-const menuDropdownItems: MenuProps['items'] = [
-  {
-    label: <Link to={'/auth/sign-out'}> Sign out</Link>,
-    key: '0',
-  },
-];
-
 export default function ManagerHeader() {
+  const apiSignOut = useApiClient('/auth/sign-out');
+  const { notification } = App.useApp();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      const response = await apiSignOut.create();
+      console.log({
+        response,
+      });
+
+      if (response?.status === 200) {
+        dispatch(authActions.signOut());
+
+        notification.success({
+          message: t('auth.signOutSuccess'),
+        });
+        navigate('/auth/sign-in');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const menuDropdownItems: MenuProps['items'] = [
+    {
+      label: (
+        <Typography.Text onClick={() => handleSignOut()}>
+          {t('auth.signOut')}
+        </Typography.Text>
+      ),
+      key: '0',
+    },
+  ];
+
   return (
     <div className="bg-white flex justify-between mt-2 items-center">
       <div className="flex flex-col">
@@ -62,7 +97,7 @@ export default function ManagerHeader() {
         {/* Change language button */}
         <SettingFilled style={{ color: 'black' }} />
         <Badge size="small" count={dropdownItems?.length}>
-          <Dropdown menu={{ items: dropdownItems }}>
+          <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
             <a onClick={(e) => e.preventDefault()}>
               <BellFilled />
             </a>
