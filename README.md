@@ -160,6 +160,9 @@ yarn add i18next react-i18next
 # Icons for app
 yarn add react-icons
 
+# Dayjs to format date
+yarn add dayjs
+
 # Chart
 yarn add chart.js react-chartjs-2
 

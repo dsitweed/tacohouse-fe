@@ -1,4 +1,5 @@
 import {
+  App,
   Button,
   Card,
   Checkbox,
@@ -9,7 +10,7 @@ import {
   InputNumber,
   Row,
   Select,
-  SelectProps,
+  Tooltip,
   Typography,
   Upload,
 } from 'antd';
@@ -17,34 +18,19 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react';
 import { useApiClient } from '@/shared/hooks/api';
-import { BUILDINGS_PATH, MANAGER_PATH } from '@/routes/routeNames';
-import { BuildingEntity } from '@/models';
-
-const facilitiesSelectOption: SelectProps['options'] = [
-  {
-    label: 'Điều hòa',
-    value: 1,
-  },
-  {
-    label: 'Bình nóng lạnh',
-    value: 2,
-  },
-  {
-    label: 'Tủ lạnh',
-    value: 3,
-  },
-];
+import { MANAGERS_PATH, ROOMS_PATH } from '@/routes/routeNames';
+import { BuildingEntity, RoomEntity } from '@/models';
 
 export default function CreateRoom() {
+  const { notification } = App.useApp();
   const [form] = Form.useForm();
-  const [isActive, setIsActive] = useState(false);
-  const apiGetAllBuildings = useApiClient(`${MANAGER_PATH}/buildings`);
-  const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const apiManager = useApiClient(MANAGERS_PATH);
+  const apiRoom = useApiClient<RoomEntity>(ROOMS_PATH);
   const [buildings, setBuildings] = useState<BuildingEntity[]>();
 
   useEffect(() => {
     const fetchBuildings = async () => {
-      const response = await apiGetAllBuildings.getAll();
+      const response = await apiManager.getAllExtend('/buildings');
 
       if (response && response.status === 200) {
         setBuildings(response.data.data);
@@ -55,10 +41,14 @@ export default function CreateRoom() {
   }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handelCreate = (values: any) => {
-    console.log({
-      values,
+  const handelCreate = async (values: any) => {
+    const res = await apiRoom.create({
+     ...values,
     });
+
+    if (res?.success) {
+      notification.success({ message: 'Tạo thòng thành công' });
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,7 +80,7 @@ export default function CreateRoom() {
             <Row gutter={[24, 24]}>
               <Col xs={24} sm={12}>
                 <Form.Item
-                  name="building"
+                  name="buildingId"
                   label="Thuộc tòa nhà"
                   rules={[{ required: true }]}
                 >
@@ -118,21 +108,19 @@ export default function CreateRoom() {
                     </div>
                   </Upload>
                 </Form.Item>
-
-                <Form.Item>
-                  <Checkbox
-                    checked={isActive}
-                    onChange={() => setIsActive(!isActive)}
-                  >
-                    Phòng đã được thuê
-                  </Checkbox>
-                </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
-                <Typography.Title level={5}>
-                  Chỉnh sửa lúc chọn người thuê phòng hiển thị như lúc view
-                  singgleRoom
-                </Typography.Title>
+                <Form.Item
+                  name="isActive"
+                  valuePropName="checked"
+                  label="Phòng đã được thuê chưa?"
+                >
+                  <Checkbox>
+                    <Tooltip title="Nếu bỏ chọn nghìa là phòng chưa được thuê và sẽ đăng bài">
+                      <p>Phòng đã được thuê</p>
+                    </Tooltip>
+                  </Checkbox>
+                </Form.Item>
               </Col>
             </Row>
 
@@ -142,6 +130,22 @@ export default function CreateRoom() {
               rules={[{ required: true }]}
             >
               <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Giá thuê"
+              name="price"
+              rules={[{ required: true }]}
+            >
+              <InputNumber
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
+                style={{
+                  width: 600,
+                }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -157,27 +161,11 @@ export default function CreateRoom() {
             </Form.Item>
 
             <Form.Item
-              label="Số lượng người"
+              label="Số lượng người tối đa ở"
               name="maxTenant"
               rules={[{ required: true }]}
             >
               <InputNumber
-                style={{
-                  width: 600,
-                }}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Giá thuê"
-              name="price"
-              rules={[{ required: true }]}
-            >
-              <InputNumber
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                }
-                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}
@@ -200,18 +188,8 @@ export default function CreateRoom() {
               />
             </Form.Item>
 
-            <Form.Item label="Ngày phòng sẽ trống" name="dateBecomeAvailable">
-              <DatePicker />
-            </Form.Item>
-
-            <Form.Item label="Ngày thu tiền" name="dueDate" initialValue={31}>
-              <InputNumber
-                min={1}
-                max={31}
-                style={{
-                  width: 600,
-                }}
-              />
+            <Form.Item label="Ngày thu tiền" name="dueDate">
+              <DatePicker format={'DD/MM/YYYY'} />
             </Form.Item>
 
             <Form.Item
@@ -219,15 +197,6 @@ export default function CreateRoom() {
               name="description"
             >
               <Input.TextArea rows={4} />
-            </Form.Item>
-
-            <Form.Item label="Các tiện ích" name="facilities">
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Chọn các tiện ích của phòng"
-                options={facilitiesSelectOption}
-              ></Select>
             </Form.Item>
 
             <Form.Item>

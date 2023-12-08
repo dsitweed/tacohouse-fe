@@ -187,7 +187,7 @@ export default function UserDashboard() {
             </Button>
           </div>
         </Col>
-        <GoogleMap
+        {/* <GoogleMap
           mapContainerStyle={{
             width: '100%',
             height: 450,
@@ -197,7 +197,7 @@ export default function UserDashboard() {
           mapContainerClassName="border border-slate-300"
         >
           <MarkerF position={exampleMap.center} />
-        </GoogleMap>
+        </GoogleMap> */}
       </Row>
 
       {/* MARKETINGS FACILITIES */}

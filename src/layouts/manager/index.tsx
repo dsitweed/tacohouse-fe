@@ -29,7 +29,7 @@ export default function ManagerLayout() {
 
   return (
     <Layout className="h-screen">
-      <Layout.Sider theme="light" trigger={null}>
+      <Layout.Sider theme="light" trigger={null} className="hidden lg:block">
         <ManagerSider />
       </Layout.Sider>
       <Layout>

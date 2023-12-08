@@ -1,5 +1,4 @@
 import { RoomEntity } from '@/models';
-import { RoomService, mockTenantSection } from '@/services';
 import {
   Avatar,
   Button,
@@ -16,19 +15,29 @@ import { useEffect, useState } from 'react';
 import { GoArrowSwitch, GoHeart, GoShareAndroid } from 'react-icons/go';
 import { TfiPrinter } from 'react-icons/tfi';
 
-import face1 from '@/assets/images/face-1.jpg';
 import { Link } from 'react-router-dom';
+import { useApiClient } from '@/shared/hooks/api';
+import { ROOMS_PATH } from '@/routes/routeNames';
+import dayjs from 'dayjs';
+// import image
+import face1 from '@/assets/images/face-1.jpg';
+import avatarDefault from '@/assets/images/avatar.jpg';
 
 export default function SingleRoom() {
   const paths = window.location.pathname.split('/');
   const roomId = Number(paths[paths.length - 1]);
   const [room, setRoom] = useState<RoomEntity>();
 
+  const apiRoom = useApiClient(ROOMS_PATH);
+
   // GET ROOM DATA
   useEffect(() => {
     const fetchData = async () => {
-      const roomData = (await RoomService.getRoom(roomId)) as RoomEntity;
-      setRoom(roomData);
+      const response = await apiRoom.getById(roomId);
+
+      if (response && response.status === 200) {
+        setRoom(response.data.data);
+      }
     };
 
     fetchData();
@@ -53,11 +62,11 @@ export default function SingleRoom() {
                 Chỉnh sửa thông tin phòng
               </Link>
             </div>
-            <Typography.Text>Building.address</Typography.Text>
+            <Typography.Text>Địa chỉ: {room.building.name}</Typography.Text>
           </Col>
           <Col sm={24} md={8} className="flex justify-between items-center">
             <Typography>
-              {room.price}VND/<span>month</span>
+              {room.price.toLocaleString()} VND/<span>tháng</span>
             </Typography>
             <Space>
               <GoArrowSwitch size={16} />
@@ -75,13 +84,10 @@ export default function SingleRoom() {
             <Col className="flex flex-col gap-5">
               <Space>
                 <div className="px-3 py-2 bg-gray-100 rounded-lg">
-                  room.type
+                  {room.building.type}
                 </div>
                 <div className="px-3 py-2 bg-gray-100 rounded-lg">
                   {room.area} m&sup2;
-                </div>
-                <div className="px-3 py-2 bg-gray-100 rounded-lg">
-                  room.type
                 </div>
               </Space>
 
@@ -95,16 +101,7 @@ export default function SingleRoom() {
                   }}
                   className="mt-4"
                 >
-                  room.description
-                  <br />
-                  Fully furnished. Elegantly appointed condominium unit situated
-                  on premier location. PS6. The wide entry hall leads to a large
-                  living room with dining area. This expansive 2 bedroom and 2
-                  renovated marble bathroom apartment has great windows. Despite
-                  the interior views, the apartments Southern and Eastern
-                  exposures allow for lovely natural light to fill every room.
-                  The master suite is surrounded by handcrafted milkwork and
-                  features incredible walk-in closet and storage space.
+                  {room.description || 'Không có miêu tả'}
                 </Typography.Paragraph>
                 <Divider className="border" />
               </div>
@@ -116,13 +113,12 @@ export default function SingleRoom() {
                 <div className="grid grid-cols-2">
                   <div>
                     <p>Room ID: {room.id}</p>
-                    <p>
-                      Price: {room.price} VND/Month Size: {room.area} m&sup2;
-                    </p>
+                    <p>Price: {room.price.toLocaleString()} VND/Tháng</p>
+                    <p>Diện tích: {room.area} m&sup2;</p>
                   </div>
                   <div>
-                    <p>Property Type : Apartment</p>
-                    <p>Property Status : For Sale</p>
+                    <p>Property Type : {room.building.type}</p>
+                    <p>Property Status : For Rent</p>
                   </div>
                 </div>
               </div>
@@ -131,14 +127,10 @@ export default function SingleRoom() {
           {/* Features */}
           <Card>
             <Typography.Title level={5}>Features</Typography.Title>
-            <div className="grid grid-cols-2">
-              <div>
-                <p>Air Conditioning</p>
-                <p>WiFi</p>
-              </div>
-              <div>
-                <p>Refrigerator</p>
-              </div>
+            <div className="grid md:grid-cols-2 grid-cols-1">
+              {room.facilities.map((item, index) => (
+                <p key={`facility-${index}`}>{item.name}</p>
+              ))}
             </div>
           </Card>
           {/* Location */}
@@ -217,25 +209,28 @@ export default function SingleRoom() {
         </Col>
         <Col xs={24} md={8}>
           <Card>
-            <Typography.Title level={3}>Sô người: 3</Typography.Title>
+            <Typography.Title level={3}>
+              Số người: {room.tenants.length}
+            </Typography.Title>
             <div className="flex flex-col gap-4">
-              {mockTenantSection.map((tenant, index) => {
-                if (index < 3) {
-                  return (
-                    <div
-                      key={`${tenant.id}-tenants`}
-                      className="flex gap-3 items-center"
-                    >
-                      <Avatar src={tenant.avatar} size={80} />
-                      <div>
-                        <p>{tenant.name}</p>
-                        <p>Phone: tenant.phone</p>
-                        <p>Age: tenant.dob</p>
-                        <p>Address: {tenant.address}</p>
-                      </div>
+              {room.tenants.map((tenant) => {
+                return (
+                  <div
+                    key={`${tenant.id}-tenants`}
+                    className="flex gap-3 items-center"
+                  >
+                    <Avatar src={tenant.avatarUrl || avatarDefault} size={80} />
+                    <div>
+                      <p>{`${tenant.lastName} ${tenant.firstName}`}</p>
+                      <p>Phone: {tenant.phoneNumber}</p>
+                      <p>
+                        Ngày sinh: {dayjs(tenant.dob).format('DD/MM/YYYY')} (
+                        {dayjs().diff(tenant.dob, 'years')} tuổi)
+                      </p>
+                      <p>Address: {tenant.address}</p>
                     </div>
-                  );
-                }
+                  </div>
+                );
               })}
             </div>
           </Card>

@@ -1,11 +1,8 @@
 import { RoomEntity } from '.';
 
 export interface TenantEntity {
-  id: number | string;
-  user_id?: number | string;
-  room_id?: number | string;
-  building_id?: number | string;
-  // just for test attribute
+  id: number;
+  roomId?: number | string;
   firstName: string;
   lastName: string;
   room: RoomEntity; // room name or number
@@ -14,5 +11,4 @@ export interface TenantEntity {
   email: string;
   avatar?: string;
   role?: string[];
-  is_active: boolean;
 }

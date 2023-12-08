@@ -1,9 +1,56 @@
-import { Button, Card, DatePicker, Form, Input, Typography } from 'antd';
+import { RoomEntity } from '@/models';
+import { MANAGERS_PATH, routes } from '@/routes/routeNames';
+import { useApiClient } from '@/shared/hooks/api';
+import {
+  App,
+  Button,
+  Card,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Typography,
+} from 'antd';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateTenant() {
   const [form] = Form.useForm();
+  const { notification } = App.useApp();
+  const navigate = useNavigate();
 
-  const createTenant = () => {};
+  const [listRooms, setListRooms] = useState<RoomEntity[]>();
+  const apiManager = useApiClient(MANAGERS_PATH);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await apiManager.getAllExtend('/rooms');
+      if (res?.success) {
+        setListRooms(res.data.data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const createTenant = async (values: any) => {
+    const response = await apiManager.createExtend('/tenant', {
+      ...values,
+      dob: values.dob.$d,
+    });
+
+    if (response?.success) {
+      notification.success({
+        message: 'Thêm người thuê trọ thành công',
+      });
+      navigate(routes.managers.tenants.index);
+    } else {
+      notification.error({
+        message: response?.message,
+      });
+    }
+  };
 
   return (
     <Card>
@@ -14,35 +61,73 @@ export default function CreateTenant() {
         autoComplete="true"
         onFinish={createTenant}
       >
-        <Form.Item name="name" label="Phòng đang thuê (Có thể thêm sau)">
-          <Input placeholder="Nhập số phòng" />
+        <Form.Item
+          name="roomId"
+          label="Phòng đang thuê"
+          rules={[{ required: true, message: 'Hãy chọn phòng đang thuê' }]}
+        >
+          <Select
+            placeholder="Chọn phòng đang thuê"
+            options={listRooms?.map((room) => ({
+              label: `${room.name} - ${room.building.name}`,
+              value: room.id,
+            }))}
+          />
         </Form.Item>
 
         <Form.Item
-          name="name"
+          name="lastName"
+          label="Họ và tên đệm"
+          rules={[{ required: true, message: 'Hãy nhập họ và tên' }]}
+        >
+          <Input placeholder="Nhập họ và tên đệm" />
+        </Form.Item>
+
+        <Form.Item
+          name="firstName"
           label="Tên"
           rules={[{ required: true, message: 'Hãy nhập tên' }]}
         >
-          <Input placeholder="Input building name" />
+          <Input placeholder="Nhập tên" />
         </Form.Item>
 
         <Form.Item
-          name="name"
+          name="phoneNumber"
           label="Số điện thoại"
-          rules={[{ required: true, message: 'Hãy nhập số điện thoại' }]}
+          rules={[
+            { required: true, message: 'Hãy nhập số điện thoại' },
+            {
+              len: 10,
+              message: 'Hãy nhập số điện thoại 10 chữ số',
+            },
+          ]}
         >
-          <Input placeholder="Input building name" />
+          <Input placeholder="Nhập số điện thoại" />
         </Form.Item>
 
         <Form.Item name="dob" label="Ngày tháng năm sinh">
           <DatePicker format={'DD/MM/YYYY'} />
         </Form.Item>
 
-        <Form.Item name="address" label="Quê quán">
+        <Form.Item
+          name="address"
+          label="Quê quán"
+          rules={[{ required: true, message: 'Hãy nhập quê quán' }]}
+        >
           <Input placeholder="Building address" />
         </Form.Item>
 
-        <Form.Item name="citizenNumber" label="Sô CCCD">
+        <Form.Item
+          name="citizenNumber"
+          label="Sô CCCD"
+          rules={[
+            { required: true, message: 'Hãy nhập số điện thoại' },
+            {
+              len: 12,
+              message: 'Hãy nhập CCCD 12 chữ số',
+            },
+          ]}
+        >
           <Input placeholder="Số căn cước công dân" />
         </Form.Item>
 

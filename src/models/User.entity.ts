@@ -1,10 +1,21 @@
+import { BuildingEntity, RoomEntity } from '.';
+
 export interface UserEntity {
   id: number;
-  username: string;
-  address: object;
-  phone: string;
-  website: string;
-  company: object;
-  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  refreshTOken?: string;
+  isActive: boolean;
   firstName: string;
+  lastName: string;
+  address: string;
+  citizenNumber?: string;
+  phoneNumber?: string;
+  avatarUrl?: string;
+  dob?: Date | string;
+
+  buildings: BuildingEntity[];
+  roomId: number;
+  room: RoomEntity;
 }

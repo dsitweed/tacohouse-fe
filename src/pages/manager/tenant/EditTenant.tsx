@@ -1,6 +1,6 @@
-import { TenantEntity } from '@/models';
-import { TenantService } from '@/services';
+import { RoomEntity, UserEntity } from '@/models';
 import {
+  App,
   Avatar,
   Button,
   Card,
@@ -9,86 +9,170 @@ import {
   Form,
   Input,
   Row,
+  Select,
   Typography,
 } from 'antd';
 import { useEffect, useState } from 'react';
 
 // images mock
 import face4 from '@/assets/images/face-4.jpg';
+import { useApiClient } from '@/shared/hooks/api';
+import { MANAGERS_PATH } from '@/routes/routeNames';
+import dayjs from 'dayjs';
 
 export default function EditTenant() {
+  const { notification } = App.useApp();
   const [form] = Form.useForm();
-  const [tenant, setTenant] = useState<TenantEntity>();
+  const [tenant, setTenant] = useState<UserEntity>();
+  const [rooms, setRooms] = useState<RoomEntity[]>();
   const paths = window.location.pathname.split('/');
+  // single page (/tenantId) -> -1, edit page -> -2 (/tenantId/edit)
   const tenantId =
     Number(paths[paths.length - 1]) || Number(paths[paths.length - 2]);
+  const apiManager = useApiClient(MANAGERS_PATH);
 
   useEffect(() => {
-    const fetch = async () => {
-      const tenant = (await TenantService.getTenant(tenantId)) as TenantEntity;
-      setTenant(tenant);
+    const fetchData = async () => {
+      const res = await apiManager.getByIdExtend('/tenant', tenantId);
+
+      if (res?.success) {
+        setTenant(res.data.data);
+      }
     };
 
-    fetch();
-  }, [tenant]);
+    const fetchRoom = async () => {
+      const res = await apiManager.getAllExtend('/rooms');
+
+      if (res?.success) {
+        setRooms(res.data.data);
+      }
+    };
+
+    fetchData();
+    fetchRoom();
+  }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = async (values: any) => {
+    const res = await apiManager.updateExtend('/tenant', tenantId, {
+      ...values,
+      dob: values.dob.$d,
+    });
+
+    if (res?.success) {
+      notification.success({
+        message: 'Thay đổi thông tin người thuê thành công',
+      });
+      setTenant(res.data.data);
+    }
+  };
+
+  /**
+   * If rooms list not contain tenant.room (selected room) -> add selectedRoom to rooms list
+   * for user select and for presentation
+   */
+  const addSelectedRoom = () => {
+    const isContain = rooms?.some((room) => room.id === tenant?.room.id);
+    if (!isContain && tenant) rooms?.push(tenant.room);
+  };
+
+  addSelectedRoom();
 
   return !tenant ? (
     <Card>Không có tenant</Card>
   ) : (
     <Card>
-      <Typography.Title level={3}>Thông tin: {tenant.name}</Typography.Title>
-      <Form form={form} layout="vertical" autoComplete="true">
+      <Typography.Title level={3}>
+        Thông tin: {tenant.lastName} {tenant.firstName}
+      </Typography.Title>
+      <Form
+        form={form}
+        layout="vertical"
+        autoComplete="true"
+        onFinish={handleUpdate}
+        initialValues={{
+          firstName: tenant.firstName,
+          lastName: tenant.lastName,
+          roomId: tenant.room.id,
+          address: tenant.address,
+          phoneNumber: tenant.phoneNumber,
+          dob: dayjs(tenant.dob),
+          citizenNumber: tenant.citizenNumber,
+        }}
+      >
         <Form.Item>
           <Avatar shape="square" src={face4} size={150} />
         </Form.Item>
         <Row gutter={[24, 24]}>
           <Col xs={24} sm={12}>
-            <Form.Item name="name" label="Tên" initialValue={tenant.name}>
-              <Input placeholder={tenant.name} />
+            <Form.Item name="lastName" label="Họ và tên đệm">
+              <Input />
             </Form.Item>
+
             <Form.Item name="dob" label="Ngày tháng năm sinh">
               <DatePicker format={'DD/MM/YYYY'} />
             </Form.Item>
 
-            <Form.Item
-              name="address"
-              label="Quê quán"
-              initialValue={tenant.address}
-            >
-              <Input placeholder={tenant.address} />
+            <Form.Item name="address" label="Quê quán">
+              <Input />
             </Form.Item>
 
             <Form.Item
               name="citizenNumber"
               label="Sô CCCD"
-              initialValue={tenant.citizenNumber}
+              rules={[
+                { required: true, message: 'Hãy nhập số điện thoại' },
+                {
+                  len: 12,
+                  message: 'Hãy nhập CCCD 12 chữ số',
+                },
+              ]}
             >
               <Input placeholder="Số căn cước công dân" />
             </Form.Item>
+
             <Form.Item name="tenantPicture" label="Ảnh chân dung - 1 bức">
               <Typography.Title level={5}>
                 Ảnh chân dung sau này cho phép up ảnh - 1 cái
               </Typography.Title>
             </Form.Item>
           </Col>
+
           <Col xs={24} sm={12}>
-            <Form.Item name="room" label="Phòng" initialValue={tenant.room}>
+            <Form.Item name="firstName" label="Tên">
               <Input />
             </Form.Item>
-            <Form.Item
-              name="building"
-              label="Tòa nhà"
-              initialValue={tenant.building}
-            >
-              <Input />
+
+            <Form.Item name="roomId" label="Phòng">
+              <Select
+                options={rooms?.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                }))}
+              />
             </Form.Item>
+
+            <Form.Item name="building" label="Tòa nhà">
+              <p>
+                Thuộc tòa nhà:
+                <span className="font-bold"> {tenant.room.building.name}</span>
+              </p>
+            </Form.Item>
+
             <Form.Item
-              name="phone"
+              name="phoneNumber"
               label="Số điện thoại"
-              initialValue={tenant.phone}
+              rules={[
+                { required: true, message: 'Hãy nhập số điện thoại' },
+                {
+                  len: 10,
+                  message: 'Hãy nhập số điện thoại 10 chữ số',
+                },
+              ]}
             >
-              <Input />
+              <Input placeholder="Nhập số điện thoại" />
             </Form.Item>
+
             <Form.Item name="citizenPicture" label="Ảnh thẻ căn cước - 2 bức">
               <Typography.Title level={5}>
                 Ảnh căn cước sau này cho phép up ảnh - 2 cái

@@ -2,9 +2,11 @@
 export const AUTH_PATH = '/auth';
 export const BUILDINGS_PATH = '/buildings';
 export const ROOMS_PATH = '/rooms';
+export const TENANTS_PATH = '/tenants';
 export const ROOM_UNIT_PRICES_PATH = '/room-unit-prices';
 export const BUILDING_UNIT_PRICES_PATH = '/building-unit-prices';
-export const MANAGER_PATH = '/managers';
+export const FACILITIES_PATH = '/facilities';
+export const MANAGERS_PATH = '/managers';
 
 /* FOR FRONT END */
 export const routes = {
@@ -13,5 +15,8 @@ export const routes = {
     buildings: {
       index: '/managers/buildings',
     },
+    tenants: {
+      index: '/managers/tenants',
+    }
   },
 };

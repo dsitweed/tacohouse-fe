@@ -1,56 +1,36 @@
 import {
+  App,
   Button,
   Card,
   Checkbox,
   Col,
-  DatePicker,
   Form,
   Input,
   InputNumber,
   Row,
   Select,
-  SelectProps,
+  Tooltip,
   Typography,
   Upload,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react';
-import {
-  RoomService,
-  mockBuildingSection,
-  mockTenantSection,
-} from '@/services';
-import { RoomEntity } from '@/models';
-
-const facilitiesSelectOption: SelectProps['options'] = [
-  {
-    label: 'Điều hòa',
-    value: 1,
-  },
-  {
-    label: 'Bình nóng lạnh',
-    value: 2,
-  },
-  {
-    label: 'Tủ lạnh',
-    value: 3,
-  },
-];
-
-const buildingsSelectOptions: SelectProps['options'] = mockBuildingSection.map(
-  (item) => ({
-    label: item.name,
-    value: item.id,
-  }),
-);
+import { BuildingEntity, RoomEntity } from '@/models';
+import { useApiClient } from '@/shared/hooks/api';
+import { BUILDINGS_PATH, ROOMS_PATH } from '@/routes/routeNames';
 
 export default function EditRoom() {
+  const { notification } = App.useApp();
   const [form] = Form.useForm();
   const [room, setRoom] = useState<RoomEntity>();
-  const [isActive, setIsActive] = useState(false);
   const paths = window.location.pathname.split('/');
   const roomId = Number(paths[paths.length - 2]);
+
+  const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const apiRoom = useApiClient(ROOMS_PATH);
+
+  const [listBuilding, setListBuilding] = useState<BuildingEntity[]>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const normFile = (e: any) => {
@@ -61,13 +41,43 @@ export default function EditRoom() {
   };
 
   useEffect(() => {
-    const fetch = async () => {
-      const room = (await RoomService.getRoom(roomId)) as RoomEntity;
-      setRoom(room);
+    // get this room information
+    const fetchRoom = async () => {
+      const response = await apiRoom.getById(roomId);
+
+      if (response && response.status === 200) {
+        setRoom(response.data.data);
+      }
     };
 
-    fetch();
-  }, [room]);
+    const fetchBuilding = async () => {
+      const response = await apiBuilding.getAll();
+
+      if (response?.status === 200) {
+        setListBuilding(response.data.data);
+      }
+    };
+
+    fetchRoom();
+    fetchBuilding();
+  }, [roomId]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEditRoom = async (values: any) => {
+    const res = await apiRoom.update(roomId, {
+      ...values,
+    });
+
+    if (res?.success) {
+      notification.success({
+        message: 'Thay đổi thông tin phòng thành công',
+      });
+    }
+
+    console.log({
+      values,
+    });
+  };
 
   return !room ? (
     <Card>No have this room</Card>
@@ -76,7 +86,9 @@ export default function EditRoom() {
       {/* Basic room information + dropdown for Edit, delete func */}
       <Row gutter={[24, 24]} className="mb-6">
         <Col md={24} lg={12} className="flex justify-between">
-          <Typography.Title level={2}>Tạo phòng mới</Typography.Title>
+          <Typography.Title level={2}>
+            Chỉnh sửa thông tin phòng
+          </Typography.Title>
         </Col>
       </Row>
 
@@ -86,18 +98,31 @@ export default function EditRoom() {
             form={form}
             layout="vertical"
             autoComplete="off"
-            name="edit_room"
+            onFinish={handleEditRoom}
+            initialValues={{
+              buildingId: room.building.id,
+              isActive: room.isActive,
+              name: room.name,
+              area: Number(room.area),
+              maxTenant: room.maxTenant,
+              price: room.price,
+              deposit: room.deposit,
+              debt: room.debt,
+              description: room.description,
+            }}
           >
             <Row gutter={[24, 24]}>
               <Col xs={24} sm={12}>
                 <Form.Item
-                  name="building"
+                  name="buildingId"
                   label="Thuộc tòa nhà"
                   rules={[{ required: true }]}
-                  initialValue="room.buildingName"
                 >
                   <Select
-                    options={buildingsSelectOptions}
+                    options={listBuilding?.map((building) => ({
+                      label: building.name,
+                      value: building.id,
+                    }))}
                     placeholder="Chọn tòa nhà"
                   />
                 </Form.Item>
@@ -115,38 +140,22 @@ export default function EditRoom() {
                     </div>
                   </Upload>
                 </Form.Item>
-
-                <Form.Item>
-                  <Checkbox
-                    checked={isActive}
-                    onChange={() => setIsActive(!isActive)}
-                  >
-                    Phòng đã được thuê
-                  </Checkbox>
-                </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
+                {/* Problem: no match value to check box
+                  https://stackoverflow.com/questions/65696317/antd-4-checkbox-doesnt-have-value-after-form-submit
+                */}
                 <Form.Item
-                  name="tenants"
-                  label="Chọn người đang thuê"
-                  initialValue={room.tenant_name}
+                  label="Phòng đã được thuê chưa?"
+                  name="isActive"
+                  valuePropName="checked"
                 >
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Chọn người đang thuê"
-                    options={mockTenantSection.map((tenant) => {
-                      return {
-                        label: `${tenant.name} - ${tenant.room}`,
-                        value: `${tenant.id}`,
-                      };
-                    })}
-                  />
+                  <Checkbox>
+                    <Tooltip title="Nếu bỏ chọn nghìa là phòng chưa được thuê và sẽ đăng bài">
+                      <p>Phòng đã được thuê</p>
+                    </Tooltip>
+                  </Checkbox>
                 </Form.Item>
-                <Typography.Title level={5}>
-                  Chỉnh sửa lúc chọn người thuê phòng hiển thị như lúc view
-                  singgleRoom
-                </Typography.Title>
               </Col>
             </Row>
 
@@ -154,7 +163,6 @@ export default function EditRoom() {
               label="Tên phòng"
               name="name"
               rules={[{ required: true }]}
-              initialValue={room.name}
             >
               <Input />
             </Form.Item>
@@ -163,27 +171,36 @@ export default function EditRoom() {
               label="Diện tích"
               name="area"
               rules={[{ required: true }]}
-              initialValue={room.area}
             >
-              <Input />
+              <InputNumber
+                style={{
+                  width: 600,
+                }}
+              />
             </Form.Item>
 
             <Form.Item
               label="Số lượng người"
               name="maxTenant"
               rules={[{ required: true }]}
-              initialValue={room.max_number_tenant}
             >
-              <Input />
+              <InputNumber
+                style={{
+                  width: 600,
+                }}
+              />
             </Form.Item>
 
             <Form.Item
               label="Giá thuê"
               name="price"
               rules={[{ required: true }]}
-              initialValue={room.price}
             >
               <InputNumber
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}
@@ -194,31 +211,24 @@ export default function EditRoom() {
               label="Tiền đặt cọc"
               name="deposit"
               rules={[{ required: true }]}
-              initialValue={room.deposit}
             >
               <InputNumber
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}
               />
             </Form.Item>
 
-            <Form.Item label="Nợ" name="debt" initialValue={room.debt}>
+            <Form.Item label="Nợ" name="debt">
               <InputNumber
-                style={{
-                  width: 600,
-                }}
-              />
-            </Form.Item>
-
-            <Form.Item label="Ngày phòng sẽ trống" name="dateBecomeAvailable">
-              <DatePicker />
-            </Form.Item>
-
-            <Form.Item label="Ngày thu tiền" name="dueDate" initialValue={31}>
-              <InputNumber
-                min={1}
-                max={31}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value!.replace(/,/g, '')}
                 style={{
                   width: 600,
                 }}
@@ -229,16 +239,7 @@ export default function EditRoom() {
               label="Miêu tả (để đăng bài cho thuê)"
               name="description"
             >
-              <Input.TextArea rows={4} />
-            </Form.Item>
-
-            <Form.Item label="Các tiện ích" name="facilities">
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Chọn các tiện ích của phòng"
-                options={facilitiesSelectOption}
-              ></Select>
+              <Input.TextArea rows={10} />
             </Form.Item>
 
             <Form.Item>

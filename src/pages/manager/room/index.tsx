@@ -1,9 +1,11 @@
 import { RoomEntity } from '@/models';
 import {
+  App,
   Button,
   Card,
   Col,
   Input,
+  Popconfirm,
   Row,
   Select,
   Space,
@@ -12,51 +14,92 @@ import {
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import RoomGridItem from './RoomGridItem';
-import { mockRoomsSection } from '@/services';
 import { FaPlus } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
-
-const propertyTableColumns: ColumnsType<RoomEntity> = [
-  {
-    title: 'Index',
-    dataIndex: 'id',
-    width: 20,
-    render: (value, record, index) => <p>{index + 1}</p>,
-  },
-  {
-    title: 'Property',
-    render: (_, record) => <RoomGridItem room={record} />,
-  },
-  {
-    title: 'Date published',
-    dataIndex: 'datePublished',
-    render: () => <p>12/11/2023. Fake</p>,
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    render: () => <p>Rent. Fake</p>,
-  },
-  {
-    title: 'View',
-    dataIndex: 'view',
-    render: () => <p>12. Fake</p>,
-  },
-  {
-    title: 'Action',
-    dataIndex: 'action',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    render: (_, record) => (
-      <Space>
-        <Link to={`/managers/rooms/${record.id}/edit`}>Edit</Link>
-        <a href="">Delete</a>
-      </Space>
-    ),
-  },
-];
+import { useApiClient } from '@/shared/hooks/api';
+import { ROOMS_PATH } from '@/routes/routeNames';
+import { useEffect, useState } from 'react';
 
 export default function ManagerRoom() {
+  const { notification } = App.useApp();
   const navigate = useNavigate();
+  const apiRoom = useApiClient(ROOMS_PATH);
+  const [rooms, setRooms] = useState<RoomEntity[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await apiRoom.getAll();
+      if (response && response.status === 200) {
+        setRooms(response.data.data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDeleteRoom = async (roomId: number) => {
+    const res = await apiRoom.deleteById(roomId);
+
+    if (res.success) {
+      notification.success({
+        message: 'Xóa phòng thành công',
+      });
+      console.log({
+        data: res.data,
+      });
+      const deletedRoom: RoomEntity = res.data.data;
+      setRooms(rooms?.filter((item) => item.id !== deletedRoom.id));
+    }
+  };
+
+  const propertyTableColumns: ColumnsType<RoomEntity> = [
+    {
+      title: 'Index',
+      dataIndex: 'id',
+      width: 20,
+      render: (value, record, index) => <p>{index + 1}</p>,
+    },
+    {
+      title: 'Property',
+      render: (_, record) => <RoomGridItem room={record} />,
+    },
+    {
+      title: 'Date published',
+      dataIndex: 'datePublished',
+      render: () => <p>12/11/2023. Fake</p>,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActive', // isActive == true -> Have people renting
+      render: (value) =>
+        value === false ? (
+          <p className="font-bold text-green-500">Empty</p>
+        ) : (
+          <p className="font-bold text-red-500">Rent</p>
+        ),
+    },
+    {
+      title: 'View',
+      dataIndex: 'view',
+      render: () => <p>12. Fake</p>,
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      render: (_, record) => (
+        <Space>
+          <Link to={`/managers/rooms/${record.id}/edit`}>Edit</Link>
+          <Popconfirm
+            title="Bạn chắc chắn muốn xóa"
+            onConfirm={() => handleDeleteRoom(record.id)}
+          >
+            <a>Delete</a>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <Card>
@@ -95,7 +138,7 @@ export default function ManagerRoom() {
           rowKey={'id'}
           className="w-full overflow-auto"
           columns={propertyTableColumns}
-          dataSource={mockRoomsSection}
+          dataSource={rooms}
         />
       </Row>
     </Card>
