@@ -1,14 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BuildingUnitPriceEntity } from '@/models/BuildingUnitPriceEntity';
+import { InvoiceEntity } from '@/models/Invoice.entity';
 import { RoomEntity } from '@/models/Room.entity';
-import { BUILDING_UNIT_PRICES_PATH, ROOMS_PATH } from '@/routes/routeNames';
+import {
+  INVOICES_PATH,
+  MANAGERS_PATH,
+  ROOM_UNIT_PRICES_PATH,
+} from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from 'antd';
+import {
+  App,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Table,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface ListRoomsProps {
   buildingId: number;
+}
+
+interface RoomEntityExtend extends RoomEntity {
+  invoice: InvoiceEntity;
+
+  currentElectricity: number;
+  beforeElectricity: number;
+  electricityPrice: number;
+  totalElectricity: number;
+  waterPrice: number;
+  wifiPrice: number;
+  lightPrice: number;
+  environmentPrice: number;
+
+  total: number;
+  status: string;
 }
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -61,11 +91,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
  * Return view of list all rooms of specific Building
  */
 export default function ListRooms(props: ListRoomsProps) {
-  const apiRoom = useApiClient(ROOMS_PATH);
-  const apiBuildingUnitPrice = useApiClient(BUILDING_UNIT_PRICES_PATH);
-  const [rooms, setRooms] = useState<RoomEntity[]>([]);
-  const [buildingUnitPrices, setBuildingUnitPrices] =
-    useState<BuildingUnitPriceEntity[]>();
+  const { notification } = App.useApp();
+  const apiManager = useApiClient(MANAGERS_PATH);
+  const apiRoomUnitPrice = useApiClient(ROOM_UNIT_PRICES_PATH);
+  const apiInvoice = useApiClient(INVOICES_PATH);
+  const [rooms, setRooms] = useState<RoomEntityExtend[]>([]);
 
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
@@ -73,26 +103,23 @@ export default function ListRooms(props: ListRoomsProps) {
   // GET FIRST TIME DATA
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiRoom.getAll({
+      const response = await apiManager.getAllExtend('/rooms', {
         buildingId: props.buildingId,
       });
 
       if (response && response.status === 200) {
-        setRooms(response.data.data);
-      }
-    };
+        const rawListRoom = response.data.data;
+        for (let index = 0; index < rawListRoom.length; index++) {
+          const room = rawListRoom[index] as RoomEntityExtend;
+          rawListRoom[index] = calculateRoomCharge(room);
+        }
 
-    const fetchBuildingUnitPrices = async () => {
-      const response = await apiBuildingUnitPrice.getAll({
-        buildingId: props.buildingId,
-      });
-      if (response && response.status === 200) {
-        setBuildingUnitPrices(response.data.data);
+        // Update data -> UI
+        setRooms(rawListRoom);
       }
     };
 
     fetchData();
-    fetchBuildingUnitPrices();
   }, []);
 
   const isEditing = (record: RoomEntity) => String(record.id) === editingKey;
@@ -108,18 +135,73 @@ export default function ListRooms(props: ListRoomsProps) {
 
   const save = async (key: React.Key) => {
     try {
-      const row = (await form.validateFields()) as RoomEntity;
+      const row = (await form.validateFields()) as RoomEntityExtend;
 
       const newData = [...rooms];
       const index = newData.findIndex((item) => key === item.id);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
+        const newRow = {
+          ...item, // old data
+          ...row, // new data
+        };
+
+        const { currentElectricity, beforeElectricity, debt } = row;
+        const newRowReCalculate = calculateRoomCharge(
+          newRow,
+          currentElectricity,
+          beforeElectricity,
+          debt,
+        );
+
+        /* UPDATE DATA TO DATABASE */
+        const thisRoomData = newData[index];
+
+        const electricity = thisRoomData.roomUnitPrices.find(
+          (item) => item.buildingUnitPrice.name === 'electricity',
+        );
+
+        if (!electricity) {
+          cancel();
+          return;
+        }
+
+        // UPDATE ELECTRICITY
+        let response = await apiRoomUnitPrice.update(electricity.id, {
+          before: beforeElectricity,
+          current: currentElectricity,
         });
 
-        setRooms(newData);
+        // UPDATE INVOICE
+        if (thisRoomData.invoice === null) {
+          response = await apiInvoice.createExtend(
+            `/${thisRoomData.id}/current-month`,
+            {
+              total: thisRoomData.total,
+              roomId: thisRoomData.id,
+              buildingId: thisRoomData.buildingId,
+            },
+          );
+        } else {
+          response = await axios.patch(
+            `${INVOICES_PATH}/${thisRoomData.id}/current-month`,
+            {
+              total: thisRoomData.total,
+            },
+          );
+        }
+
+        if (response?.success) {
+          notification.success({ message: 'Cập nhật thành công' });
+
+          newRowReCalculate.invoice = response.data.data; // update invoice info
+          // UPDATE NEWEST DATA
+          newData.splice(index, 1, {
+            ...newRowReCalculate,
+          });
+          setRooms(newData);
+        }
+
         setEditingKey('');
       } else {
         newData.push(row);
@@ -131,6 +213,58 @@ export default function ListRooms(props: ListRoomsProps) {
     }
   };
 
+  const calculateRoomCharge = (
+    room: RoomEntityExtend,
+    currentElectricity?: number,
+    beforeElectricity?: number,
+    debt?: number,
+  ) => {
+    const electricity = room.roomUnitPrices.find(
+      (item) => item.buildingUnitPrice.name === 'electricity',
+    );
+
+    room.currentElectricity =
+      currentElectricity || Number(electricity?.current);
+    room.beforeElectricity = beforeElectricity || Number(electricity?.before);
+    room.electricityPrice = Number(electricity?.buildingUnitPrice.price);
+
+    room.totalElectricity =
+      (room.currentElectricity - room.beforeElectricity) *
+      room.electricityPrice;
+
+    const water = room.roomUnitPrices.find(
+      (item) => item.buildingUnitPrice.name === 'water',
+    );
+    const wifi = room.roomUnitPrices.find(
+      (item) => item.buildingUnitPrice.name === 'wifi',
+    );
+    const light = room.roomUnitPrices.find(
+      (item) => item.buildingUnitPrice.name === 'light',
+    );
+    const environment = room.roomUnitPrices.find(
+      (item) => item.buildingUnitPrice.name === 'environment',
+    );
+
+    room.waterPrice =
+      room.tenants.length * Number(water?.buildingUnitPrice.price);
+    room.wifiPrice = Number(wifi?.buildingUnitPrice.price);
+    room.lightPrice = Number(light?.buildingUnitPrice.price);
+    room.environmentPrice =
+      room.tenants.length * Number(environment?.buildingUnitPrice.price);
+    room.debt = debt || Number(room.debt);
+
+    room.total =
+      room.price +
+      room.totalElectricity +
+      room.waterPrice +
+      room.wifiPrice +
+      room.lightPrice +
+      room.environmentPrice +
+      room.debt;
+
+    return room;
+  };
+
   const roomsTableColumns = [
     {
       title: 'Room',
@@ -138,14 +272,19 @@ export default function ListRooms(props: ListRoomsProps) {
     },
     {
       title: 'Tenants',
-      dataIndex: 'tenantName',
+      dataIndex: 'tenantsName',
       render: (_: any, record: RoomEntity) => {
-        let label = '';
-        record.tenants.forEach(
-          (item) =>
-            (label = label + item.lastName + ' ' + item.firstName + '\n'),
+        const list: string[] = [];
+        record.tenants.forEach((item) =>
+          list.push(item.lastName + ' ' + item.firstName),
         );
-        return label;
+        return (
+          <div>
+            {list.map((item, index) => (
+              <div key={`tenantName-${index}`}>{item}</div>
+            ))}
+          </div>
+        );
       },
     },
     {
@@ -163,11 +302,11 @@ export default function ListRooms(props: ListRoomsProps) {
           electricity
         </span>
       ),
-      dataIndex: 'current_electricity',
+      dataIndex: 'currentElectricity',
       editable: true,
-      render: (_: any, record: RoomEntity) => (
-        <p>{record.current_electricity?.toLocaleString()}</p>
-      ),
+      render: (value: number) => {
+        return value.toLocaleString();
+      },
     },
     {
       title: (
@@ -177,25 +316,10 @@ export default function ListRooms(props: ListRoomsProps) {
           electricity
         </span>
       ),
-      dataIndex: 'previous_electricity',
+      dataIndex: 'beforeElectricity',
       editable: true,
-      render: (_: any, record: RoomEntity) => (
-        <p>{record.previous_electricity?.toLocaleString()}</p>
-      ),
-    },
-    {
-      title: (
-        <span>
-          Total
-          <br />
-          electricity
-        </span>
-      ),
-      dataIndex: 'total_electricity',
-      render: (_: any, record: RoomEntity) => {
-        const consume =
-          record.current_electricity - record.previous_electricity;
-        return <p>{consume?.toLocaleString()}</p>;
+      render: (value: number) => {
+        return value.toLocaleString();
       },
     },
     {
@@ -206,83 +330,59 @@ export default function ListRooms(props: ListRoomsProps) {
           price
         </span>
       ),
-      dataIndex: 'electricity_price',
-      render: () => (
-        <p>
-          {buildingUnitPrices
-            ?.find((item) => item.name === 'electricity')
-            ?.price.toLocaleString()}
-        </p>
-      ),
-    },
-    {
-      title: (
-        <span>
-          Electricity
-          <br />
-          fee
-        </span>
-      ),
-      dataIndex: 'electricity_fee',
-      render: (_: any, record: RoomEntity) => {
-        const totalCost =
-          (record.current_electricity - record.previous_electricity) *
-          record.electricity_price;
-        return <p>{totalCost?.toLocaleString()}</p>;
+      dataIndex: 'electricityPrice',
+      render: (value: number) => {
+        return `${value.toLocaleString()}`;
       },
     },
+    {
+      title: <span>Total electricity fee</span>,
+      dataIndex: 'totalElectricity',
+      render: (_: any, record: RoomEntityExtend) => {
+        return `${(
+          record.currentElectricity - record.beforeElectricity
+        ).toLocaleString()} x ${record.electricityPrice.toLocaleString()} = ${record.totalElectricity.toLocaleString()}`;
+      },
+    },
+
     {
       title: (
         <span>
           Water
           <br />
-          price
+          fee
         </span>
       ),
-      dataIndex: 'water_price',
-      editable: true,
-      render: (_: any, record: RoomEntity) => (
-        <p>
-          {buildingUnitPrices
-            ?.find((item) => item.name === 'water')
-            ?.price.toLocaleString()}
-        </p>
-      ),
+      dataIndex: 'waterPrice',
+      render: (value: number) => {
+        return `${value.toLocaleString()}`;
+      },
     },
     {
       title: (
         <span>
           Wifi
           <br />
-          price
+          fee
         </span>
       ),
-      dataIndex: 'wifi_price',
-      editable: true,
-      render: (_: any, record: RoomEntity) => (
-        <p>
-          {buildingUnitPrices
-            ?.find((item) => item.name === 'wifi')
-            ?.price.toLocaleString()}
-        </p>
-      ),
+      dataIndex: 'wifiPrice',
+      render: (value: number) => {
+        return `${value.toLocaleString()}`;
+      },
     },
     {
       title: (
         <span>
           Light
           <br />
-          price
+          fee
         </span>
       ),
-      dataIndex: 'light_price',
-      render: (_: any, record: RoomEntity) => (
-        <p>
-          {buildingUnitPrices
-            ?.find((item) => item.name === 'light')
-            ?.price.toLocaleString()}
-        </p>
-      ),
+      dataIndex: 'lightPrice',
+      render: (value: number) => {
+        return `${value.toLocaleString()}`;
+      },
     },
     {
       title: (
@@ -292,15 +392,10 @@ export default function ListRooms(props: ListRoomsProps) {
           price
         </span>
       ),
-      dataIndex: 'environment_price',
-      editable: true,
-      render: (_: any, record: RoomEntity) => (
-        <p>
-          {buildingUnitPrices
-            ?.find((item) => item.name === 'environment')
-            ?.price.toLocaleString()}
-        </p>
-      ),
+      dataIndex: 'environmentPrice',
+      render: (value: number) => {
+        return `${value.toLocaleString()}`;
+      },
     },
     {
       title: (
@@ -322,15 +417,25 @@ export default function ListRooms(props: ListRoomsProps) {
       ),
     },
     {
-      title: 'Total money',
-      dataIndex: 'environment_price',
-      render: (_) => <p>0</p>,
+      title: (
+        <Tooltip title="Nếu tổng tiền hiện 0. Hãy nhập tiền điện mới tháng này và lưu lại">
+          Total money
+        </Tooltip>
+      ),
+      dataIndex: 'total',
+      render: (value: number) => <p>{value.toLocaleString()}</p>,
     },
     {
       title: 'Paid',
       dataIndex: 'paid',
-      render: (_: any, record: RoomEntity) => (
-        <p>{record.paid ? 'Paid' : 'Pending'}</p>
+      render: (_: any, record: RoomEntityExtend) => (
+        <p>
+          {record.invoice?.status || (
+            <Tooltip title="Tháng này chưa có hóa đơn thuê phòng">
+              Not have
+            </Tooltip>
+          )}
+        </p>
       ),
     },
     {
@@ -393,6 +498,7 @@ export default function ListRooms(props: ListRoomsProps) {
           bordered
           size="small"
           rowKey={'id'}
+          rowClassName="editable-row"
           columns={mergedColumns}
           dataSource={rooms}
           className="w-full"

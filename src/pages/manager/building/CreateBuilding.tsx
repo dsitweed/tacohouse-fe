@@ -2,7 +2,6 @@ import { BUILDINGS_PATH, routes } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
 import { App, Button, Card, Form, Input, Select } from 'antd';
 import { t } from 'i18next';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateBuilding() {
@@ -10,8 +9,6 @@ export default function CreateBuilding() {
   const apiBuilding = useApiClient(BUILDINGS_PATH);
   const { notification } = App.useApp();
   const navigate = useNavigate();
-
-  const [buildingType, setBuildingType] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCreate = async (values: any) => {
@@ -62,13 +59,12 @@ export default function CreateBuilding() {
                 label: t('building.type.hostel'),
                 value: 'HOSTEL',
               },
-              {
-                label: t('building.type.entireHouse'),
-                value: 'ENTIRE_HOUSE',
-              },
+              // {
+              //   label: t('building.type.entireHouse'),
+              //   value: 'ENTIRE_HOUSE',
+              // },
             ]}
             placeholder="Select"
-            onChange={(value) => setBuildingType(value)}
           />
         </Form.Item>
 
