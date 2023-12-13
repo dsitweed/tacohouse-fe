@@ -20,8 +20,6 @@ import Tenant from '@/pages/manager/tenant';
 import EditRoom from '@/pages/manager/room/EditRoom';
 import EditTenant from '@/pages/manager/tenant/EditTenant';
 
-const isUserLoggedIn = true;
-
 const router = createBrowserRouter([
   {
     path: '/auth',
@@ -53,9 +51,9 @@ const router = createBrowserRouter([
         index: true,
         element: <UserDashboard />,
       },
-      isUserLoggedIn && {
-        // Routes for logged in User
-        path: 'users',
+      {
+        path: 'rooms/:roomId',
+        element: <SingleRoom />,
       },
     ],
   },

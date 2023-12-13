@@ -30,6 +30,7 @@ export default function ManagerRoom() {
     const fetchData = async () => {
       const response = await apiRoom.getAll();
       if (response && response.status === 200) {
+        console.log(response.data.data);
         setRooms(response.data.data);
       }
     };
@@ -44,9 +45,7 @@ export default function ManagerRoom() {
       notification.success({
         message: 'Xóa phòng thành công',
       });
-      console.log({
-        data: res.data,
-      });
+
       const deletedRoom: RoomEntity = res.data.data;
       setRooms(rooms?.filter((item) => item.id !== deletedRoom.id));
     }
@@ -70,12 +69,12 @@ export default function ManagerRoom() {
     },
     {
       title: 'Status',
-      dataIndex: 'isActive', // isActive == true -> Have people renting
+      dataIndex: 'isActive', // isActive == true -> Want to show this room public
       render: (value) =>
-        value === false ? (
-          <p className="font-bold text-green-500">Empty</p>
+        value === true ? (
+          <p className="font-bold text-green-500">Current posting publicly</p>
         ) : (
-          <p className="font-bold text-red-500">Rent</p>
+          <p className="font-bold text-red-500">Private</p>
         ),
     },
     {

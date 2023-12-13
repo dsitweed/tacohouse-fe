@@ -16,6 +16,7 @@ export default function RoomGridItem(props: RoomGridItemProps) {
     <div className="flex flex-row gap-4 flex-wrap">
       <div className="relative w-[150px] h-[120px]">
         <img
+          loading="lazy"
           src={room.imageUrls[0] || bgDefault}
           className="object-cover rounded-md w-full h-full"
         />

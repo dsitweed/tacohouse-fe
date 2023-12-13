@@ -5,6 +5,7 @@ import {
   INVOICES_PATH,
   MANAGERS_PATH,
   ROOM_UNIT_PRICES_PATH,
+  routes,
 } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
 import {
@@ -20,6 +21,7 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface ListRoomsProps {
   buildingId: number;
@@ -116,6 +118,9 @@ export default function ListRooms(props: ListRoomsProps) {
 
         // Update data -> UI
         setRooms(rawListRoom);
+        console.log({
+          rawListRoom,
+        });
       }
     };
 
@@ -269,6 +274,11 @@ export default function ListRooms(props: ListRoomsProps) {
     {
       title: 'Room',
       dataIndex: 'name',
+      render: (roomName: string, record: RoomEntityExtend) => (
+        <Link to={`${routes.managers.rooms.index}/${record.id}`}>
+          {roomName}
+        </Link>
+      ),
     },
     {
       title: 'Tenants',

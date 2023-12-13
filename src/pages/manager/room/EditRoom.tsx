@@ -146,13 +146,13 @@ export default function EditRoom() {
                   https://stackoverflow.com/questions/65696317/antd-4-checkbox-doesnt-have-value-after-form-submit
                 */}
                 <Form.Item
-                  label="Phòng đã được thuê chưa?"
                   name="isActive"
                   valuePropName="checked"
+                  label="Muốn đăng bài?"
                 >
                   <Checkbox>
-                    <Tooltip title="Nếu bỏ chọn nghìa là phòng chưa được thuê và sẽ đăng bài">
-                      <p>Phòng đã được thuê</p>
+                    <Tooltip title="Nếu tích sẽ đăng bài công khai">
+                      <p>Đăng bài</p>
                     </Tooltip>
                   </Checkbox>
                 </Form.Item>

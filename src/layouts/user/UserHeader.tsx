@@ -6,6 +6,7 @@ import ChangeLanguage from '@/components/common/ChangeLanguage';
 import { authActions, selectUser } from '@/store/slices/auth.slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useApiClient } from '@/shared/hooks/api';
+import { UserRole } from '@/shared/constants';
 
 export default function UserHeader() {
   const { t } = useTranslation();
@@ -51,9 +52,11 @@ export default function UserHeader() {
           <Link to="#" className=" text-lg">
             Chat
           </Link>
-          <Link to="/managers" className=" text-lg">
-            Manager Dashboard
-          </Link>
+          {currentUser?.role === UserRole.MANAGER && (
+            <Link to="/managers" className=" text-lg">
+              Manager Dashboard
+            </Link>
+          )}
         </div>
       </div>
 

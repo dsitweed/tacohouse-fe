@@ -56,13 +56,13 @@ export default function ManagerHeader() {
         response,
       });
 
-      if (response?.status === 200) {
+      if (response?.success) {
         dispatch(authActions.signOut());
 
         notification.success({
           message: t('auth.signOutSuccess'),
         });
-        navigate('/auth/sign-in');
+        navigate('/');
       }
     } catch (error) {
       console.error(error);

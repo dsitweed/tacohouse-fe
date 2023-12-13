@@ -92,6 +92,7 @@
   "uploadImage": {
     "upload": "Up load",
     "errorSize5M": "Image must be less than 5MB!",
-    "errorSize1M": "Image must be less than 1MB!"
+    "errorSize1M": "Image must be less than 1MB!",
+    "errorUploadSize": "Image must be less than  {{size}}MB!"
   }
 }

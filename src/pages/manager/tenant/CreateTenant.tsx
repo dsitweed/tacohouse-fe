@@ -105,7 +105,11 @@ export default function CreateTenant() {
           <Input placeholder="Nhập số điện thoại" />
         </Form.Item>
 
-        <Form.Item name="dob" label="Ngày tháng năm sinh">
+        <Form.Item
+          name="dob"
+          label="Ngày tháng năm sinh"
+          rules={[{ required: true, message: 'Hãy nhập ngày tháng năm sinh' }]}
+        >
           <DatePicker format={'DD/MM/YYYY'} />
         </Form.Item>
 

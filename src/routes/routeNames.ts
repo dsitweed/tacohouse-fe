@@ -8,6 +8,7 @@ export const BUILDING_UNIT_PRICES_PATH = '/building-unit-prices';
 export const FACILITIES_PATH = '/facilities';
 export const MANAGERS_PATH = '/managers';
 export const INVOICES_PATH = '/invoices';
+export const FILE_PATH = '/file';
 
 /* FOR FRONT END */
 export const routes = {
@@ -18,6 +19,9 @@ export const routes = {
     },
     tenants: {
       index: '/managers/tenants',
+    },
+    rooms: {
+      index: '/managers/rooms',
     },
   },
 };

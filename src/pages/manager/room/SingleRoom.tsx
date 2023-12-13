@@ -13,20 +13,25 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { GoArrowSwitch, GoHeart, GoShareAndroid } from 'react-icons/go';
+import { IoStar } from 'react-icons/io5';
 import { TfiPrinter } from 'react-icons/tfi';
 
 import { Link } from 'react-router-dom';
 import { useApiClient } from '@/shared/hooks/api';
 import { ROOMS_PATH } from '@/routes/routeNames';
+import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
 import dayjs from 'dayjs';
 // import image
 import face1 from '@/assets/images/face-1.jpg';
 import avatarDefault from '@/assets/images/avatar.jpg';
+import { UserRole } from '@/shared/constants';
 
 export default function SingleRoom() {
   const paths = window.location.pathname.split('/');
   const roomId = Number(paths[paths.length - 1]);
   const [room, setRoom] = useState<RoomEntity>();
+  const currentUser = useAppSelector(selectUser);
 
   const apiRoom = useApiClient(ROOMS_PATH);
 
@@ -41,7 +46,7 @@ export default function SingleRoom() {
     };
 
     fetchData();
-  }, [room]);
+  }, [roomId]);
 
   return !room ? (
     <>
@@ -51,23 +56,29 @@ export default function SingleRoom() {
     <div className="flex flex-col gap-8">
       <Card>
         <Row gutter={[24, 24]}>
-          <Col sm={24} md={16}>
+          <Col sm={24} lg={16}>
             <div className="flex justify-between">
               <Typography.Title level={4}>Phòng: {room.name}</Typography.Title>
 
-              <Link
-                className="bg-primary p-2 px-4 text-white rounded-md hover:text-white hover:opacity-90"
-                to={`/managers/rooms/${room.id}/edit`}
-              >
-                Chỉnh sửa thông tin phòng
-              </Link>
+              {currentUser?.role === UserRole.MANAGER && (
+                <Link
+                  className="bg-primary p-2 px-4 text-white rounded-md hover:text-white hover:opacity-90"
+                  to={`/managers/rooms/${room.id}/edit`}
+                >
+                  Chỉnh sửa thông tin phòng
+                </Link>
+              )}
             </div>
-            <Typography.Text>Địa chỉ: {room.building.name}</Typography.Text>
+            <Typography.Text>Địa chỉ: {room.building.address}</Typography.Text>
+            {currentUser?.role === UserRole.MANAGER && (
+              <Typography.Text>Tòa nhà: {room.building.name}</Typography.Text>
+            )}
           </Col>
-          <Col sm={24} md={8} className="flex justify-between items-center">
-            <Typography>
-              {room.price.toLocaleString()} VND/<span>tháng</span>
-            </Typography>
+          <Col sm={24} lg={8} className="flex justify-between items-center">
+            <Typography.Title level={2}>
+              {room.price.toLocaleString()} VND/
+              <span className="text-lg font-normal">tháng</span>
+            </Typography.Title>
             <Space>
               <GoArrowSwitch size={16} />
               <GoHeart />
@@ -79,7 +90,7 @@ export default function SingleRoom() {
       </Card>
 
       <Row gutter={[24, 24]}>
-        <Col xs={24} md={16} className="flex flex-col gap-6">
+        <Col md={24} lg={16} className="flex flex-col gap-6">
           <Card>
             <Col className="flex flex-col gap-5">
               <Space>
@@ -111,15 +122,23 @@ export default function SingleRoom() {
                   Thông tin chi tiết
                 </Typography.Title>
                 <div className="grid grid-cols-2">
-                  <div>
-                    <p>Room ID: {room.id}</p>
-                    <p>Price: {room.price.toLocaleString()} VND/Tháng</p>
-                    <p>Diện tích: {room.area} m&sup2;</p>
-                  </div>
-                  <div>
-                    <p>Property Type : {room.building.type}</p>
-                    <p>Property Status : For Rent</p>
-                  </div>
+                  <p>Room ID: {room.id}</p>
+                  <p>Property Type : {room.building.type}</p>
+                  <p>Price: {room.price.toLocaleString()} VND/Tháng</p>
+                  <p>Property Status : For Rent</p>
+                  <p>
+                    Diện tích: {room.area} m<sup>2</sup>
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Typography.Title level={5}>Thông tin bổ sung</Typography.Title>
+                <div className="grid grid-cols-2">
+                  <p>Đặt cọc: Đặt cọc 1 tháng</p>
+                  <p>Tiền phòng: Trả đầu tháng</p>
+                  <p>Năm xây dựng: 2019</p>
+                  <a>Hợp dồng thuê nhà</a>
                 </div>
               </div>
             </Col>
@@ -207,31 +226,69 @@ export default function SingleRoom() {
             </div>
           </Card>
         </Col>
-        <Col xs={24} md={8}>
-          <Card>
-            <Typography.Title level={3}>
-              Số người: {room.tenants.length}
-            </Typography.Title>
-            <div className="flex flex-col gap-4">
-              {room.tenants.map((tenant) => {
-                return (
-                  <div
-                    key={`${tenant.id}-tenants`}
-                    className="flex gap-3 items-center"
-                  >
-                    <Avatar src={tenant.avatarUrl || avatarDefault} size={80} />
-                    <div>
-                      <p>{`${tenant.lastName} ${tenant.firstName}`}</p>
-                      <p>Phone: {tenant.phoneNumber}</p>
-                      <p>
-                        Ngày sinh: {dayjs(tenant.dob).format('DD/MM/YYYY')} (
-                        {dayjs().diff(tenant.dob, 'years')} tuổi)
-                      </p>
-                      <p>Address: {tenant.address}</p>
+        <Col md={24} lg={8} className="flex flex-col gap-3">
+          {currentUser?.role === UserRole.MANAGER && (
+            <Card>
+              <Typography.Title level={3}>
+                Số người: {room.tenants.length}
+              </Typography.Title>
+              <div className="flex flex-col gap-4">
+                {room.tenants.map((tenant) => {
+                  return (
+                    <div
+                      key={`${tenant.id}-tenants`}
+                      className="flex gap-4 items-center"
+                    >
+                      <Avatar
+                        src={tenant.avatarUrl || avatarDefault}
+                        size={80}
+                      />
+                      <div>
+                        <p>{`${tenant.lastName} ${tenant.firstName}`}</p>
+                        <p>Phone: {tenant.phoneNumber}</p>
+                        <p>
+                          Ngày sinh: {dayjs(tenant.dob).format('DD/MM/YYYY')} (
+                          {dayjs().diff(tenant.dob, 'years')} tuổi)
+                        </p>
+                        <p>Address: {tenant.address}</p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+            </Card>
+          )}
+          <Card>
+            <Typography.Title level={3}>Host</Typography.Title>
+            <div className="flex gap-4 items-center">
+              <Avatar src={avatarDefault} size={80} />
+              <div>
+                <p className="font-bold text-xl">Nguyễn Văn Kỳ</p>
+                <p>0987984542</p>
+                <p>luffy3042001@gmail.com</p>
+              </div>
+            </div>
+            <div className="flex justify-around mt-3 items-center">
+              <div className="flex flex-col items-center">
+                <p className="text-xl font-bold">3</p>
+                <p>Reviews</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="text-xl font-bold flex items-center gap-2">
+                  4.6 <IoStar size={18} />
+                </p>
+
+                <p>Rating</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="text-xl font-bold">6</p>
+                <p>Years hosting</p>
+              </div>
+            </div>
+            <div className="mt-3">
+              <Button type="primary" className="h-fit py-2">
+                <span className="text-base">Message Host</span>
+              </Button>
             </div>
           </Card>
         </Col>

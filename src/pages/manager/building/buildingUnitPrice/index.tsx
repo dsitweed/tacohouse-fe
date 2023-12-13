@@ -120,7 +120,7 @@ export default function BuildingUnitPrice(props: ServiceProps) {
       />
 
       <Button
-        disabled
+        hidden
         className="border border-black"
         onClick={() => showModal()}
       >

@@ -1,23 +1,68 @@
-import { BUILDINGS_PATH, routes } from '@/routes/routeNames';
+import { BuildingEntity } from '@/models';
+import {
+  BUILDINGS_PATH,
+  BUILDING_UNIT_PRICES_PATH,
+  routes,
+} from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
-import { App, Button, Card, Form, Input, Select } from 'antd';
+import { App, Button, Card, Form, Input, InputNumber, Select } from 'antd';
 import { t } from 'i18next';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const buildingUnits = [
+  {
+    name: 'electricity',
+    label: 'Nhập tiền điện',
+  },
+  {
+    name: 'water',
+    label: 'Nhập tiền nước',
+  },
+  {
+    name: 'wifi',
+    label: 'Nhập tiền wifi',
+  },
+  {
+    name: 'light',
+    label: 'Nhập tiền chiếu sáng',
+  },
+  {
+    name: 'environment',
+    label: 'Nhập tiền vệ sinh',
+  },
+];
 
 export default function CreateBuilding() {
   const [form] = Form.useForm();
   const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const apiBuildingUnitPrice = useApiClient(BUILDING_UNIT_PRICES_PATH);
   const { notification } = App.useApp();
   const navigate = useNavigate();
+  const [buildingType, setBuildingType] = useState<string>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCreate = async (values: any) => {
     try {
-      const newBuilding = await apiBuilding.create({
-        ...values,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { electricity, water, wifi, light, environment, ...buildingDto } =
+        values;
+
+      const newBuildingRes = await apiBuilding.create({
+        ...buildingDto,
       });
 
-      if (newBuilding && newBuilding.status === 201) {
+      if (newBuildingRes && newBuildingRes.status === 201) {
+        const newBuilding = newBuildingRes.data.data as BuildingEntity;
+        // Create building units price
+        buildingUnits.forEach(async (unit) => {
+          await apiBuildingUnitPrice.create({
+            buildingId: newBuilding.id,
+            name: unit.name,
+            price: values[unit.name],
+          });
+        });
+
         notification.success({ message: t('building.new.success') });
         navigate(routes.managers.buildings.index);
       } else {
@@ -49,6 +94,14 @@ export default function CreateBuilding() {
         </Form.Item>
 
         <Form.Item
+          name="address"
+          label={t('building.buildingAddress')}
+          rules={[{ required: true, message: t('common.pleaseEnter') }]}
+        >
+          <Input placeholder="Building address" />
+        </Form.Item>
+
+        <Form.Item
           name="type"
           label={t('building.buildingType')}
           rules={[{ required: true, message: t('common.pleaseEnter') }]}
@@ -64,17 +117,32 @@ export default function CreateBuilding() {
               //   value: 'ENTIRE_HOUSE',
               // },
             ]}
+            onChange={(value) => setBuildingType(value)}
             placeholder="Select"
           />
         </Form.Item>
 
-        <Form.Item
-          name="address"
-          label={t('building.buildingAddress')}
-          rules={[{ required: true, message: t('common.pleaseEnter') }]}
-        >
-          <Input placeholder="Building address" />
-        </Form.Item>
+        {buildingType === 'HOSTEL' && (
+          <div className="grid-cols-2">
+            {buildingUnits.map((item, index) => (
+              <Form.Item
+                key={`buildingUnitPrice-${index}`}
+                name={item.name}
+                label={item.label}
+                rules={[{ required: true, message: t('common.pleaseEnter') }]}
+              >
+                <InputNumber
+                  placeholder="Đơn vị VNĐ"
+                  className="w-40"
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  parser={(value) => value!.replace(/,/g, '')}
+                />
+              </Form.Item>
+            ))}
+          </div>
+        )}
 
         <Button type="primary" htmlType="submit">
           Tạo tòa nhà mới

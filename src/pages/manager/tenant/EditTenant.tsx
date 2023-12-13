@@ -12,7 +12,7 @@ import {
   Select,
   Typography,
 } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // images mock
 import face4 from '@/assets/images/face-4.jpg';
@@ -67,16 +67,19 @@ export default function EditTenant() {
     }
   };
 
-  /**
-   * If rooms list not contain tenant.room (selected room) -> add selectedRoom to rooms list
-   * for user select and for presentation
-   */
-  const addSelectedRoom = () => {
-    const isContain = rooms?.some((room) => room.id === tenant?.room.id);
-    if (!isContain && tenant) rooms?.push(tenant.room);
-  };
+  const selectRoomOptions = useMemo(() => {
+    if (tenant?.room === null) return rooms;
 
-  addSelectedRoom();
+    return rooms?.filter((item) => {
+      if (
+        // get room have same id with room tenant is living
+        item.id === tenant?.roomId ||
+        // Or room have number of tenant < maxTenant available
+        item.tenants.length < (Number(item.maxTenant) || 0)
+      )
+        return item;
+    });
+  }, [rooms]);
 
   return !tenant ? (
     <Card>Không có tenant</Card>
@@ -93,7 +96,7 @@ export default function EditTenant() {
         initialValues={{
           firstName: tenant.firstName,
           lastName: tenant.lastName,
-          roomId: tenant.room.id,
+          roomId: tenant.room?.id,
           address: tenant.address,
           phoneNumber: tenant.phoneNumber,
           dob: dayjs(tenant.dob),
@@ -145,7 +148,7 @@ export default function EditTenant() {
 
             <Form.Item name="roomId" label="Phòng">
               <Select
-                options={rooms?.map((item) => ({
+                options={selectRoomOptions?.map((item) => ({
                   label: item.name,
                   value: item.id,
                 }))}
@@ -155,7 +158,7 @@ export default function EditTenant() {
             <Form.Item name="building" label="Tòa nhà">
               <p>
                 Thuộc tòa nhà:
-                <span className="font-bold"> {tenant.room.building.name}</span>
+                <span className="font-bold"> {tenant.room?.building.name}</span>
               </p>
             </Form.Item>
 

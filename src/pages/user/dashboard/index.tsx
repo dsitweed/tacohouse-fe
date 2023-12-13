@@ -19,6 +19,8 @@ import { BsCursorFill } from 'react-icons/bs';
 import HotelInformation from './HotelInfomation';
 import AttractionPlace from './AtractionPlace';
 import Review from './Review';
+import GridItem from './ListingRoom/RoomGridItem';
+import RoomGrid from './ListingRoom/RoomGrid';
 
 const marketingsNumber = [
   {
@@ -121,8 +123,10 @@ export default function UserDashboard() {
         />
       </Row>
 
+      <RoomGrid />
+
       {/* OVERVIEW INFORMATION */}
-      <Row gutter={[24, 24]}>
+      {/* <Row gutter={[24, 24]}>
         <Col md={24} lg={12}>
           <img
             src={aboutHotel}
@@ -147,9 +151,8 @@ export default function UserDashboard() {
             </Typography>
           </Button>
         </Col>
-      </Row>
-
-      <Row gutter={[12, 24]}>
+      </Row> */}
+      {/* <Row gutter={[12, 24]}>
         {marketingsNumber.map((item, index) => (
           <Col
             key={`overview-info-${index}`}
@@ -164,11 +167,9 @@ export default function UserDashboard() {
             </Typography>
           </Col>
         ))}
-      </Row>
-
+      </Row> */}
       {/* DIRECT IN GOOGLE MAP */}
-      <Row gutter={[24, 32]}>
-        {/* HEADER - INFORMATION */}
+      {/* <Row gutter={[24, 32]}>
         <Col className="w-full flex gap-6 justify-between flex-col items-center md:flex-row">
           <div>
             <Typography className="text-4xl font-normal text-center md:text-left">
@@ -187,7 +188,7 @@ export default function UserDashboard() {
             </Button>
           </div>
         </Col>
-        {/* <GoogleMap
+        <GoogleMap
           mapContainerStyle={{
             width: '100%',
             height: 450,
@@ -197,11 +198,10 @@ export default function UserDashboard() {
           mapContainerClassName="border border-slate-300"
         >
           <MarkerF position={exampleMap.center} />
-        </GoogleMap> */}
-      </Row>
-
+        </GoogleMap>
+      </Row> */}
       {/* MARKETINGS FACILITIES */}
-      <Row gutter={[24, 60]}>
+      {/* <Row gutter={[24, 60]}>
         <div className="w-full flex flex-col justify-center items-center">
           <Typography className="text-5xl mb-4">Facilities</Typography>
           <Typography.Paragraph className="text-base text-gray-700 w-2/3 text-center">
@@ -221,16 +221,13 @@ export default function UserDashboard() {
             <Typography className="pt-2 text-lg">{item.name}</Typography>
           </Col>
         ))}
-      </Row>
-
+      </Row> */}
       {/* Best place for play */}
-      <AttractionPlace />
-
+      {/* <AttractionPlace /> */}
       {/* HOTEL REVIEW */}
-      <Review />
-
+      {/* <Review /> */}
       {/* HOTEL INFORMATION */}
-      <HotelInformation />
+      {/* <HotelInformation /> */}
     </div>
   );
 }

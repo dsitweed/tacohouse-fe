@@ -23,7 +23,8 @@ export default function SignUp() {
         password,
         role,
       });
-      if (response) {
+
+      if (response && response.success) {
         notification.success({
           message: t('auth.signUpSuccess'),
         });

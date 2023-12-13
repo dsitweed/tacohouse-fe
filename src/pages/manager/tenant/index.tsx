@@ -74,7 +74,7 @@ export default function Tenant() {
     {
       title: 'Số phòng',
       dataIndex: 'room',
-      render: (_, record) => <p>{record.room.name}</p>,
+      render: (_, record) => <p>{record.room?.name}</p>,
     },
     {
       title: 'Số điện thoại',

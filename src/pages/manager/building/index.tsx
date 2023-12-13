@@ -1,36 +1,8 @@
-import { Card, Col, Radio, Row, TabsProps, Typography } from 'antd';
-import { Tab } from 'rc-tabs/lib/interface';
-import { useEffect, useState } from 'react';
+import { Card, Col, Radio, Row, Typography } from 'antd';
 import BuildingAnalytic from './BuildingAnalytic';
 import BuildingUnitPrice from './buildingUnitPrice';
-import ListRooms from './ListRooms';
-import { BuildingEntity } from '@/models';
-import { BuildingService as MockService } from '@/services/Building.service';
 
 export default function ManagerBuilding() {
-  const [buildings, setBuildings] = useState<BuildingEntity[]>([]);
-  const [tabsBuilding, setTabsBuilding] = useState<Tab[]>([]);
-
-  useEffect(() => {
-    const handleData = async () => {
-      const buildings = await MockService.getBuildings('Nguyen Van Ky');
-      setBuildings(buildings);
-      const tabs = getTabsBuilding(buildings);
-      setTabsBuilding(tabs);
-    };
-
-    handleData();
-  }, [buildings]);
-
-  const getTabsBuilding = (data: BuildingEntity[]) => {
-    const tabs: TabsProps['items'] = data.map((item) => ({
-      key: `${item.id}`,
-      label: item.name,
-      children: <ListRooms buildingId={item.id} />,
-    }));
-    return tabs;
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 

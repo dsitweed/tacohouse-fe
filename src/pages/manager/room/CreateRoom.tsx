@@ -12,14 +12,13 @@ import {
   Select,
   Tooltip,
   Typography,
-  Upload,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react';
 import { useApiClient } from '@/shared/hooks/api';
 import { MANAGERS_PATH, ROOMS_PATH } from '@/routes/routeNames';
 import { BuildingEntity, RoomEntity } from '@/models';
+import UploadImage from '@/components/common/UploadImage';
 
 export default function CreateRoom() {
   const { notification } = App.useApp();
@@ -27,6 +26,7 @@ export default function CreateRoom() {
   const apiManager = useApiClient(MANAGERS_PATH);
   const apiRoom = useApiClient<RoomEntity>(ROOMS_PATH);
   const [buildings, setBuildings] = useState<BuildingEntity[]>();
+  const [images, setImages] = useState<IImageUrl[]>([]);
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -43,20 +43,13 @@ export default function CreateRoom() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handelCreate = async (values: any) => {
     const res = await apiRoom.create({
-     ...values,
+      ...values,
+      imageUrls: images.map((item) => item.url),
     });
 
     if (res?.success) {
-      notification.success({ message: 'Tạo thòng thành công' });
+      notification.success({ message: 'Tạo phòng thành công' });
     }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
   };
 
   return (
@@ -96,28 +89,25 @@ export default function CreateRoom() {
                 </Form.Item>
 
                 <Form.Item
-                  name="buildingPictures"
-                  label="Ảnh tòa nhà (tối đa 3 bức)"
-                  valuePropName="fileList"
-                  getValueFromEvent={normFile} // ? need research
+                  name="imageUrls"
+                  label="Ảnh phòng trọ (tối đa 3 bức)"
                 >
-                  <Upload action="/upload.do" listType="picture-card">
-                    <div>
-                      <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
-                  </Upload>
+                  <UploadImage
+                    imageUrls={images}
+                    setImageUrls={setImages}
+                    maxCount={3}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
                 <Form.Item
                   name="isActive"
                   valuePropName="checked"
-                  label="Phòng đã được thuê chưa?"
+                  label="Muốn đăng bài?"
                 >
                   <Checkbox>
-                    <Tooltip title="Nếu bỏ chọn nghìa là phòng chưa được thuê và sẽ đăng bài">
-                      <p>Phòng đã được thuê</p>
+                    <Tooltip title="Nếu tích sẽ đăng bài công khai">
+                      <p>Đăng bài</p>
                     </Tooltip>
                   </Checkbox>
                 </Form.Item>
