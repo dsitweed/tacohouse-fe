@@ -76,7 +76,11 @@ export default function ManagerSider() {
       {/* FOOTER OF SIDER */}
       <div className="absolute bottom-4 flex items-center justify-center w-full gap-2">
         <Badge status="success" dot={true}>
-          <Avatar shape="square" src={avatar} size={'large'} />
+          <Avatar
+            shape="square"
+            src={currentUser?.avatarUrl || avatar}
+            size={'large'}
+          />
         </Badge>
         <div>
           <Text>{currentUser?.email}</Text>

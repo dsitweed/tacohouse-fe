@@ -31,7 +31,7 @@ export default function SignUp() {
         navigate('/auth/sign-in');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (

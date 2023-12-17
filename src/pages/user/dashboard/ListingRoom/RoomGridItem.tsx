@@ -1,4 +1,4 @@
-import { Avatar, Typography } from 'antd';
+import { Avatar, Image, Skeleton, Typography } from 'antd';
 import { MdOutlinePlace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -24,9 +24,11 @@ export default function RoomGridItem({ room }: RoomGridItemProps) {
   return (
     <div className="flex flex-col gap-3 flex-wrap w-fit p-3 shadow-lg rounded-md">
       <div className="relative w-[350px] h-[320px]">
-        <img
-          loading="lazy"
-          src={room.imageUrls[0] || bgDefault}
+        <Image
+          width={350} // Set the desired width
+          height={320} // Set the desired height
+          src={room.imageUrls[0] || bgDefault} // URL of your image
+          placeholder={<Skeleton.Image active />} // Placeholder component
           className="object-cover rounded-lg w-full h-full"
         />
         <Typography className="bg-light-pink text-white px-2 absolute top-2 left-2 rounded-sm">

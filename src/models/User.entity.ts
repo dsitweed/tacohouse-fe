@@ -5,7 +5,7 @@ export interface UserEntity {
   email: string;
   password: string;
   role: string;
-  refreshTOken?: string;
+  refreshToken?: string;
   isActive: boolean;
   firstName: string;
   lastName: string;

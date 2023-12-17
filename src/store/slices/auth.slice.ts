@@ -6,6 +6,15 @@ interface IUser {
   id: number; // for user object in users tables
   email: string;
   role: UserRole;
+  refreshToken?: string;
+  isActive: boolean;
+  firstName: string;
+  lastName: string;
+  address: string;
+  citizenNumber?: string;
+  phoneNumber?: string;
+  avatarUrl?: string;
+  dob?: Date | string;
 }
 
 interface AuthState {
@@ -55,7 +64,7 @@ function getUserFromStorage() {
 
     return JSON.parse(user) as IUser;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }
@@ -67,7 +76,7 @@ export function getAccessTokenFromStorage() {
 
     return token;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return '';
   }
 }
@@ -79,7 +88,7 @@ export function getRefreshTokenFromStorage() {
 
     return token;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return '';
   }
 }

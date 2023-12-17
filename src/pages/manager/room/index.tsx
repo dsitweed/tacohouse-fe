@@ -30,7 +30,6 @@ export default function ManagerRoom() {
     const fetchData = async () => {
       const response = await apiRoom.getAll();
       if (response && response.status === 200) {
-        console.log(response.data.data);
         setRooms(response.data.data);
       }
     };

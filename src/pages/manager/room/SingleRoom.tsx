@@ -5,6 +5,7 @@ import {
   Card,
   Col,
   Divider,
+  Image,
   Input,
   Rate,
   Row,
@@ -32,6 +33,7 @@ export default function SingleRoom() {
   const roomId = Number(paths[paths.length - 1]);
   const [room, setRoom] = useState<RoomEntity>();
   const currentUser = useAppSelector(selectUser);
+  const [currentImage, setCurrentImage] = useState(0);
 
   const apiRoom = useApiClient(ROOMS_PATH);
 
@@ -56,7 +58,7 @@ export default function SingleRoom() {
     <div className="flex flex-col gap-8">
       <Card>
         <Row gutter={[24, 24]}>
-          <Col sm={24} lg={16}>
+          <Col md={24} lg={16}>
             <div className="flex justify-between">
               <Typography.Title level={4}>Phòng: {room.name}</Typography.Title>
 
@@ -74,7 +76,7 @@ export default function SingleRoom() {
               <Typography.Text>Tòa nhà: {room.building.name}</Typography.Text>
             )}
           </Col>
-          <Col sm={24} lg={8} className="flex justify-between items-center">
+          <Col md={24} lg={8} className="flex justify-between items-center">
             <Typography.Title level={2}>
               {room.price.toLocaleString()} VND/
               <span className="text-lg font-normal">tháng</span>
@@ -86,6 +88,43 @@ export default function SingleRoom() {
               <TfiPrinter />
             </Space>
           </Col>
+        </Row>
+        <Row gutter={[24, 24]} className="mt-6">
+          <Image.PreviewGroup
+            items={room.imageUrls}
+            preview={{
+              current: currentImage,
+              onChange(current) {
+                setCurrentImage(current);
+              },
+            }}
+          >
+            <Col lg={24} xl={16}>
+              <Image
+                height={524}
+                width="100%"
+                src={room.imageUrls[0]}
+                className="object-cover rounded-lg"
+              />
+            </Col>
+            <Col lg={24} xl={8}>
+              <div className="grid grid-cols-2 gap-6">
+                {room?.imageUrls.map(
+                  (item, index) =>
+                    index !== 0 &&
+                    index <= 4 && (
+                      <Image
+                        height={250}
+                        key={`image-single-room-${index}`}
+                        src={item}
+                        className="object-cover rounded-lg"
+                        onClick={() => setCurrentImage(index)}
+                      />
+                    ),
+                )}
+              </div>
+            </Col>
+          </Image.PreviewGroup>
         </Row>
       </Card>
 

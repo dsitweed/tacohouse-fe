@@ -26,7 +26,7 @@ export default function CreateRoom() {
   const apiManager = useApiClient(MANAGERS_PATH);
   const apiRoom = useApiClient<RoomEntity>(ROOMS_PATH);
   const [buildings, setBuildings] = useState<BuildingEntity[]>();
-  const [images, setImages] = useState<IImageUrl[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -44,7 +44,7 @@ export default function CreateRoom() {
   const handelCreate = async (values: any) => {
     const res = await apiRoom.create({
       ...values,
-      imageUrls: images.map((item) => item.url),
+      imageUrls: imageUrls.map((url) => url),
     });
 
     if (res?.success) {
@@ -93,8 +93,8 @@ export default function CreateRoom() {
                   label="Ảnh phòng trọ (tối đa 3 bức)"
                 >
                   <UploadImage
-                    imageUrls={images}
-                    setImageUrls={setImages}
+                    imageUrls={imageUrls}
+                    setImageUrls={setImageUrls}
                     maxCount={3}
                   />
                 </Form.Item>

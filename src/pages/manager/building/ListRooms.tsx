@@ -118,9 +118,6 @@ export default function ListRooms(props: ListRoomsProps) {
 
         // Update data -> UI
         setRooms(rawListRoom);
-        console.log({
-          rawListRoom,
-        });
       }
     };
 
@@ -214,7 +211,7 @@ export default function ListRooms(props: ListRoomsProps) {
         setEditingKey('');
       }
     } catch (errInfo) {
-      console.log('Validate Failed: ', errInfo);
+      console.error('Validate Failed: ', errInfo);
     }
   };
 

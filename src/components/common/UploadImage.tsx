@@ -18,8 +18,8 @@ const getBase64 = (file: RcFile): Promise<string> => {
 };
 
 interface UploadImageProps {
-  imageUrls: IImageUrl[];
-  setImageUrls: React.Dispatch<React.SetStateAction<IImageUrl[]>>;
+  imageUrls: string[];
+  setImageUrls: React.Dispatch<React.SetStateAction<string[]>>;
   maxCount?: number;
   maxSize?: number; // a = a MB
 }
@@ -43,11 +43,19 @@ export default function UploadImage(props: UploadImageProps) {
 
   const { t } = useTranslation();
   const { message } = App.useApp();
+  const getFileList = () => {
+    return imageUrls.map(
+      (url) =>
+        ({
+          url: url,
+        }) as UploadFile,
+    );
+  };
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(getFileList);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -58,9 +66,25 @@ export default function UploadImage(props: UploadImageProps) {
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
-    );
+    function getPathStorageFromUrl(url: string | undefined) {
+      if (!url) return '';
+      // Find the last '/' in the URL
+      const lastSlashIndex = url.lastIndexOf('/');
+
+      // Extract the file name from the URL
+      const fileNameWithParams = url.substring(lastSlashIndex + 1);
+
+      // Remove parameters from the file name
+      const questionMarkIndex = fileNameWithParams.indexOf('?');
+      let fileName =
+        questionMarkIndex !== -1
+          ? fileNameWithParams.substring(0, questionMarkIndex)
+          : fileNameWithParams;
+      fileName = fileName.replace(/%20/g, ' ');
+      return fileName;
+    }
+
+    setPreviewTitle(file.name || getPathStorageFromUrl(file.url));
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -97,15 +121,10 @@ export default function UploadImage(props: UploadImageProps) {
       });
 
       if (response.success) {
-        const { url, fileName } = response.data.data;
-        setImageUrls([
-          ...imageUrls,
-          {
-            uid: file.uid,
-            url: url,
-            fileName: fileName,
-          },
-        ]);
+        // response.data.data = url and fileName of file
+        const { url } = response.data.data;
+        setImageUrls([...imageUrls, url]);
+        file.url = url;
         onSuccess(null, file);
       }
     } catch (error) {
@@ -115,12 +134,20 @@ export default function UploadImage(props: UploadImageProps) {
   };
 
   const onRemove = async (file: UploadFile) => {
-    const deleteFile = imageUrls.find((item) => item.uid === file.uid);
-    if (deleteFile) {
-      const newList = imageUrls.filter((item) => item.uid !== file.uid);
-      setImageUrls(newList);
+    try {
+      const deleteFile = imageUrls.find((url) => url === file?.url);
+      if (deleteFile) {
+        const newList = imageUrls.filter((url) => url !== file?.url);
+        setImageUrls(newList);
 
-      await axios.delete(`${FILE_PATH}/${deleteFile.fileName}`);
+        await axios.delete(`${FILE_PATH}`, {
+          data: {
+            fileUrl: deleteFile,
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

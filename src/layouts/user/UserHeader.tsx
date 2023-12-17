@@ -29,7 +29,7 @@ export default function UserHeader() {
         navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

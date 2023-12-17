@@ -11,14 +11,14 @@ import {
   Select,
   Tooltip,
   Typography,
-  Upload,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react';
 import { BuildingEntity, RoomEntity } from '@/models';
 import { useApiClient } from '@/shared/hooks/api';
 import { BUILDINGS_PATH, ROOMS_PATH } from '@/routes/routeNames';
+import UploadImage from '@/components/common/UploadImage';
+import { useNavigate } from 'react-router-dom';
 
 export default function EditRoom() {
   const { notification } = App.useApp();
@@ -29,16 +29,10 @@ export default function EditRoom() {
 
   const apiBuilding = useApiClient(BUILDINGS_PATH);
   const apiRoom = useApiClient(ROOMS_PATH);
+  const navigate = useNavigate();
 
   const [listBuilding, setListBuilding] = useState<BuildingEntity[]>();
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     // get this room information
@@ -46,7 +40,9 @@ export default function EditRoom() {
       const response = await apiRoom.getById(roomId);
 
       if (response && response.status === 200) {
-        setRoom(response.data.data);
+        const room: RoomEntity = response.data.data;
+        setRoom(room);
+        setImageUrls(room.imageUrls);
       }
     };
 
@@ -66,17 +62,15 @@ export default function EditRoom() {
   const handleEditRoom = async (values: any) => {
     const res = await apiRoom.update(roomId, {
       ...values,
+      imageUrls: imageUrls,
     });
 
     if (res?.success) {
       notification.success({
         message: 'Thay đổi thông tin phòng thành công',
       });
+      navigate(-1);
     }
-
-    console.log({
-      values,
-    });
   };
 
   return !room ? (
@@ -129,16 +123,15 @@ export default function EditRoom() {
 
                 <Form.Item
                   name="buildingPictures"
-                  label="Ảnh tòa nhà (tối đa 3 bức)"
-                  valuePropName="fileList"
-                  getValueFromEvent={normFile} // ? need research
+                  label="Ảnh tòa nhà (tối đa 6 bức)"
                 >
-                  <Upload action="/upload.do" listType="picture-card">
-                    <div>
-                      <PlusOutlined />
-                      <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
-                  </Upload>
+                  <div>
+                    <UploadImage
+                      imageUrls={imageUrls}
+                      setImageUrls={setImageUrls}
+                      maxCount={6}
+                    />
+                  </div>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
@@ -147,8 +140,8 @@ export default function EditRoom() {
                 */}
                 <Form.Item
                   name="isActive"
-                  valuePropName="checked"
                   label="Muốn đăng bài?"
+                  valuePropName="checked"
                 >
                   <Checkbox>
                     <Tooltip title="Nếu tích sẽ đăng bài công khai">

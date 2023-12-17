@@ -37,8 +37,6 @@ export default function RoomGrid() {
     fetchData();
   }, [currentPage]);
 
-  console.log(currentPage);
-
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
   };

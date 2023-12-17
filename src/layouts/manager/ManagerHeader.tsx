@@ -14,8 +14,8 @@ import { Link, useNavigate } from 'react-router-dom';
 // images
 import avatar from '@/assets/images/avatar.jpg';
 import { useApiClient } from '@/shared/hooks/api';
-import { useAppDispatch } from '@/store/hooks';
-import { authActions } from '@/store/slices/auth.slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { authActions, selectUser } from '@/store/slices/auth.slice';
 import { useTranslation } from 'react-i18next';
 
 const breadcrumbItems = [
@@ -48,13 +48,11 @@ export default function ManagerHeader() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser);
 
   const handleSignOut = async () => {
     try {
       const response = await apiSignOut.create();
-      console.log({
-        response,
-      });
 
       if (response?.success) {
         dispatch(authActions.signOut());
@@ -108,7 +106,7 @@ export default function ManagerHeader() {
             <Avatar
               className="ml-4"
               size="large"
-              src={<img src={avatar} alt="avatar" />}
+              src={<img src={currentUser?.avatarUrl || avatar} alt="avatar" />}
             />
           </a>
         </Dropdown>
