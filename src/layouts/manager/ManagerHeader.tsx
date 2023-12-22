@@ -79,7 +79,7 @@ export default function ManagerHeader() {
   ];
 
   return (
-    <div className="bg-white flex justify-between mt-2 items-center">
+    <div className="bg-white flex justify-between items-center">
       <div className="flex flex-col">
         <Breadcrumb className="hidden md:block" items={breadcrumbItems} />
         <Typography className="uppercase text-lg font-bold">
@@ -89,8 +89,8 @@ export default function ManagerHeader() {
       <div className="flex items-center gap-3">
         <Input
           className="h w-80 hidden lg:flex"
-          prefix={<SearchOutlined />}
-          placeholder="Search..."
+          prefix={<SearchOutlined className="mr-1" />}
+          placeholder={`${t('common.search')}`}
         />
         {/* Change language button */}
         <SettingFilled style={{ color: 'black' }} />
@@ -101,7 +101,11 @@ export default function ManagerHeader() {
             </a>
           </Dropdown>
         </Badge>
-        <Dropdown menu={{ items: menuDropdownItems }} trigger={['click']}>
+        <Dropdown
+          menu={{ items: menuDropdownItems }}
+          trigger={['click']}
+          className="flex"
+        >
           <a onClick={(e) => e.preventDefault()}>
             <Avatar
               className="ml-4"

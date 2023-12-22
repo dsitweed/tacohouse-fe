@@ -13,9 +13,8 @@ function App() {
     <AntApp>
       <ConfigProvider theme={theme} locale={viVN}>
         <Provider store={store}>
-            <RouterProvider router={router} />
-          {/* <LoadScript googleMapsApiKey="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8">
-          </LoadScript> */}
+          <RouterProvider router={router} />
+          <LoadScript googleMapsApiKey="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8"></LoadScript>
         </Provider>
       </ConfigProvider>
     </AntApp>

@@ -60,7 +60,7 @@ export default function Tenant() {
       title: 'Index',
       dataIndex: 'id',
       width: 20,
-      render: (value, record, index) => <p>{index + 1}</p>,
+      render: (_value, _record, index) => <p>{index + 1}</p>,
     },
     {
       title: 'Tên',

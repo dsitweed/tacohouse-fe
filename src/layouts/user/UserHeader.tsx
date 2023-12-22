@@ -53,7 +53,7 @@ export default function UserHeader() {
             Chat
           </Link>
           {currentUser?.role === UserRole.MANAGER && (
-            <Link to="/managers" className=" text-lg">
+            <Link to="/managers" className="text-lg">
               Manager Dashboard
             </Link>
           )}

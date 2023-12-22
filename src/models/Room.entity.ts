@@ -1,5 +1,6 @@
 import { BuildingEntity, UserEntity } from '.';
 import { facilityEntity } from './FacilityEntity';
+import { InvoiceEntity } from './Invoice.entity';
 import { RoomUnitPriceEntity } from './RoomUnitPriceEntity';
 
 export interface RoomEntity {
@@ -21,6 +22,6 @@ export interface RoomEntity {
 
   tenants: UserEntity[];
   facilities: facilityEntity[];
-  invoices: string[];
+  invoices: InvoiceEntity[];
   roomUnitPrices: RoomUnitPriceEntity[];
 }

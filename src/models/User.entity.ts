@@ -19,3 +19,7 @@ export interface UserEntity {
   roomId: number;
   room: RoomEntity;
 }
+
+export function getFullUserName(user: UserEntity): string {
+  return `${user.lastName} ${user.firstName}`;
+}

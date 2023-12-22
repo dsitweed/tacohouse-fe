@@ -72,7 +72,7 @@ export default function SingleBuilding() {
         {/* Rooms of Building */}
         <Card className="w-full">
           <Typography.Title level={4}>Danh sách các phòng</Typography.Title>
-          <ListRooms buildingId={building.id} />
+          <ListRooms buildingId={building.id} buildingName={building.name} />
         </Card>
       </Row>
     </div>

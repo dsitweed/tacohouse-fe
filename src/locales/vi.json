@@ -18,6 +18,7 @@
     "delete": "Xóa",
     "save": "Lưu",
     "cancel": "Hủy",
+    "cancelToolTipTitle": "Chắc chắn muốn hủy?",
     "submit": "Gửi",
     "loading": "Đang tải...",
     "noData": "Không có dữ liệu",
@@ -46,17 +47,81 @@
     "inviteSentence": "Chưa có tài khoản?",
     "forgotPassword": "Quên mật khẩu",
     "hadAccount": "Nếu bạn đã có tài khoản",
-    "signInSuccess": "Đăng nhập thành công. Chúc bạn ngày mới vui vẻ!"
+    "signInSuccess": "Đăng nhập thành công. Chúc bạn ngày mới vui vẻ!",
+    "signUpSuccess": "Sign up successful!",
+    "signOutSuccess": "Sign out successful!",
+    "signInRequired": "Please sign in with an account have valid permissions!"
   },
   "building": {
-    "create": "Tạo tòa nhà mới",
-    "buildingAddress": "Địa chỉ tòa nhà",
-    "buildingName": "Tên tòa nhà",
-    "buildingLogo": "Logo của tòa nhà"
+    "buildingName": "Building name",
+    "buildingType": "Building type",
+    "buildingAddress": "Building Address",
+    "buildingLogo": "Logo of building",
+    "new": {
+      "create": "Create new building",
+      "success": "Create new building success",
+      "failed": "Create new building failed"
+    },
+    "edit": {
+      "success": "Edit building {{name}} success",
+      "failed": "Edit building {{name}} failed"
+    },
+    "delete": {
+      "success": "Delete building success",
+      "failed": "Delete building failed"
+    },
+    "type": {
+      "hostel": "Hostel",
+      "entireHouse": "Entire house"
+    }
+  },
+  "buildingUnitPrice": {
+    "new": {
+      "create": "Create new building",
+      "success": "Create new building unit price success",
+      "failed": "Create new building unit price failed"
+    },
+    "edit": {
+      "success": "Edit building unit price success",
+      "failed": "Edit building unit price failed"
+    },
+    "delete": {
+      "success": "Delete building unit price success",
+      "failed": "Delete building unit price failed"
+    }
+  },
+  "listRooms": {
+    "table": {
+      "room": "Phòng",
+      "tenants": "Người thuê",
+      "roomPrice": "Giá phòng",
+      "beforeElectricity": "Tiền điện tháng trước",
+      "currentElectricity": "Tiền điện tháng này",
+      "electricityPrice": "Giá tiền điện",
+      "totalElectricityFee": "Tổng tiền điện",
+      "waterFee": "Tiền nước",
+      "wifiFee": "Tiền mạng",
+      "lightFee": "Tiền thắp sáng",
+      "environmentFee": "Tiền vệ sinh",
+      "debt": "Tiền nợ",
+      "deposit": "Tiền đặt cọc",
+      "totalMoney": "Tổng tiền",
+      "totalMoneyToolTipTitle": "Nếu tổng tiền hiện 0. Hãy nhập tiền điện mới tháng này và lưu lại",
+      "paid": "Tình trạng",
+      "paidToolTip": "Chưa có",
+      "paidToolTipTitle": "Tháng này chưa có hóa đơn thuê phòng",
+      "operation": "Thao tác"
+    }
+  },
+  "invoice": {
+    "status": {
+      "PENDING": "Chưa thanh toán"
+    }
   },
   "uploadImage": {
     "upload": "Tải lên",
     "errorSize5M": "Hình ảnh phải nhỏ hơn 5MB!",
-    "errorSize1M": "Hình ảnh phải nhỏ hơn 1MB!"
+    "errorSize1M": "Hình ảnh phải nhỏ hơn 1MB!",
+    "errorUploadSize": "Image must be less than  {{size}}MB!"
   }
 }

@@ -175,6 +175,11 @@ yarn add firebase
 # Google map
 yarn add @react-google-maps/api
 
+# Export excel
+yarn add antd-table-saveas-excel
+
+# React to print
+yarn add react-to-print
 ```
 
 ### `Firebase`
@@ -229,7 +234,6 @@ const analytics = getAnalytics(app);
 ## Bug when coding
 
 1. Hiện tại chỉ phục vụ cho manager
-
 
 ## Tài liệu tham khảo
 
