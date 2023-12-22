@@ -15,7 +15,7 @@ import {
   Typography,
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
