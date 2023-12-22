@@ -52,18 +52,47 @@
     "signInRequired": "Please sign in with an account have valid permissions!"
   },
   "building": {
+    "buildingName": "Building name",
+    "buildingType": "Building type",
+    "buildingAddress": "Building Address",
+    "buildingLogo": "Logo of building",
     "new": {
       "create": "Create new building",
       "success": "Create new building success",
       "failed": "Create new building failed"
     },
-    "buildingAddress": "Building Address",
-    "buildingName": "Building name",
-    "buildingLogo": "Logo of building"
+    "edit": {
+      "success": "Edit building {{name}} success",
+      "failed": "Edit building {{name}} failed"
+    },
+    "delete": {
+      "success": "Delete building success",
+      "failed": "Delete building failed"
+    },
+    "type": {
+      "hostel": "Hostel",
+      "entireHouse": "Entire house"
+    }
+  },
+  "buildingUnitPrice": {
+    "new": {
+      "create": "Create new building",
+      "success": "Create new building unit price success",
+      "failed": "Create new building unit price failed"
+    },
+    "edit": {
+      "success": "Edit building unit price success",
+      "failed": "Edit building unit price failed"
+    },
+    "delete": {
+      "success": "Delete building unit price success",
+      "failed": "Delete building unit price failed"
+    }
   },
   "uploadImage": {
     "upload": "Up load",
     "errorSize5M": "Image must be less than 5MB!",
-    "errorSize1M": "Image must be less than 1MB!"
+    "errorSize1M": "Image must be less than 1MB!",
+    "errorUploadSize": "Image must be less than  {{size}}MB!"
   }
 }

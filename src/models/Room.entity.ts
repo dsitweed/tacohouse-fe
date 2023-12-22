@@ -1,22 +1,27 @@
+import { BuildingEntity, UserEntity } from '.';
+import { facilityEntity } from './FacilityEntity';
+import { InvoiceEntity } from './Invoice.entity';
+import { RoomUnitPriceEntity } from './RoomUnitPriceEntity';
+
 export interface RoomEntity {
   id: number;
-  name: string | number; // name of room
-  // tenant: TenantEntity[]; // real
-  tenant_name: string[]; // for demo
-  max_number_tenant?: number; //
+  imageUrls: string[];
+  name: string; // name of room
+  maxTenant?: number; //
   price: number;
-  previous_electricity: number;
-  current_electricity: number;
-  electricity_price: number;
-  water_price: number;
-  wifi_price?: number;
-  light_price: number;
-  parking_price?: number;
-  environment_price: number;
-  // Phí bảo trì và phi dịch vụ
-  charing_price?: number;
-  debt?: number;
-  area?: number;
+  area: number;
+  isActive: boolean;
+  dateBecomeAvailable?: string;
+  dueDate?: string;
   deposit?: number;
-  paid?: boolean;
+  debt?: number;
+  description?: string;
+
+  buildingId: number;
+  building: BuildingEntity;
+
+  tenants: UserEntity[];
+  facilities: facilityEntity[];
+  invoices: InvoiceEntity[];
+  roomUnitPrices: RoomUnitPriceEntity[];
 }

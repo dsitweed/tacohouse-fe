@@ -1,36 +1,9 @@
-import { Card, Col, Radio, Row, Tabs, TabsProps, Typography } from 'antd';
-import { Tab } from 'rc-tabs/lib/interface';
-import { useEffect, useState } from 'react';
+import { Card, Col, Radio, Row, Typography } from 'antd';
 import BuildingAnalytic from './BuildingAnalytic';
-import BuildingService from './BuildingService';
-import ListRooms from './ListRooms';
-import { BuildingEntity } from '@/models';
-import { BuildingService as MockService } from '@/services/Building.service';
+import BuildingUnitPrice from './buildingUnitPrice';
 
 export default function ManagerBuilding() {
-  const [buildings, setBuildings] = useState<BuildingEntity[]>([]);
-  const [tabsBuilding, setTabsBuilding] = useState<Tab[]>([]);
-
-  useEffect(() => {
-    const handleData = async () => {
-      const buildings = await MockService.getBuildings('Nguyen Van Ky');
-      setBuildings(buildings);
-      const tabs = getTabsBuilding(buildings);
-      setTabsBuilding(tabs);
-    };
-
-    handleData();
-  }, [buildings]);
-
-  const getTabsBuilding = (data: BuildingEntity[]) => {
-    const tabs: TabsProps['items'] = data.map((item) => ({
-      key: `${item.id}`,
-      label: item.name,
-      children: <ListRooms idBuilding={item.id} />,
-    }));
-    return tabs;
-  };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 
   return (
@@ -46,7 +19,7 @@ export default function ManagerBuilding() {
             title={<p className="text-lg">Services</p>}
             className="mb-6 border"
           >
-            <BuildingService building_id={1} />
+            <BuildingUnitPrice buildingId={1} />
           </Card>
         </Col>
       </Row>
@@ -55,7 +28,7 @@ export default function ManagerBuilding() {
       <Row gutter={[12, 12]} className=" overflow-auto">
         <Card>
           <div>
-            <div className="flex justify-between w-full">
+            <div className="flex gap-4 justify-between w-full">
               <Typography.Title level={4}>List rooms</Typography.Title>
               <Radio.Group onChange={onChange} defaultValue={'a'}>
                 <Radio.Button value={'a'}>Incomplete</Radio.Button>
@@ -63,7 +36,6 @@ export default function ManagerBuilding() {
               </Radio.Group>
             </div>
             {/* SHOW LIST ROOMS OF BUILDING + CAN CHANGE BUILDINGS */}
-            <Tabs items={tabsBuilding} />
           </div>
         </Card>
       </Row>

@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FaBuilding, FaHome } from 'react-icons/fa';
 import { BsDoorClosedFill } from 'react-icons/bs';
+import { BsFilePersonFill } from 'react-icons/bs';
 // images
 import logo from '@/assets/logo.png';
 import avatar from '@/assets/images/avatar.jpg';
+import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
 
 const { Title, Text } = Typography;
 
@@ -24,9 +27,15 @@ const items = [
     children: null,
   },
   {
-    key: '/managers/rooms/1',
+    key: '/managers/rooms',
     label: 'Rooms',
     icon: <BsDoorClosedFill size={18} />,
+    children: null,
+  },
+  {
+    key: '/managers/tenants',
+    label: 'Tenants',
+    icon: <BsFilePersonFill size={18} />,
     children: null,
   },
 ];
@@ -34,6 +43,7 @@ const items = [
 export default function ManagerSider() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentUser = useAppSelector(selectUser);
 
   const siderItems = useCallback(
     () =>
@@ -44,6 +54,7 @@ export default function ManagerSider() {
       })),
     [navigate],
   );
+
   return (
     <div>
       <div className="flex items-center">
@@ -65,9 +76,17 @@ export default function ManagerSider() {
       {/* FOOTER OF SIDER */}
       <div className="absolute bottom-4 flex items-center justify-center w-full gap-2">
         <Badge status="success" dot={true}>
-          <Avatar shape="square" src={avatar} size={'large'} />
+          <Avatar
+            shape="square"
+            src={currentUser?.avatarUrl || avatar}
+            size={'large'}
+          />
         </Badge>
-        <Text>Nguyễn Văn Kỳ</Text>
+        <div>
+          <Text>{currentUser?.email}</Text>
+          <br />
+          <Text className="font-bold">{currentUser?.role}</Text>
+        </div>
       </div>
     </div>
   );

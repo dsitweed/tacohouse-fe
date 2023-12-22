@@ -25,15 +25,13 @@ export default function SignIn() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const signIn = async (values: any) => {
     const { email, password, remember } = values;
-    console.log({
-      values,
-    });
 
     try {
       const response = await apiSignIn.create({
         email,
         password,
       });
+
       if (response) {
         const { data } = response.data;
         // Save state => redux + show notification + redirect
@@ -46,7 +44,7 @@ export default function SignIn() {
         navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     console.log({ remember });
   };

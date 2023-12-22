@@ -5,8 +5,8 @@ import { App, Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
 
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '@/plugins/firebase/config';
+import { FILE_PATH } from '@/routes/routeNames';
+import axios from 'axios';
 
 const getBase64 = (file: RcFile): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -18,18 +18,44 @@ const getBase64 = (file: RcFile): Promise<string> => {
 };
 
 interface UploadImageProps {
-  imageUrl: string;
-  setImageUrl: React.Dispatch<React.SetStateAction<string>>;
+  imageUrls: string[];
+  setImageUrls: React.Dispatch<React.SetStateAction<string[]>>;
+  maxCount?: number;
+  maxSize?: number; // a = a MB
 }
 
+/**
+ * UploadImage component props
+ * @typedef {Object} UploadImageProps
+ * @property {string[]} imageUrls - An array of image URLs.
+ * @property {React.Dispatch<React.SetStateAction<string[]>>} setImageUrls - Function to set the image URLs.
+ * @property {number} [maxCount=1] - The maximum number of allowed images.
+ * @property {number} [maxSize=1] - The maximum size of each image in bytes (default is 1 MB).
+ */
+
+/**
+ * UploadImage component
+ * @param {UploadImageProps} props - Component props.
+ * @returns {JSX.Element} - Rendered component.
+ */
 export default function UploadImage(props: UploadImageProps) {
+  const { imageUrls, setImageUrls, maxCount = 2, maxSize = 2 } = props;
+
   const { t } = useTranslation();
   const { message } = App.useApp();
+  const getFileList = () => {
+    return imageUrls.map(
+      (url) =>
+        ({
+          url: url,
+        }) as UploadFile,
+    );
+  };
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(getFileList);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -40,9 +66,25 @@ export default function UploadImage(props: UploadImageProps) {
 
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1),
-    );
+    function getPathStorageFromUrl(url: string | undefined) {
+      if (!url) return '';
+      // Find the last '/' in the URL
+      const lastSlashIndex = url.lastIndexOf('/');
+
+      // Extract the file name from the URL
+      const fileNameWithParams = url.substring(lastSlashIndex + 1);
+
+      // Remove parameters from the file name
+      const questionMarkIndex = fileNameWithParams.indexOf('?');
+      let fileName =
+        questionMarkIndex !== -1
+          ? fileNameWithParams.substring(0, questionMarkIndex)
+          : fileNameWithParams;
+      fileName = fileName.replace(/%20/g, ' ');
+      return fileName;
+    }
+
+    setPreviewTitle(file.name || getPathStorageFromUrl(file.url));
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -51,45 +93,68 @@ export default function UploadImage(props: UploadImageProps) {
 
   const beforeUpload = (file: UploadFile) => {
     if (!file.size) return false;
-    const isLt1M = file.size / 1024 / 1024 < 1;
-    if (!isLt1M) {
-      message.error(t('uploadImage.errorSize1M'));
+    const isLtMaxSize = file.size / 1024 / 1024 < maxSize;
+    if (!isLtMaxSize) {
+      message.error(t('uploadImage.errorUploadSize', { size: maxSize }));
     }
 
-    return isLt1M || Upload.LIST_IGNORE;
+    // Add Upload.LIST_IGNORE for ignore failed image
+    return isLtMaxSize || Upload.LIST_IGNORE;
   };
 
-  const customUpload = async ({
-    file,
-    onSuccess,
-    onError,
-  }: {
-    file: UploadFile;
-    onSuccess: any;
-    onError: any;
-  }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const customRequest = async (values: any) => {
+    const { file, headers, onSuccess, onError, onProgress } = values;
     try {
-      const imageRef = ref(storage, `images/${file.uid + file.name}`);
-      const snapshot = await uploadBytes(imageRef, file as RcFile);
-      const downloadURL = await getDownloadURL(snapshot.ref);
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await axios.post(`${FILE_PATH}/image`, formData, {
+        headers,
+        onUploadProgress: ({ total, loaded }) => {
+          if (total !== undefined) {
+            onProgress(
+              { percent: Math.round((loaded / total) * 100).toFixed(2) },
+              file,
+            );
+          }
+        },
+      });
 
-      // save image url -> HOC
-      props.setImageUrl(downloadURL);
-      onSuccess(null, file);
+      if (response.success) {
+        // response.data.data = url and fileName of file
+        const { url } = response.data.data;
+        setImageUrls([...imageUrls, url]);
+        file.url = url;
+        onSuccess(null, file);
+      }
     } catch (error) {
       console.error(error);
-      onError();
+      onError(error);
     }
   };
 
-  const customRequest = (props: any) => {
-    return customUpload(props);
+  const onRemove = async (file: UploadFile) => {
+    try {
+      const deleteFile = imageUrls.find((url) => url === file?.url);
+      if (deleteFile) {
+        const newList = imageUrls.filter((url) => url !== file?.url);
+        setImageUrls(newList);
+
+        await axios.delete(`${FILE_PATH}`, {
+          data: {
+            fileUrl: deleteFile,
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const UploadButton = (
     <div>
       <PlusOutlined />
-      <p>{t('uploadImage.upload')}</p>
+      <p className="mt-1">{t('uploadImage.upload')}</p>
     </div>
   );
 
@@ -99,12 +164,21 @@ export default function UploadImage(props: UploadImageProps) {
         accept=".jpg, .jpeg, .png"
         listType="picture-card"
         fileList={fileList}
+        maxCount={maxCount}
         onPreview={handlePreview}
         onChange={handleChange}
         beforeUpload={beforeUpload}
         customRequest={customRequest}
+        onRemove={onRemove}
+        progress={{
+          strokeColor: {
+            '0%': '#108ee9',
+            '100%': '#87d068',
+          },
+          size: 3,
+        }}
       >
-        {fileList.length == 1 ? null : UploadButton}
+        {fileList.length >= maxCount ? null : UploadButton}
       </Upload>
       <Modal
         open={previewOpen}

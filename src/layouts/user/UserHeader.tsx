@@ -6,6 +6,7 @@ import ChangeLanguage from '@/components/common/ChangeLanguage';
 import { authActions, selectUser } from '@/store/slices/auth.slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useApiClient } from '@/shared/hooks/api';
+import { UserRole } from '@/shared/constants';
 
 export default function UserHeader() {
   const { t } = useTranslation();
@@ -18,10 +19,8 @@ export default function UserHeader() {
   const handleSignOut = async () => {
     try {
       const response = await apiSignOut.create();
-      console.log({
-        response,
-      });
-      if (response) {
+
+      if (response?.status === 200) {
         dispatch(authActions.signOut());
 
         notification.success({
@@ -30,7 +29,7 @@ export default function UserHeader() {
         navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -53,9 +52,11 @@ export default function UserHeader() {
           <Link to="#" className=" text-lg">
             Chat
           </Link>
-          <Link to="/managers" className=" text-lg">
-            Manager Dashboard
-          </Link>
+          {currentUser?.role === UserRole.MANAGER && (
+            <Link to="/managers" className="text-lg">
+              Manager Dashboard
+            </Link>
+          )}
         </div>
       </div>
 

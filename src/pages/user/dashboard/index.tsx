@@ -19,6 +19,7 @@ import { BsCursorFill } from 'react-icons/bs';
 import HotelInformation from './HotelInfomation';
 import AttractionPlace from './AtractionPlace';
 import Review from './Review';
+import RoomGrid from './ListingRoom/RoomGrid';
 
 const marketingsNumber = [
   {
@@ -120,7 +121,7 @@ export default function UserDashboard() {
           loading="lazy"
         />
       </Row>
-
+      <RoomGrid />
       {/* OVERVIEW INFORMATION */}
       <Row gutter={[24, 24]}>
         <Col md={24} lg={12}>
@@ -148,7 +149,6 @@ export default function UserDashboard() {
           </Button>
         </Col>
       </Row>
-
       <Row gutter={[12, 24]}>
         {marketingsNumber.map((item, index) => (
           <Col
@@ -165,10 +165,8 @@ export default function UserDashboard() {
           </Col>
         ))}
       </Row>
-
       {/* DIRECT IN GOOGLE MAP */}
       <Row gutter={[24, 32]}>
-        {/* HEADER - INFORMATION */}
         <Col className="w-full flex gap-6 justify-between flex-col items-center md:flex-row">
           <div>
             <Typography className="text-4xl font-normal text-center md:text-left">
@@ -199,7 +197,6 @@ export default function UserDashboard() {
           <MarkerF position={exampleMap.center} />
         </GoogleMap>
       </Row>
-
       {/* MARKETINGS FACILITIES */}
       <Row gutter={[24, 60]}>
         <div className="w-full flex flex-col justify-center items-center">
@@ -222,14 +219,11 @@ export default function UserDashboard() {
           </Col>
         ))}
       </Row>
-
       {/* Best place for play */}
       <AttractionPlace />
-
-      {/* HOTEL REVIEW */}
+      HOTEL REVIEW
       <Review />
-
-      {/* HOTEL INFORMATION */}
+      HOTEL INFORMATION
       <HotelInformation />
     </div>
   );

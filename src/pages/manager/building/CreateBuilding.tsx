@@ -1,103 +1,153 @@
+import { BuildingEntity } from '@/models';
+import {
+  BUILDINGS_PATH,
+  BUILDING_UNIT_PRICES_PATH,
+  routes,
+} from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
-import { useAppSelector } from '@/store/hooks';
-import { selectUser } from '@/store/slices/auth.slice';
-import { App, Button, Form, Input, Modal } from 'antd';
+import { App, Button, Card, Form, Input, InputNumber, Select } from 'antd';
 import { t } from 'i18next';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface CreateBuildingForm {
-  name: string;
-  address: string;
-  ownerId: number | undefined;
-}
+const buildingUnits = [
+  {
+    name: 'electricity',
+    label: 'Nhập tiền điện',
+  },
+  {
+    name: 'water',
+    label: 'Nhập tiền nước',
+  },
+  {
+    name: 'wifi',
+    label: 'Nhập tiền wifi',
+  },
+  {
+    name: 'light',
+    label: 'Nhập tiền chiếu sáng',
+  },
+  {
+    name: 'environment',
+    label: 'Nhập tiền vệ sinh',
+  },
+];
 
 export default function CreateBuilding() {
   const [form] = Form.useForm();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const apiBuilding = useApiClient('/buildings');
-
-  const currentUser = useAppSelector(selectUser);
-
+  const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const apiBuildingUnitPrice = useApiClient(BUILDING_UNIT_PRICES_PATH);
   const { notification } = App.useApp();
+  const navigate = useNavigate();
+  const [buildingType, setBuildingType] = useState<string>();
 
-  const handleCreate = async (values: CreateBuildingForm) => {
-    values.ownerId = currentUser?.userId;
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCreate = async (values: any) => {
     try {
-      console.log(values);
-      const newBuilding = await apiBuilding.create({
-        ...values,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { electricity, water, wifi, light, environment, ...buildingDto } =
+        values;
+
+      const newBuildingRes = await apiBuilding.create({
+        ...buildingDto,
       });
-      if (newBuilding?.status === 201) {
+
+      if (newBuildingRes && newBuildingRes.status === 201) {
+        const newBuilding = newBuildingRes.data.data as BuildingEntity;
+        // Create building units price
+        buildingUnits.forEach(async (unit) => {
+          await apiBuildingUnitPrice.create({
+            buildingId: newBuilding.id,
+            name: unit.name,
+            price: values[unit.name],
+          });
+        });
+
         notification.success({ message: t('building.new.success') });
+        navigate(routes.managers.buildings.index);
       } else {
         notification.error({ message: t('building.new.failed') });
       }
-      console.log({
-        newBuilding,
-      });
+
       form.resetFields();
-      setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const onCancel = () => {
-    setIsOpen(false);
-  };
-
   return (
-    <div>
-      <Button className="border border-black" onClick={() => setIsOpen(true)}>
-        <span>
-          Click to Create <span className="font-bold">new building</span>
-        </span>
-      </Button>
-      {/* popup modal */}
-      <Modal
-        title={t('building.new.create')}
-        open={isOpen}
-        onCancel={onCancel}
-        width={1000}
-        okButtonProps={{ hidden: true }}
-        cancelButtonProps={{ hidden: true }}
-        footer={[
-          <Button
-            form="createForm"
-            key="submit"
-            htmlType="submit"
-            type="primary"
-            className="bg-primary"
-          >
-            <p className=" text-base">{t('common.create')}</p>
-          </Button>,
-        ]}
+    <Card>
+      <Form
+        id="createForm"
+        layout="vertical"
+        autoComplete="true"
+        form={form}
+        onFinish={handleCreate}
+        onFinishFailed={(error) => console.error(error)}
       >
-        <Form
-          id="createForm"
-          layout="vertical"
-          autoComplete="true"
-          form={form}
-          onFinish={handleCreate}
-          onFinishFailed={(error) => console.error(error)}
+        <Form.Item
+          name="name"
+          label={t('building.buildingName')}
+          rules={[{ required: true, message: t('common.pleaseEnter') }]}
         >
-          <Form.Item
-            name="address"
-            label={t('building.buildingAddress')}
-            rules={[{ required: true, message: t('common.pleaseEnter') }]}
-          >
-            <Input placeholder="Building address" />
-          </Form.Item>
-          <Form.Item
-            name="name"
-            label={t('building.buildingName')}
-            rules={[{ required: true, message: t('common.pleaseEnter') }]}
-          >
-            <Input placeholder="Input building name" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+          <Input placeholder="Input building name" />
+        </Form.Item>
+
+        <Form.Item
+          name="address"
+          label={t('building.buildingAddress')}
+          rules={[{ required: true, message: t('common.pleaseEnter') }]}
+        >
+          <Input placeholder="Building address" />
+        </Form.Item>
+
+        <Form.Item
+          name="type"
+          label={t('building.buildingType')}
+          rules={[{ required: true, message: t('common.pleaseEnter') }]}
+        >
+          <Select
+            options={[
+              {
+                label: t('building.type.hostel'),
+                value: 'HOSTEL',
+              },
+              // {
+              //   label: t('building.type.entireHouse'),
+              //   value: 'ENTIRE_HOUSE',
+              // },
+            ]}
+            onChange={(value) => setBuildingType(value)}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        {buildingType === 'HOSTEL' && (
+          <div className="grid-cols-2">
+            {buildingUnits.map((item, index) => (
+              <Form.Item
+                key={`buildingUnitPrice-${index}`}
+                name={item.name}
+                label={item.label}
+                rules={[{ required: true, message: t('common.pleaseEnter') }]}
+              >
+                <InputNumber
+                  placeholder="Đơn vị VNĐ"
+                  className="w-40"
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  parser={(value) => value!.replace(/,/g, '')}
+                />
+              </Form.Item>
+            ))}
+          </div>
+        )}
+
+        <Button type="primary" htmlType="submit">
+          Tạo tòa nhà mới
+        </Button>
+      </Form>
+    </Card>
   );
 }

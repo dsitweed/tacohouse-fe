@@ -1,12 +1,20 @@
+import { RoomEntity, UserEntity } from '.';
+import { BuildingUnitPriceEntity } from './BuildingUnitPriceEntity';
+
 export interface BuildingEntity {
   id: number;
   name: string;
-  room: number; // number of rooms
-  tenant: number; // number of tenants
+  type: string;
   address: string;
+  rooms: RoomEntity[]; // number of rooms
+
+  // invoices: InvoiceEntity[];
+  buildingUnitPrices: BuildingUnitPriceEntity[];
+  ownerId: number;
+  owner: UserEntity;
+
+  tenants: UserEntity[]; // number of tenants
   income: number;
   completion: number; // level of completion
   icon?: string | undefined;
-  owner: string;
-  building?: string; // ? save for what
 }

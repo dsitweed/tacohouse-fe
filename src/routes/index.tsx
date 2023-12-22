@@ -6,12 +6,19 @@ import SignUp from '@/pages/auth/SignUp';
 import ManagerLayout from '@/layouts/manager';
 import ManagerDashboard from '@/pages/manager/dashboard';
 import ManagerBuilding from '@/pages/manager/building';
-import Room from '@/pages/manager/room';
+import ManagerRoom from '@/pages/manager/room';
 import UserDashboard from '@/pages/user/dashboard';
 import AuthLayout from '@/layouts/user/AuthLayout';
-// import Dev from '../pages/Dev';
-
-const isUserLoggedIn = true;
+import Dev from '../pages/Dev';
+import CreateBuilding from '@/pages/manager/building/CreateBuilding';
+import CreateRoom from '@/pages/manager/room/CreateRoom';
+import SingleRoom from '@/pages/manager/room/SingleRoom';
+import SingleBuilding from '@/pages/manager/building/SingleBuilding';
+import EditBuilding from '@/pages/manager/building/EditBuilding';
+import CreateTenant from '@/pages/manager/tenant/CreateTenant';
+import Tenant from '@/pages/manager/tenant';
+import EditRoom from '@/pages/manager/room/EditRoom';
+import EditTenant from '@/pages/manager/tenant/EditTenant';
 
 const router = createBrowserRouter([
   {
@@ -44,9 +51,9 @@ const router = createBrowserRouter([
         index: true,
         element: <UserDashboard />,
       },
-      isUserLoggedIn && {
-        // Routes for logged in User
-        path: 'users',
+      {
+        path: 'rooms/:roomId',
+        element: <SingleRoom />,
       },
     ],
   },
@@ -65,8 +72,52 @@ const router = createBrowserRouter([
         element: <ManagerBuilding />,
       },
       {
+        path: 'buildings/:buildingId',
+        element: <SingleBuilding />,
+      },
+      {
+        path: 'buildings/new',
+        element: <CreateBuilding />,
+      },
+      {
+        path: 'buildings/:buildingId/edit',
+        element: <EditBuilding />,
+      },
+      {
+        path: 'rooms',
+        element: <ManagerRoom />,
+      },
+      {
         path: 'rooms/:roomId',
-        element: <Room />,
+        element: <SingleRoom />,
+      },
+      {
+        path: 'rooms/new',
+        element: <CreateRoom />,
+      },
+      {
+        path: 'rooms/:roomId/edit',
+        element: <EditRoom />,
+      },
+      {
+        path: 'tenants',
+        element: <Tenant />,
+      },
+      {
+        path: 'tenants/new',
+        element: <CreateTenant />,
+      },
+      {
+        path: 'tenants/:tenantId',
+        element: <EditTenant />,
+      },
+      {
+        path: 'tenants/:tenantId/edit',
+        element: <EditTenant />,
+      },
+      {
+        path: 'dev',
+        element: <Dev />,
       },
     ],
   },

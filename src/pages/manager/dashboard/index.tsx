@@ -157,7 +157,7 @@ export default function ManagerDashboard() {
                   ),
                 }))}
               />
-              <Button type="primary" className="bg-primary w-full" size="large">
+              <Button type="primary" className="w-full" size="large">
                 See details
               </Button>
             </div>

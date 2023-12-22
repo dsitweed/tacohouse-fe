@@ -160,6 +160,9 @@ yarn add i18next react-i18next
 # Icons for app
 yarn add react-icons
 
+# Dayjs to format date
+yarn add dayjs
+
 # Chart
 yarn add chart.js react-chartjs-2
 
@@ -172,6 +175,11 @@ yarn add firebase
 # Google map
 yarn add @react-google-maps/api
 
+# Export excel
+yarn add antd-table-saveas-excel
+
+# React to print
+yarn add react-to-print
 ```
 
 ### `Firebase`
@@ -225,7 +233,7 @@ const analytics = getAnalytics(app);
 
 ## Bug when coding
 
-1. Bug 1
+1. Hiện tại chỉ phục vụ cho manager
 
 ## Tài liệu tham khảo
 
