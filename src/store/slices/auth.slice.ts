@@ -56,7 +56,6 @@ export const selectUser = (state: RootState) => state.auth.user;
 export default authSlice;
 
 // MANIPULATION WITH LOCAL STORAGE
-
 function getUserFromStorage() {
   try {
     const user = localStorage.getItem('user');

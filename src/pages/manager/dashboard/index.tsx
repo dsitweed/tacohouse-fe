@@ -12,6 +12,7 @@ import card from '@/assets/images/info-card-1.jpg';
 import LineChart from '@/components/chart/line-chart';
 import BarChart from '@/components/chart/bar-chart';
 import BuildingAnalytic from '../building/BuildingAnalytic';
+import SEO from '@/components/common/SEO';
 
 type ItemTimeLine = {
   title: string;
@@ -88,6 +89,7 @@ export default function ManagerDashboard() {
 
   return (
     <div>
+      <SEO title="Manager | Home Page" />
       {/* OVER VIEW CARDS */}
       <Row gutter={[24, 24]}>
         {count.map((c, index) => (

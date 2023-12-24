@@ -5,7 +5,12 @@
     "errorsPage": {
       "report": "Xin lỗi, đã xảy ra một lỗi không mong muốn.",
       "backToHome": "Quay lại Trang chủ"
-    }
+    },
+    "home": "Trang chủ",
+    "managers": "Quản lý",
+    "buildings": "Tòa nhà",
+    "rooms": "Các phòng",
+    "tenants": "Người thuê"
   },
   "common": {
     "pleaseEnter": "Vui lòng nhập",
@@ -15,6 +20,7 @@
     "add": "Thêm",
     "edit": "Sửa",
     "create": "Tạo mới",
+    "new": "Tạo mới",
     "delete": "Xóa",
     "save": "Lưu",
     "cancel": "Hủy",
