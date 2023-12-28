@@ -45,7 +45,7 @@ export default function UserHeader() {
             {t('webName')}
           </Typography.Title>
         </div>
-        <div className="hidden pl-8 lg:flex items-center gap-6 font-semibold">
+        <div className="hidden pl-8 md:flex items-center gap-6 font-semibold">
           <Link to="#" className=" text-lg">
             Rooms
           </Link>

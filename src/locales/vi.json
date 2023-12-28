@@ -129,5 +129,8 @@
     "errorSize5M": "Hình ảnh phải nhỏ hơn 5MB!",
     "errorSize1M": "Hình ảnh phải nhỏ hơn 1MB!",
     "errorUploadSize": "Image must be less than  {{size}}MB!"
+  },
+  "me": {
+    "profile": "Cá nhân"
   }
 }

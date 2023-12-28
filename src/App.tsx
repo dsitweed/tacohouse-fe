@@ -3,7 +3,6 @@ import { RouterProvider } from 'react-router-dom';
 
 import router from './routes';
 import { theme } from './assets/theme';
-import { LoadScript } from '@react-google-maps/api';
 import viVN from 'antd/locale/vi_VN';
 import enUS from 'antd/locale/en_US';
 import jaJP from 'antd/locale/ja_JP';
@@ -31,7 +30,6 @@ function App() {
       <ConfigProvider theme={theme} locale={getAntdLocale(key)}>
         <HelmetProvider>
           <RouterProvider router={router} />
-          <LoadScript googleMapsApiKey="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8"></LoadScript>
         </HelmetProvider>
       </ConfigProvider>
     </AntApp>

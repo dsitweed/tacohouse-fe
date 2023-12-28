@@ -8,7 +8,7 @@ import {
   MenuProps,
   Typography,
 } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // images
 import avatar from '@/assets/images/avatar.jpg';
@@ -17,6 +17,9 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { authActions, selectUser } from '@/store/slices/auth.slice';
 import { useTranslation } from 'react-i18next';
 import AppBreadcrumb from '@/components/common/AppBreadcrum';
+
+import { MdOutlineLogout } from 'react-icons/md';
+import { FaUserCircle } from 'react-icons/fa';
 
 const dropdownItems: MenuProps['items'] = [
   {
@@ -65,7 +68,20 @@ export default function ManagerHeader() {
   const menuDropdownItems: MenuProps['items'] = [
     {
       label: (
-        <Typography.Text onClick={() => handleSignOut()}>
+        <Link to={'/managers/me'} className="flex items-center gap-2">
+          <FaUserCircle />
+          {t('me.profile')}
+        </Link>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <Typography.Text
+          onClick={() => handleSignOut()}
+          className="flex items-center gap-2"
+        >
+          <MdOutlineLogout />
           {t('auth.signOut')}
         </Typography.Text>
       ),

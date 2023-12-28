@@ -17,18 +17,19 @@ import RoomGridItem from './RoomGridItem';
 import { FaPlus } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApiClient } from '@/shared/hooks/api';
-import { ROOMS_PATH } from '@/routes/routeNames';
+import { MANAGERS_PATH, ROOMS_PATH } from '@/routes/routeNames';
 import { useEffect, useState } from 'react';
 
 export default function ManagerRoom() {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const apiRoom = useApiClient(ROOMS_PATH);
+  const apiManager = useApiClient(MANAGERS_PATH);
   const [rooms, setRooms] = useState<RoomEntity[]>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiRoom.getAll();
+      const response = await apiManager.getAllExtend('/rooms');
       if (response && response.status === 200) {
         setRooms(response.data.data);
       }

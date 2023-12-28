@@ -191,9 +191,7 @@ export default function ListRooms({
       );
 
       /* UPDATE DATA TO DATABASE */
-      const thisRoomData = newData[index];
-
-      const electricity = thisRoomData.roomUnitPrices.find(
+      const electricity = newRowReCalculate.roomUnitPrices.find(
         (item) => item.buildingUnitPrice.name === 'electricity',
       );
 
@@ -210,29 +208,23 @@ export default function ListRooms({
       );
 
       let updatedInvoice;
-      console.log({
-        total: thisRoomData.total,
-        tenantIds: thisRoomData.tenants.map((tenant) => tenant.id),
-        roomId: thisRoomData.id,
-        buildingId: thisRoomData.buildingId,
-      });
 
       // UPDATE INVOICE
-      if (thisRoomData.invoice === null) {
+      if (newRowReCalculate.invoice === null) {
         updatedInvoice = await apiInvoice.createExtend(
-          `/${thisRoomData.id}/current-month`,
+          `/${newRowReCalculate.id}/current-month`,
           {
-            total: thisRoomData.total,
-            tenantIds: thisRoomData.tenants.map((tenant) => tenant.id),
-            roomId: thisRoomData.id,
-            buildingId: thisRoomData.buildingId,
+            total: newRowReCalculate.total,
+            tenantIds: newRowReCalculate.tenants.map((tenant) => tenant.id),
+            roomId: newRowReCalculate.id,
+            buildingId: newRowReCalculate.buildingId,
           },
         );
       } else {
         updatedInvoice = await axios.patch(
-          `${INVOICES_PATH}/${thisRoomData.id}/current-month`,
+          `${INVOICES_PATH}/${newRowReCalculate.id}/current-month`,
           {
-            total: thisRoomData.total,
+            total: newRowReCalculate.total,
           },
         );
       }
@@ -264,10 +256,9 @@ export default function ListRooms({
       (item) => item.buildingUnitPrice.name === 'electricity',
     );
 
-    room.currentElectricity =
-      currentElectricity || Number(electricity?.current);
-    room.beforeElectricity = beforeElectricity || Number(electricity?.before);
-    room.electricityPrice = Number(electricity?.buildingUnitPrice.price);
+    room.currentElectricity = currentElectricity || electricity?.current || 0;
+    room.beforeElectricity = beforeElectricity || electricity?.before || 0;
+    room.electricityPrice = electricity?.buildingUnitPrice.price || 0;
 
     room.totalElectricity =
       (room.currentElectricity - room.beforeElectricity) *
@@ -287,12 +278,12 @@ export default function ListRooms({
     );
 
     room.waterPrice =
-      room.tenants.length * Number(water?.buildingUnitPrice.price);
-    room.wifiPrice = Number(wifi?.buildingUnitPrice.price);
-    room.lightPrice = Number(light?.buildingUnitPrice.price);
+      room.tenants.length * (water?.buildingUnitPrice.price || 0);
+    room.wifiPrice = wifi?.buildingUnitPrice.price || 0;
+    room.lightPrice = light?.buildingUnitPrice.price || 0;
     room.environmentPrice =
-      room.tenants.length * Number(environment?.buildingUnitPrice.price);
-    room.debt = debt || Number(room.debt);
+      room.tenants.length * (environment?.buildingUnitPrice.price || 0);
+    room.debt = debt || room?.debt || 0;
 
     room.total =
       room.price +
@@ -324,7 +315,7 @@ export default function ListRooms({
         const list: string[] = [];
         record.tenants.forEach((item) => list.push(getFullUserName(item)));
         return (
-          <div>
+          <div className="flex flex-col">
             {list.map((item, index) => (
               <div key={`tenantName-${index}`}>{item}</div>
             ))}

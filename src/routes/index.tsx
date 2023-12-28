@@ -20,6 +20,7 @@ import Tenant from '@/pages/manager/tenant';
 import EditRoom from '@/pages/manager/room/EditRoom';
 import EditTenant from '@/pages/manager/tenant/EditTenant';
 import i18n from '@/locales/i18n';
+import Profile from '@/components/person/Profile';
 
 const router = createBrowserRouter([
   {
@@ -149,6 +150,10 @@ const router = createBrowserRouter([
             element: <EditTenant />,
           },
         ],
+      },
+      {
+        path: 'me',
+        element: <Profile />,
       },
       {
         path: 'dev',
