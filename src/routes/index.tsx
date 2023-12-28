@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Link, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from './ErrorPage';
 import UserLayout from '@/layouts/user';
 import SignIn from '@/pages/auth/SignIn';
@@ -19,6 +19,8 @@ import CreateTenant from '@/pages/manager/tenant/CreateTenant';
 import Tenant from '@/pages/manager/tenant';
 import EditRoom from '@/pages/manager/room/EditRoom';
 import EditTenant from '@/pages/manager/tenant/EditTenant';
+import i18n from '@/locales/i18n';
+import Profile from '@/components/person/Profile';
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,9 @@ const router = createBrowserRouter([
     path: 'managers',
     element: <ManagerLayout />,
     errorElement: <ErrorPage />,
+    handle: {
+      crumb: () => <Link to={'/managers'}>{i18n.t('routes.managers')}</Link>,
+    },
     children: [
       {
         index: true,
@@ -69,51 +74,86 @@ const router = createBrowserRouter([
       },
       {
         path: 'buildings',
-        element: <ManagerBuilding />,
-      },
-      {
-        path: 'buildings/:buildingId',
-        element: <SingleBuilding />,
-      },
-      {
-        path: 'buildings/new',
-        element: <CreateBuilding />,
-      },
-      {
-        path: 'buildings/:buildingId/edit',
-        element: <EditBuilding />,
+        handle: {
+          crumb: () => (
+            <Link to={'buildings'}>{i18n.t('routes.buildings')}</Link>
+          ),
+        },
+        children: [
+          {
+            index: true,
+            element: <ManagerBuilding />,
+          },
+          {
+            path: ':buildingId',
+            element: <SingleBuilding />,
+          },
+          {
+            path: 'new',
+            element: <CreateBuilding />,
+            handle: {
+              crumb: () => (
+                <Link to={'buildings/new'}>{i18n.t('common.new')}</Link>
+              ),
+            },
+          },
+          {
+            path: ':buildingId/edit',
+            element: <EditBuilding />,
+          },
+        ],
       },
       {
         path: 'rooms',
-        element: <ManagerRoom />,
-      },
-      {
-        path: 'rooms/:roomId',
-        element: <SingleRoom />,
-      },
-      {
-        path: 'rooms/new',
-        element: <CreateRoom />,
-      },
-      {
-        path: 'rooms/:roomId/edit',
-        element: <EditRoom />,
+        handle: {
+          crumb: () => <Link to={'rooms'}>{i18n.t('routes.rooms')}</Link>,
+        },
+        children: [
+          {
+            index: true,
+            element: <ManagerRoom />,
+          },
+          {
+            path: ':roomId',
+            element: <SingleRoom />,
+          },
+          {
+            path: 'new',
+            element: <CreateRoom />,
+          },
+          {
+            path: ':roomId/edit',
+            element: <EditRoom />,
+          },
+        ],
       },
       {
         path: 'tenants',
-        element: <Tenant />,
+        handle: {
+          crumb: () => <Link to={'tenants'}>{i18n.t('routes.tenants')}</Link>,
+        },
+        children: [
+          {
+            index: true,
+            element: <Tenant />,
+          },
+          {
+            path: 'new',
+            element: <CreateTenant />,
+          },
+          {
+            path: ':tenantId',
+            element: <EditTenant />,
+          },
+          {
+            path: ':tenantId/edit',
+            element: <EditTenant />,
+          },
+        ],
       },
       {
-        path: 'tenants/new',
-        element: <CreateTenant />,
-      },
-      {
-        path: 'tenants/:tenantId',
-        element: <EditTenant />,
-      },
-      {
-        path: 'tenants/:tenantId/edit',
-        element: <EditTenant />,
+        path: 'me',
+        element: <Profile />,
       },
       {
         path: 'dev',

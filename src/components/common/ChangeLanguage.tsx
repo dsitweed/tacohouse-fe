@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import viFlag from '@/assets/images/vi.png';
 import enFlag from '@/assets/images/en.png';
 import jpFlag from '@/assets/images/jp.png';
+import { useAppDispatch } from '@/store/hooks';
+import { languageActions } from '@/store/slices/language.slice';
 
 interface LanguageInterface {
   key: I18nType.Language;
@@ -19,11 +21,17 @@ const languages: LanguageInterface[] = [
 
 export default function ChangeLanguage() {
   const { i18n } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const handleChangeLanguage = (lang: LanguageInterface) => {
+    dispatch(languageActions.setLanguage(lang.key));
+    i18n.changeLanguage(lang.key);
+  };
 
   const options = languages.map((lang) => ({
     key: lang.key,
     label: (
-      <p onClick={() => i18n.changeLanguage(lang.key)} className="flex gap-2">
+      <p onClick={() => handleChangeLanguage(lang)} className="flex gap-2">
         <img src={lang.flag} height={24} width={24} alt="flag" />
         {lang.nativeName}
       </p>

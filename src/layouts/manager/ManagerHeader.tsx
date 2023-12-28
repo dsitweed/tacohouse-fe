@@ -3,7 +3,6 @@ import {
   App,
   Avatar,
   Badge,
-  Breadcrumb,
   Dropdown,
   Input,
   MenuProps,
@@ -17,12 +16,10 @@ import { useApiClient } from '@/shared/hooks/api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { authActions, selectUser } from '@/store/slices/auth.slice';
 import { useTranslation } from 'react-i18next';
+import AppBreadcrumb from '@/components/common/AppBreadcrum';
 
-const breadcrumbItems = [
-  {
-    title: <Link to="/">Home</Link>,
-  },
-];
+import { MdOutlineLogout } from 'react-icons/md';
+import { FaUserCircle } from 'react-icons/fa';
 
 const dropdownItems: MenuProps['items'] = [
   {
@@ -43,12 +40,13 @@ const dropdownItems: MenuProps['items'] = [
 ];
 
 export default function ManagerHeader() {
-  const apiSignOut = useApiClient('/auth/sign-out');
   const { notification } = App.useApp();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectUser);
+
+  const apiSignOut = useApiClient('/auth/sign-out');
 
   const handleSignOut = async () => {
     try {
@@ -70,7 +68,20 @@ export default function ManagerHeader() {
   const menuDropdownItems: MenuProps['items'] = [
     {
       label: (
-        <Typography.Text onClick={() => handleSignOut()}>
+        <Link to={'/managers/me'} className="flex items-center gap-2">
+          <FaUserCircle />
+          {t('me.profile')}
+        </Link>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <Typography.Text
+          onClick={() => handleSignOut()}
+          className="flex items-center gap-2"
+        >
+          <MdOutlineLogout />
           {t('auth.signOut')}
         </Typography.Text>
       ),
@@ -79,12 +90,13 @@ export default function ManagerHeader() {
   ];
 
   return (
-    <div className="bg-white flex justify-between items-center">
+    <div className="bg-white flex justify-between items-center h-full">
       <div className="flex flex-col">
-        <Breadcrumb className="hidden md:block" items={breadcrumbItems} />
-        <Typography className="uppercase text-lg font-bold">
-          Dashboard
-        </Typography>
+        {/* <Breadcrumb className="hidden md:block" items={breadcrumbItems} /> */}
+        <div className="pt-1 hidden md:block">
+          <AppBreadcrumb />
+        </div>
+        <p className="uppercase text-lg font-bold">Dashboard</p>
       </div>
       <div className="flex items-center gap-3">
         <Input

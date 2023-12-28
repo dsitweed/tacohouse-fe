@@ -13,37 +13,37 @@ import { selectUser } from '@/store/slices/auth.slice';
 
 const { Title, Text } = Typography;
 
-const items = [
-  {
-    key: '/managers',
-    label: 'Dashboard',
-    icon: <FaHome size={18} />,
-    children: null,
-  },
-  {
-    key: '/managers/buildings',
-    label: 'Buildings',
-    icon: <FaBuilding size={18} />,
-    children: null,
-  },
-  {
-    key: '/managers/rooms',
-    label: 'Rooms',
-    icon: <BsDoorClosedFill size={18} />,
-    children: null,
-  },
-  {
-    key: '/managers/tenants',
-    label: 'Tenants',
-    icon: <BsFilePersonFill size={18} />,
-    children: null,
-  },
-];
-
 export default function ManagerSider() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const currentUser = useAppSelector(selectUser);
+
+  const items = [
+    {
+      key: '/managers',
+      label: t('routes.managers'),
+      icon: <FaHome size={18} />,
+      children: null,
+    },
+    {
+      key: '/managers/buildings',
+      label: t('routes.buildings'),
+      icon: <FaBuilding size={18} />,
+      children: null,
+    },
+    {
+      key: '/managers/rooms',
+      label: t('routes.rooms'),
+      icon: <BsDoorClosedFill size={18} />,
+      children: null,
+    },
+    {
+      key: '/managers/tenants',
+      label: t('routes.tenants'),
+      icon: <BsFilePersonFill size={18} />,
+      children: null,
+    },
+  ];
 
   const siderItems = useCallback(
     () =>
@@ -57,9 +57,12 @@ export default function ManagerSider() {
 
   return (
     <div>
-      <div className="flex items-center">
+      <div
+        className="flex items-center justify-center h-14 cursor-pointer"
+        onClick={() => navigate('/')}
+      >
         <img src={logo} className="w-12 h-12" alt="web logo" />
-        <Title level={4} className="font-bold text-xl mt-2">
+        <Title level={4} className="font-bold text-xl pt-6">
           {t('webName')}
         </Title>
       </div>
@@ -68,7 +71,7 @@ export default function ManagerSider() {
         <Menu
           theme="light"
           mode="inline"
-          className="px-2 pt-2 text-base font-semibold"
+          className="px-2 pt-1 text-base font-semibold"
           defaultSelectedKeys={[location.pathname]}
           items={siderItems()}
         />

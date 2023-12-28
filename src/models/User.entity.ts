@@ -13,6 +13,7 @@ export interface UserEntity {
   citizenNumber?: string;
   phoneNumber?: string;
   avatarUrl?: string;
+  citizenImageUrls: string[];
   dob?: Date | string;
 
   buildings: BuildingEntity[];
@@ -21,5 +22,5 @@ export interface UserEntity {
 }
 
 export function getFullUserName(user: UserEntity): string {
-  return `${user.lastName} ${user.firstName}`;
+  return `${user.lastName} ${user.firstName || ''}`;
 }

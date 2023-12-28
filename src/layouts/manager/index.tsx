@@ -14,18 +14,18 @@ export default function ManagerLayout() {
   const { notification } = App.useApp();
   const navigate = useNavigate();
 
-  const hasPermission =
-    currentUser?.role === UserRole.MANAGER ||
-    currentUser?.role === UserRole.ADMIN;
-
   useEffect(() => {
+    const hasPermission =
+      currentUser?.role === UserRole.MANAGER ||
+      currentUser?.role === UserRole.ADMIN;
+
     if (!hasPermission) {
       notification.error({
         message: t('auth.signInRequired'),
       });
       navigate('/auth/sign-in');
     }
-  }, [currentUser, navigate]);
+  }, [navigate]);
 
   return (
     <Layout className="h-screen">
@@ -37,7 +37,7 @@ export default function ManagerLayout() {
           <ManagerHeader />
         </Layout.Header>
         <Layout.Content className="h-full overflow-auto px-6 py-4">
-          {hasPermission && <Outlet />}
+          <Outlet />
         </Layout.Content>
       </Layout>
     </Layout>

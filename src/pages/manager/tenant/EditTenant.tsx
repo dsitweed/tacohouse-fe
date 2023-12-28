@@ -1,4 +1,4 @@
-import { RoomEntity, UserEntity } from '@/models';
+import { RoomEntity, UserEntity, getFullUserName } from '@/models';
 import {
   App,
   Avatar,
@@ -6,6 +6,7 @@ import {
   Card,
   Col,
   DatePicker,
+  Empty,
   Form,
   Input,
   Row,
@@ -29,6 +30,7 @@ export default function EditTenant() {
   // single page (/tenantId) -> -1, edit page -> -2 (/tenantId/edit)
   const tenantId =
     Number(paths[paths.length - 1]) || Number(paths[paths.length - 2]);
+
   const apiManager = useApiClient(MANAGERS_PATH);
 
   useEffect(() => {
@@ -81,12 +83,18 @@ export default function EditTenant() {
     });
   }, [rooms]);
 
-  return !tenant ? (
-    <Card>Không có tenant</Card>
-  ) : (
+  if (!tenant) {
+    return (
+      <Card>
+        <Empty />
+      </Card>
+    );
+  }
+
+  return (
     <Card>
       <Typography.Title level={3}>
-        Thông tin: {tenant.lastName} {tenant.firstName}
+        Thông tin: {getFullUserName(tenant)}
       </Typography.Title>
       <Form
         form={form}
@@ -99,7 +107,7 @@ export default function EditTenant() {
           roomId: tenant.room?.id,
           address: tenant.address,
           phoneNumber: tenant.phoneNumber,
-          dob: dayjs(tenant.dob),
+          dob: tenant.dob && dayjs(tenant.dob),
           citizenNumber: tenant.citizenNumber,
         }}
       >

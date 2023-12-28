@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './slices/auth.slice';
+import languageSlice from './slices/language.slice';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
+    language: languageSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

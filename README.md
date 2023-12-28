@@ -180,6 +180,9 @@ yarn add antd-table-saveas-excel
 
 # React to print
 yarn add react-to-print
+
+# Helmet for SEO
+yarn add react-helmet-async
 ```
 
 ### `Firebase`

@@ -1,26 +1,11 @@
-import { UserRole } from '@/shared/constants';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-
-interface IUser {
-  id: number; // for user object in users tables
-  email: string;
-  role: UserRole;
-  refreshToken?: string;
-  isActive: boolean;
-  firstName: string;
-  lastName: string;
-  address: string;
-  citizenNumber?: string;
-  phoneNumber?: string;
-  avatarUrl?: string;
-  dob?: Date | string;
-}
+import { UserEntity } from '@/models';
 
 interface AuthState {
   accessToken: string;
   refreshToken: string;
-  user: IUser | null;
+  user: UserEntity | null;
 }
 
 const initialState: AuthState = {
@@ -38,6 +23,8 @@ export const authSlice = createSlice({
       localStorage.setItem('accessToken', payload.accessToken);
       localStorage.setItem('refreshToken', payload.refreshToken);
       localStorage.setItem('user', JSON.stringify(payload.user));
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
       state.user = payload.user;
     },
     signOut: (state) => {
@@ -45,6 +32,10 @@ export const authSlice = createSlice({
       state.accessToken = '';
       state.refreshToken = '';
       state.user = null;
+    },
+    updateProfile: (state, action: PayloadAction<UserEntity>) => {
+      state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(action.payload));
     },
   },
 });
@@ -56,13 +47,12 @@ export const selectUser = (state: RootState) => state.auth.user;
 export default authSlice;
 
 // MANIPULATION WITH LOCAL STORAGE
-
 function getUserFromStorage() {
   try {
     const user = localStorage.getItem('user');
     if (!user) return null;
 
-    return JSON.parse(user) as IUser;
+    return JSON.parse(user) as UserEntity;
   } catch (error) {
     console.error(error);
     return null;

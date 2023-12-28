@@ -32,12 +32,6 @@ interface UploadImageProps {
  * @property {number} [maxCount=1] - The maximum number of allowed images.
  * @property {number} [maxSize=1] - The maximum size of each image in bytes (default is 1 MB).
  */
-
-/**
- * UploadImage component
- * @param {UploadImageProps} props - Component props.
- * @returns {JSX.Element} - Rendered component.
- */
 export default function UploadImage(props: UploadImageProps) {
   const { imageUrls, setImageUrls, maxCount = 2, maxSize = 2 } = props;
 

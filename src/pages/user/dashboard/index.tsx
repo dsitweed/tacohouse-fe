@@ -14,7 +14,6 @@ import {
 // images
 import bgImg from '@/assets/images/mountain_2.jpg';
 import aboutHotel from '@/assets/images/about-hotel.jpg';
-import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { BsCursorFill } from 'react-icons/bs';
 import HotelInformation from './HotelInfomation';
 import AttractionPlace from './AtractionPlace';
@@ -74,18 +73,6 @@ const facilities = [
     name: 'Downtown Location',
   },
 ];
-
-const exampleMap = {
-  size: {
-    height: 600,
-    width: 600,
-  },
-  center: {
-    lng: 105.76688824797935,
-    lat: 21.199146789009678,
-  },
-  zoom: 11,
-};
 
 export default function UserDashboard() {
   const { t } = useTranslation();
@@ -185,17 +172,28 @@ export default function UserDashboard() {
             </Button>
           </div>
         </Col>
-        <GoogleMap
+        <Typography.Title level={2} className="mx-auto">
+          Embedded GoogleMap
+        </Typography.Title>
+        {/* <GoogleMap
           mapContainerStyle={{
             width: '100%',
             height: 450,
           }}
-          center={exampleMap.center}
+          center={{
+            lng: 105.76688824797935,
+            lat: 21.199146789009678,
+          }}
           zoom={15}
           mapContainerClassName="border border-slate-300"
         >
-          <MarkerF position={exampleMap.center} />
-        </GoogleMap>
+          <MarkerF
+            position={{
+              lng: 105.76688824797935,
+              lat: 21.199146789009678,
+            }}
+          />
+        </GoogleMap> */}
       </Row>
       {/* MARKETINGS FACILITIES */}
       <Row gutter={[24, 60]}>
