@@ -1,5 +1,5 @@
 import { TenantEntity } from '@/models';
-import { MANAGERS_PATH } from '@/routes/routeNames';
+import { MANAGERS_PATH, routes } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
 import {
   App,
@@ -74,7 +74,11 @@ export default function Tenant() {
     {
       title: 'Số phòng',
       dataIndex: 'room',
-      render: (_, record) => <p>{record.room?.name}</p>,
+      render: (_, record) => (
+        <Link to={`${routes.managers.rooms.index}/${record.roomId}`}>
+          {record.room?.name}
+        </Link>
+      ),
     },
     {
       title: 'Số điện thoại',

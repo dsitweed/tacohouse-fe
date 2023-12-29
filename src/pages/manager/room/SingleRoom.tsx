@@ -12,27 +12,30 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+import { ROOMS_PATH } from '@/routes/routeNames';
+import { UserRole } from '@/shared/constants';
+import { useApiClient } from '@/shared/hooks/api';
+import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+// import image
+import avatarDefault from '@/assets/images/avatar.jpg';
+import { FaRegEdit } from 'react-icons/fa';
 import { GoArrowSwitch, GoHeart, GoShareAndroid } from 'react-icons/go';
 import { IoStar } from 'react-icons/io5';
 import { TfiPrinter } from 'react-icons/tfi';
 
-import { Link } from 'react-router-dom';
-import { useApiClient } from '@/shared/hooks/api';
-import { ROOMS_PATH } from '@/routes/routeNames';
-import { useAppSelector } from '@/store/hooks';
-import { selectUser } from '@/store/slices/auth.slice';
-import dayjs from 'dayjs';
-// import image
-import face1 from '@/assets/images/face-1.jpg';
-import avatarDefault from '@/assets/images/avatar.jpg';
-import { UserRole } from '@/shared/constants';
-
 export default function SingleRoom() {
   const paths = window.location.pathname.split('/');
   const roomId = Number(paths[paths.length - 1]);
-  const [room, setRoom] = useState<RoomEntity>();
+  const { t } = useTranslation();
+
   const currentUser = useAppSelector(selectUser);
+  const [room, setRoom] = useState<RoomEntity>();
   const [currentImage, setCurrentImage] = useState(0);
 
   const apiRoom = useApiClient(ROOMS_PATH);
@@ -50,6 +53,13 @@ export default function SingleRoom() {
     fetchData();
   }, [roomId]);
 
+  const isOwner = useMemo(() => {
+    return (
+      currentUser?.id === room?.building.ownerId &&
+      currentUser?.role === UserRole.MANAGER
+    );
+  }, [currentUser, room]);
+
   return !room ? (
     <>
       <Card>No have room</Card>
@@ -60,21 +70,22 @@ export default function SingleRoom() {
         <Row gutter={[24, 24]}>
           <Col md={24} lg={16}>
             <div className="flex justify-between">
-              <Typography.Title level={4}>Phòng: {room.name}</Typography.Title>
+              <Typography.Title level={4}>
+                {t('common.room')}: {room.name}
+              </Typography.Title>
 
-              {currentUser?.role === UserRole.MANAGER && (
+              {isOwner && (
                 <Link
-                  className="bg-primary p-2 px-4 text-white rounded-md hover:text-white hover:opacity-90"
                   to={`/managers/rooms/${room.id}/edit`}
+                  className="bg-primary p-2 px-4 text-white rounded-md hover:text-white hover:opacity-90 flex items-center gap-2"
                 >
-                  Chỉnh sửa thông tin phòng
+                  <FaRegEdit />
+                  {t('common.update')}
                 </Link>
               )}
             </div>
-            <Typography.Text>Địa chỉ: {room.building.address}</Typography.Text>
-            {currentUser?.role === UserRole.MANAGER && (
-              <Typography.Text>Tòa nhà: {room.building.name}</Typography.Text>
-            )}
+            <Typography>Địa chỉ: {room.building.address}</Typography>
+            {isOwner && <Typography>Tòa nhà: {room.building.name}</Typography>}
           </Col>
           <Col md={24} lg={8} className="flex justify-between items-center">
             <Typography.Title level={2}>
@@ -137,7 +148,7 @@ export default function SingleRoom() {
                   {room.building.type}
                 </div>
                 <div className="px-3 py-2 bg-gray-100 rounded-lg">
-                  {room.area} m&sup2;
+                  {room.area} mm<sup>2</sup>
                 </div>
               </Space>
 
@@ -173,7 +184,7 @@ export default function SingleRoom() {
 
               <div>
                 <Typography.Title level={5}>Thông tin bổ sung</Typography.Title>
-                <div className="grid grid-cols-2">
+                <div className="grid md:grid-cols-2 grid-cols-1">
                   <p>Đặt cọc: Đặt cọc 1 tháng</p>
                   <p>Tiền phòng: Trả đầu tháng</p>
                   <p>Năm xây dựng: 2019</p>
@@ -210,7 +221,7 @@ export default function SingleRoom() {
             <Row gutter={[0, 16]}>
               <div className="flex gap-4">
                 <div>
-                  <Avatar size={64} src={face1} />
+                  <Avatar size={64} src={avatarDefault} />
                 </div>
                 <div>
                   <Space>
@@ -226,7 +237,7 @@ export default function SingleRoom() {
               </div>
               <div className="flex gap-4">
                 <div>
-                  <Avatar size={64} src={face1} />
+                  <Avatar size={64} src={avatarDefault} />
                 </div>
                 <div>
                   <Space>
@@ -259,14 +270,14 @@ export default function SingleRoom() {
                   htmlType="submit"
                   className="bg-primary mt-4 flex justify-center items-center text-base p-5"
                 >
-                  Submit review
+                  urrentUser?.role === UserRole.MANAGER Submit review
                 </Button>
               </div>
             </div>
           </Card>
         </Col>
         <Col md={24} lg={8} className="flex flex-col gap-3">
-          {currentUser?.role === UserRole.MANAGER && (
+          {isOwner && (
             <Card>
               <Typography.Title level={3}>
                 Số người: {room.tenants.length}
@@ -278,10 +289,7 @@ export default function SingleRoom() {
                       key={`${tenant.id}-tenants`}
                       className="flex gap-4 items-center"
                     >
-                      <Avatar
-                        src={tenant.avatarUrl || avatarDefault}
-                        size={80}
-                      />
+                      <Avatar src={tenant.avatarUrl} size={80} />
                       <div>
                         <p>{`${tenant.lastName} ${tenant.firstName}`}</p>
                         <p>Phone: {tenant.phoneNumber}</p>
@@ -300,7 +308,7 @@ export default function SingleRoom() {
           <Card>
             <Typography.Title level={3}>Host</Typography.Title>
             <div className="flex gap-4 items-center">
-              <Avatar src={avatarDefault} size={80} />
+              <Avatar src={room.building.owner?.avatarUrl} size={80} />
               <div>
                 <p className="font-bold text-xl">Nguyễn Văn Kỳ</p>
                 <p>0987984542</p>
