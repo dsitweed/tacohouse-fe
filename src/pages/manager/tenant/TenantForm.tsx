@@ -141,6 +141,7 @@ export default function TenantForm({ type }: Props) {
   return (
     <Form
       form={form}
+      onFinish={type === 'edit' ? handleUpdate : handleCreate}
       layout="vertical"
       autoComplete="true"
       initialValues={
@@ -286,12 +287,12 @@ export default function TenantForm({ type }: Props) {
       </Row>
 
       {type === 'create' && (
-        <Button type="primary" htmlType="submit" onClick={handleCreate}>
+        <Button type="primary" htmlType="submit">
           {t('common.create')}
         </Button>
       )}
       {type === 'edit' && (
-        <Button type="primary" htmlType="submit" onClick={handleUpdate}>
+        <Button type="primary" htmlType="submit">
           {t('common.update')}
         </Button>
       )}

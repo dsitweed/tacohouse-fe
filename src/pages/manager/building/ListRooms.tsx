@@ -121,6 +121,7 @@ export default function ListRooms({
     const fetchData = async () => {
       const response = await apiManager.getAllExtend('/rooms', {
         buildingId: buildingId,
+        limit: 50,
       });
 
       if (response && response.status === 200) {
@@ -579,6 +580,9 @@ export default function ListRooms({
             columns={mergedColumns}
             dataSource={rooms}
             className="w-full"
+            pagination={{
+              pageSize: 25,
+            }}
           />
         </div>
       </Form>

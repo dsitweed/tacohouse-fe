@@ -19,8 +19,12 @@ export interface UserEntity {
   buildings: BuildingEntity[];
   roomId: number;
   room: RoomEntity;
+
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export function getFullUserName(user: UserEntity): string {
-  return `${user.lastName} ${user.firstName || ''}`;
+  if (!user?.lastName && !user?.firstName) return 'NaN';
+  return `${user?.lastName || ''} ${user?.firstName || ''}`;
 }

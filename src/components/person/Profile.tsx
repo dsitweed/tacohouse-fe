@@ -18,8 +18,10 @@ import { authActions, selectUser } from '@/store/slices/auth.slice';
 import dayjs from 'dayjs';
 import UploadImage from '../common/UploadImage';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { notification } = App.useApp();
   const [form] = Form.useForm();
   const user = useAppSelector(selectUser);
@@ -67,6 +69,7 @@ export default function Profile() {
       </Typography.Title>
       <Form
         form={form}
+        onFinish={handleUpdate}
         layout="vertical"
         autoComplete="true"
         initialValues={{
@@ -81,24 +84,61 @@ export default function Profile() {
       >
         <Row gutter={[24, 24]}>
           <Col xs={24} sm={12}>
-            <Form.Item name="firstName" label="Tên">
-              <Input placeholder="Nhập tên" />
-            </Form.Item>
-            <Form.Item name="lastName" label="Họ và tên đệm">
-              <Input placeholder="Nhập tên đệm" />
+            <Form.Item
+              name="lastName"
+              label={t('common.lastName')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.requiredTrue'),
+                },
+              ]}
+            >
+              <Input placeholder={t('common.requiredTrue')} />
             </Form.Item>
 
-            <Form.Item name="dob" label="Ngày tháng năm sinh">
+            <Form.Item
+              name="firstName"
+              label={t('common.fistName')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.requiredTrue'),
+                },
+              ]}
+            >
+              <Input placeholder={t('common.requiredTrue')} />
+            </Form.Item>
+
+            <Form.Item
+              name="dob"
+              label={t('common.dateOfBirth')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.requiredTrue'),
+                },
+              ]}
+            >
               <DatePicker format={'DD/MM/YYYY'} />
             </Form.Item>
 
-            <Form.Item name="address" label="Quê quán">
-              <Input placeholder="Quê quán" />
+            <Form.Item
+              name="address"
+              label={t('common.hometown')}
+              rules={[
+                {
+                  required: true,
+                  message: t('common.requiredTrue'),
+                },
+              ]}
+            >
+              <Input placeholder={t('common.requiredTrue')} />
             </Form.Item>
 
             <Form.Item
               name="citizenNumber"
-              label="Sô CCCD"
+              label={t('common.citizenNumber')}
               rules={[
                 { required: true, message: 'Hãy nhập số điện thoại' },
                 {
@@ -107,7 +147,7 @@ export default function Profile() {
                 },
               ]}
             >
-              <Input placeholder="Số căn cước công dân" />
+              <Input placeholder={t('common.requiredTrue')} />
             </Form.Item>
 
             <Form.Item
@@ -145,7 +185,7 @@ export default function Profile() {
             </Form.Item>
           </Col>
         </Row>
-        <Button type="primary" htmlType="submit" onClick={() => handleUpdate()}>
+        <Button type="primary" htmlType="submit">
           Chỉnh sửa thông tin
         </Button>
       </Form>
