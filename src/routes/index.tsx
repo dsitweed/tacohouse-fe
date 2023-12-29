@@ -148,6 +148,9 @@ const router = createBrowserRouter([
           {
             path: ':tenantId/edit',
             element: <EditTenant />,
+            handle: {
+              crumb: () => <p>{i18n.t('common.edit')}</p>,
+            },
           },
         ],
       },

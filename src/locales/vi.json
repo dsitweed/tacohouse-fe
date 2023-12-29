@@ -20,6 +20,7 @@
     "add": "Thêm",
     "edit": "Sửa",
     "create": "Tạo mới",
+    "update": "Cập nhật",
     "new": "Tạo mới",
     "delete": "Xóa",
     "save": "Lưu",
@@ -28,7 +29,18 @@
     "submit": "Gửi",
     "loading": "Đang tải...",
     "noData": "Không có dữ liệu",
-    "confirmDelete": "Bạn có chắc chắn muốn xóa không?"
+    "confirmDelete": "Bạn có chắc chắn muốn xóa không?",
+    "avatar": "Hình đại hiện",
+    "citizenPictures": "Ảnh thẻ căn cước (2 mặt trước sau)",
+    "requiredTrue": "Vui lòng nhập thông tin",
+    "fistName": "Tên",
+    "lastName": "Họ và tên đệm",
+    "dateOfBirth": "Ngày tháng năm sinh",
+    "hometown": "Quê quán",
+    "room": "Phòng",
+    "building": "Tòa nhà",
+    "citizenNumber": "Số CCCD",
+    "phoneNumber": "Số điện thoại"
   },
   "auth": {
     "footer": {
@@ -132,5 +144,21 @@
   },
   "me": {
     "profile": "Cá nhân"
+  },
+  "tenant": {
+    "new": {
+      "new": "Tạo người thuê",
+      "success": "Tạo người thuê trọ thành công",
+      "failed": "Tạo người thuê trọ thất bại"
+    },
+    "edit": {
+      "edit": "Sửa thông tin người thuê",
+      "success": "Sửa thông tin người thuê thành công",
+      "failed": "Sửa thông tin người thuê thất bại"
+    },
+    "delete": {
+      "success": "Xóa người thuê trọ thành công",
+      "failed": "Xóa người thuê trọ thất bại"
+    }
   }
 }
