@@ -15,8 +15,17 @@ export const useApiClient = <T = any>(url: string) => {
     else notification.error({ message: response.message });
   }
 
-  async function getById(id: number) {
-    const response = await axios.get<Response.ISingleResult<T>>(`${url}/${id}`);
+  async function getById(id: number, suffix?: string) {
+    let response;
+
+    if (suffix) {
+      // replace / at beginning of suffix if have
+      response = await axios.get<Response.ISingleResult<T>>(
+        `${url}/${id}/${suffix.replace('/', '')}`,
+      );
+    } else {
+      response = await axios.get<Response.ISingleResult<T>>(`${url}/${id}`);
+    }
 
     if (response.success) return response;
     else notification.error({ message: response.message });
