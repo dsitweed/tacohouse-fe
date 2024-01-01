@@ -1,24 +1,25 @@
 import { Button, Col, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import {
-  FaParking,
-  FaWifi,
+  FaBicycle,
+  FaBusAlt,
+  FaClock,
   FaDog,
   FaGlassMartiniAlt,
-  FaClock,
-  FaBusAlt,
-  FaBicycle,
   FaMapMarkedAlt,
+  FaParking,
+  FaWifi,
 } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 // images
-import bgImg from '@/assets/images/mountain_2.jpg';
 import aboutHotel from '@/assets/images/about-hotel.jpg';
+import bgImg from '@/assets/images/mountain_2.jpg';
+import { BubbleChat } from 'flowise-embed-react';
 import { BsCursorFill } from 'react-icons/bs';
-import HotelInformation from './HotelInfomation';
 import AttractionPlace from './AtractionPlace';
-import Review from './Review';
+import HotelInformation from './HotelInfomation';
 import RoomGrid from './ListingRoom/RoomGrid';
+import Review from './Review';
 
 const marketingsNumber = [
   {
@@ -223,6 +224,21 @@ export default function UserDashboard() {
       <Review />
       HOTEL INFORMATION
       <HotelInformation />
+      <BubbleChat
+        chatflowid="51554251-2349-4cc9-961b-575440240b7c"
+        apiHost="http://localhost:3000"
+        theme={{
+          button: {
+            backgroundColor: '#34568B',
+          },
+          chatWindow: {
+            textInput: {
+              placeholder: 'Nhập câu hỏi',
+            },
+            welcomeMessage: 'Chào bạn! Tôi có thể giúp gì?',
+          },
+        }}
+      />
     </div>
   );
 }

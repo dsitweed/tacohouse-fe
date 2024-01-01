@@ -14,11 +14,19 @@ import {
   Table,
   Typography,
 } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+
+interface TableParams {
+  pagination?: TablePaginationConfig;
+  sortField?: string;
+  sortOrder?: string;
+  filters?: Record<string, FilterValue | null>;
+}
 
 export default function Tenant() {
   const { notification } = App.useApp();
@@ -26,22 +34,46 @@ export default function Tenant() {
   const apiManager = useApiClient(MANAGERS_PATH);
 
   const [tenants, setTenants] = useState<TenantEntity[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [tableParams, setTableParams] = useState<TableParams>({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
+  });
+
+  const fetchData = async () => {
+    try {
+      if (!tableParams.pagination?.current || !tableParams.pagination.pageSize)
+        return;
+
+      const { current, pageSize } = tableParams.pagination;
+      setIsLoading(true);
+      const response = await apiManager.getAllExtend('/tenants', {
+        offset: (current - 1) * pageSize,
+        limit: pageSize,
+      });
+
+      if (response?.success) {
+        setTenants(response.data.data);
+        setTableParams({
+          ...tableParams,
+          pagination: {
+            ...tableParams.pagination,
+            total: response.data.count,
+          },
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiManager.getAllExtend('/tenants');
-
-        if (response?.success) {
-          setTenants(response.data.data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     fetchData();
-  }, []);
+  }, [JSON.stringify(tableParams)]);
 
   const handleDeleteTenant = async (tenantId: number) => {
     const res = await apiManager.deleteByIdExtend('/tenant', tenantId);
@@ -52,6 +84,21 @@ export default function Tenant() {
       });
       const deletedTenant: TenantEntity = res.data.data;
       setTenants(tenants?.filter((tenant) => tenant.id !== deletedTenant.id));
+    }
+  };
+
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+  ) => {
+    setTableParams({
+      pagination,
+      filters,
+    });
+
+    // `dataSource` is useless since `pageSize` changed
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+      setTenants([]);
     }
   };
 
@@ -153,6 +200,9 @@ export default function Tenant() {
           className="w-full"
           columns={tenantsTableColumns}
           dataSource={tenants}
+          loading={isLoading}
+          pagination={tableParams.pagination}
+          onChange={handleTableChange}
         />
       </Row>
     </Card>

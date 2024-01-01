@@ -28,10 +28,8 @@ export default function ManagerLayout() {
   }, [navigate]);
 
   return (
-    <Layout className="h-screen">
-      <Layout.Sider theme="light" trigger={null} className="hidden lg:block">
-        <ManagerSider />
-      </Layout.Sider>
+    <div className="h-screen flex flex-row">
+      <ManagerSider />
       <Layout>
         <Layout.Header className="bg-white">
           <ManagerHeader />
@@ -40,6 +38,6 @@ export default function ManagerLayout() {
           <Outlet />
         </Layout.Content>
       </Layout>
-    </Layout>
+    </div>
   );
 }

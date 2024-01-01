@@ -1,4 +1,4 @@
-import { RoomEntity } from '@/models';
+import { useEffect, useState } from 'react';
 import {
   App,
   Button,
@@ -12,31 +12,69 @@ import {
   Table,
   Typography,
 } from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import RoomGridItem from './RoomGridItem';
-import { FaPlus } from 'react-icons/fa6';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import type { FilterValue } from 'antd/es/table/interface';
+import { RoomEntity } from '@/models';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApiClient } from '@/shared/hooks/api';
 import { MANAGERS_PATH, ROOMS_PATH } from '@/routes/routeNames';
-import { useEffect, useState } from 'react';
+import RoomGridItem from './RoomGridItem';
+import { FaPlus } from 'react-icons/fa6';
+
+interface TableParams {
+  pagination?: TablePaginationConfig;
+  sortField?: string;
+  sortOrder?: string;
+  filters?: Record<string, FilterValue | null>;
+}
 
 export default function ManagerRoom() {
   const { notification } = App.useApp();
   const navigate = useNavigate();
   const apiRoom = useApiClient(ROOMS_PATH);
   const apiManager = useApiClient(MANAGERS_PATH);
-  const [rooms, setRooms] = useState<RoomEntity[]>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await apiManager.getAllExtend('/rooms');
+  const [rooms, setRooms] = useState<RoomEntity[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [tableParams, setTableParams] = useState<TableParams>({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
+  });
+
+  const fetchData = async () => {
+    try {
+      if (!tableParams.pagination?.current || !tableParams.pagination.pageSize)
+        return;
+
+      const { current, pageSize } = tableParams.pagination;
+      setIsLoading(true);
+      const response = await apiManager.getAllExtend('/rooms', {
+        offset: (current - 1) * pageSize,
+        limit: pageSize,
+      });
+
       if (response && response.status === 200) {
         setRooms(response.data.data);
+        setTableParams({
+          ...tableParams,
+          pagination: {
+            ...tableParams.pagination,
+            total: response.data.count,
+          },
+        });
       }
-    };
+    } catch (error) {
+      console.error(error);
+    }
 
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [JSON.stringify(tableParams)]);
 
   const handleDeleteRoom = async (roomId: number) => {
     const res = await apiRoom.deleteById(roomId);
@@ -47,7 +85,22 @@ export default function ManagerRoom() {
       });
 
       const deletedRoom: RoomEntity = res.data.data;
-      setRooms(rooms?.filter((item) => item.id !== deletedRoom.id));
+      setRooms(rooms.filter((item) => item.id !== deletedRoom.id));
+    }
+  };
+
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+  ) => {
+    setTableParams({
+      pagination,
+      filters,
+    });
+
+    // `dataSource` is useless since `pageSize` changed
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+      setRooms([]);
     }
   };
 
@@ -138,6 +191,9 @@ export default function ManagerRoom() {
           className="w-full overflow-auto"
           columns={propertyTableColumns}
           dataSource={rooms}
+          pagination={tableParams.pagination}
+          onChange={handleTableChange}
+          loading={isLoading}
         />
       </Row>
     </Card>

@@ -11,12 +11,13 @@ interface IRoomsResponse {
   items: RoomEntity[];
 }
 
+const pageSize = 12; // Number of data items per page
+
 export default function RoomGrid() {
   const apiRoom = useApiClient(ROOMS_PATH);
   const [rooms, setRooms] = useState<IRoomsResponse>();
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12; // Number of data items per page
 
   useEffect(() => {
     const fetchData = async () => {

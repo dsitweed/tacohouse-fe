@@ -65,7 +65,7 @@ export default function Profile() {
   return (
     <Card>
       <Typography.Title level={3}>
-        Thông tin: {getFullUserName(user)}
+        {user.role} {getFullUserName(user)}
       </Typography.Title>
       <Form
         form={form}

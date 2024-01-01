@@ -183,6 +183,9 @@ yarn add react-to-print
 
 # Helmet for SEO
 yarn add react-helmet-async
+
+# FlowiseAI React library to display flowise chatbot on website
+yarn add flowise-embed flowise-embed-react
 ```
 
 ### `Firebase`
