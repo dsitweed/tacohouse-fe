@@ -2,6 +2,8 @@ import { getFullUserName } from '@/models';
 import { VoteEntity, VoteType } from '@/models/Vote.entity';
 import { VOTES_PATH } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
+import { useAppSelector } from '@/store/hooks';
+import { selectUser } from '@/store/slices/auth.slice';
 import {
   Card,
   Typography,
@@ -25,6 +27,7 @@ interface Props {
 export default function ReviewPane({ type, targetId }: Props) {
   const { t } = useTranslation();
   const { notification } = App.useApp();
+  const currentUser = useAppSelector(selectUser);
 
   const apiVote = useApiClient(VOTES_PATH);
   const [form] = Form.useForm();
@@ -32,7 +35,10 @@ export default function ReviewPane({ type, targetId }: Props) {
 
   useEffect(() => {
     const fetchVote = async () => {
-      const response = await apiVote.getAll();
+      const response = await apiVote.getAll({
+        targetId: targetId,
+        type: type,
+      });
       if (response?.success) {
         setVotes(response.data.data);
       }
@@ -63,7 +69,16 @@ export default function ReviewPane({ type, targetId }: Props) {
 
     if (response?.success) {
       notification.success({ message: 'Đã comment thành công' });
-      setVotes([...votes, response.data.data]);
+      // Add new created vote -> votes
+      const newVote: VoteEntity = response.data.data;
+      if (currentUser) {
+        newVote.voter = currentUser; // add info of voter = currentUser
+      }
+      const newVotes = [...votes, newVote].sort(
+        (a: VoteEntity, b: VoteEntity) => (a.star < b.star ? 1 : -1), // sort desc (default db also desc sort)
+      );
+      setVotes(newVotes);
+
       form.resetFields();
     }
   };

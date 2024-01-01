@@ -1,13 +1,12 @@
-import { Avatar, Badge, Menu, Typography } from 'antd';
-import { useCallback } from 'react';
+import { Avatar, Badge, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { BsDoorClosedFill, BsFilePersonFill } from 'react-icons/bs';
+import { FaBuilding, FaHome, FaFileInvoiceDollar } from 'react-icons/fa';
+
 import { useNavigate } from 'react-router-dom';
-import { FaBuilding, FaHome } from 'react-icons/fa';
-import { BsDoorClosedFill } from 'react-icons/bs';
-import { BsFilePersonFill } from 'react-icons/bs';
 // images
-import logo from '@/assets/logo.png';
 import avatar from '@/assets/images/avatar.jpg';
+import logo from '@/assets/logo.png';
 import { useAppSelector } from '@/store/hooks';
 import { selectUser } from '@/store/slices/auth.slice';
 
@@ -18,66 +17,78 @@ export default function ManagerSider() {
   const navigate = useNavigate();
   const currentUser = useAppSelector(selectUser);
 
-  const items = [
+  const siderItems = [
     {
       key: '/managers',
       label: t('routes.managers'),
-      icon: <FaHome size={18} />,
+      icon: <FaHome size={21} />,
       children: null,
     },
     {
       key: '/managers/buildings',
       label: t('routes.buildings'),
-      icon: <FaBuilding size={18} />,
+      icon: <FaBuilding size={21} />,
       children: null,
     },
     {
       key: '/managers/rooms',
       label: t('routes.rooms'),
-      icon: <BsDoorClosedFill size={18} />,
+      icon: <BsDoorClosedFill size={21} />,
       children: null,
     },
     {
       key: '/managers/tenants',
       label: t('routes.tenants'),
-      icon: <BsFilePersonFill size={18} />,
+      icon: <BsFilePersonFill size={21} />,
+      children: null,
+    },
+    {
+      key: '/managers/invoices',
+      label: t('routes.invoices'),
+      icon: <FaFileInvoiceDollar size={21} />,
       children: null,
     },
   ];
 
-  const siderItems = useCallback(
-    () =>
-      items.map((item) => ({
-        ...item,
-        label: item.label,
-        onClick: () => navigate(item.key),
-      })),
-    [navigate],
-  );
+  console.log({
+    location: location.pathname,
+  });
 
   return (
-    <div>
+    <div className="group transition-all duration-500 w-[76px] hover:w-[250px] relative">
       <div
-        className="flex items-center justify-center h-14 cursor-pointer"
+        className="flex items-center pl-2 h-14 cursor-pointer"
         onClick={() => navigate('/')}
       >
         <img src={logo} className="w-12 h-12" alt="web logo" />
-        <Title level={4} className="font-bold text-xl pt-6">
+        <Title
+          level={3}
+          className="group-hover:block hidden whitespace-nowrap font-bold text-xl pt-6"
+        >
           {t('webName')}
         </Title>
       </div>
       {/* LIST NAVIGATION*/}
-      <div>
-        <Menu
-          theme="light"
-          mode="inline"
-          className="px-2 pt-1 text-base font-semibold"
-          defaultSelectedKeys={[location.pathname]}
-          items={siderItems()}
-        />
+      <div className="px-4 mt-2">
+        {siderItems.map((item) => (
+          <div
+            key={item.key}
+            className={
+              item.key === location.pathname
+                ? 'flex gap-2 items-center p-2 rounded-lg cursor-pointer font-bold bg-blue-300'
+                : 'flex gap-2 items-center p-2 rounded-lg cursor-pointer'
+            }
+            onClick={() => navigate(item.key)}
+          >
+            <div className="py-1">{item.icon}</div>
+            <p className="group-hover:block hidden whitespace-nowrap text-lg">
+              {item.label}
+            </p>
+          </div>
+        ))}
       </div>
       {/* FOOTER OF SIDER */}
-      <div className="absolute bottom-4 flex items-center justify-center w-full gap-2">
+      <div className="group-hover:flex hidden whitespace-nowrap absolute bottom-4 items-center w-full pl-4 gap-2">
         <Badge status="success" dot={true}>
           <Avatar
             shape="square"

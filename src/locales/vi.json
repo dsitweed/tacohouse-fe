@@ -10,7 +10,8 @@
     "managers": "Quản lý",
     "buildings": "Tòa nhà",
     "rooms": "Các phòng",
-    "tenants": "Người thuê"
+    "tenants": "Người thuê",
+    "invoices": "Hóa đơn"
   },
   "common": {
     "pleaseEnter": "Vui lòng nhập",

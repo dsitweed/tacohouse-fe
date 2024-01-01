@@ -27,11 +27,12 @@ export default function RoomGridItem(props: RoomGridItemProps) {
 
       <div className="flex flex-col gap-3">
         <Link className="font-bold text-base" to={`/managers/rooms/${room.id}`}>
-          {room.name}
+          Tên phòng: {room.name}
         </Link>
+        <Typography>Tòa nhà: {room.building.name}</Typography>
         <Typography className="flex items-center text-gray-600">
           <MdOutlinePlace size={18} />
-          {room.building.address}
+          Địa chỉ: {room.building.address}
         </Typography>
         <Typography className="text-base text-light-pink">
           {room.price.toLocaleString()}VND /month
