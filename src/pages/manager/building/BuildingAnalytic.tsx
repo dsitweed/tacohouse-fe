@@ -1,6 +1,6 @@
 import { BuildingEntity } from '@/models/Building.entity';
 import { useApiClient } from '@/shared/hooks/api';
-import { Radio, Table, Typography, Progress, Button } from 'antd';
+import { Radio, Table, Typography, Progress, Button, Skeleton } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // building logo icon example
 import buildingIcon from '@/assets/logo.png';
 import { BUILDINGS_PATH } from '@/routes/routeNames';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Paragraph } = Typography;
 
@@ -16,20 +17,25 @@ interface BuildingAnalyticProps {
 }
 
 export default function ManagerBuilding(props: BuildingAnalyticProps) {
-  const [data, setData] = useState<BuildingEntity[]>([]);
   const navigate = useNavigate();
   const apiBuilding = useApiClient(BUILDINGS_PATH);
+  const { t } = useTranslation();
+
+  const [data, setData] = useState<BuildingEntity[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (e: any) => console.log(`radio checked:${e.target.value}`);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const response = await apiBuilding.getAll();
 
-      if (response) {
+      if (response?.status) {
         setData(response.data.data);
       }
+      setIsLoading(false);
     };
 
     fetchData();
@@ -66,6 +72,11 @@ export default function ManagerBuilding(props: BuildingAnalyticProps) {
     {
       title: 'Tenant',
       dataIndex: 'tenant',
+      render: (_, record) => {
+        let sum = 0;
+        record.rooms.map((room) => (sum += room.tenants.length));
+        return <p>{sum}</p>;
+      },
     },
     {
       title: 'Income',
@@ -80,11 +91,11 @@ export default function ManagerBuilding(props: BuildingAnalyticProps) {
   ];
 
   return (
-    <div>
+    <Skeleton loading={isLoading}>
       {/* BUILDING OVERVIEW HEADER */}
       <div className="flex items-center justify-between">
         <div>
-          <Title level={4}>Buildings</Title>
+          <Title level={4}>{t('common.building')}</Title>
           <Paragraph>
             Done this month{' '}
             <span className="text-blue-600 font-bold text-base">40%</span>
@@ -120,6 +131,6 @@ export default function ManagerBuilding(props: BuildingAnalyticProps) {
           </span>
         </Button>
       </div>
-    </div>
+    </Skeleton>
   );
 }

@@ -1,6 +1,6 @@
-import { getFullUserName } from '@/models';
+import { RoomEntity, getFullUserName } from '@/models';
 import { VoteEntity, VoteType } from '@/models/Vote.entity';
-import { VOTES_PATH } from '@/routes/routeNames';
+import { ROOMS_PATH, VOTES_PATH } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
 import { useAppSelector } from '@/store/hooks';
 import { selectUser } from '@/store/slices/auth.slice';
@@ -30,8 +30,10 @@ export default function ReviewPane({ type, targetId }: Props) {
   const currentUser = useAppSelector(selectUser);
 
   const apiVote = useApiClient(VOTES_PATH);
+  const apiRoom = useApiClient(ROOMS_PATH);
   const [form] = Form.useForm();
   const [votes, setVotes] = useState<VoteEntity[]>([]);
+  const [isHavePermission, setIsHavePermission] = useState(false);
 
   useEffect(() => {
     const fetchVote = async () => {
@@ -43,7 +45,22 @@ export default function ReviewPane({ type, targetId }: Props) {
         setVotes(response.data.data);
       }
     };
+
+    const fetchPermission = async () => {
+      if (type === 'ROOM') {
+        const response = await apiRoom.getById(targetId);
+        const room: RoomEntity = response?.data.data;
+
+        if (room?.building?.ownerId === currentUser?.id) {
+          setIsHavePermission(false);
+        } else {
+          setIsHavePermission(true);
+        }
+      }
+    };
+
     fetchVote();
+    fetchPermission();
   }, []);
 
   const averageStar = useMemo(() => {
@@ -52,10 +69,6 @@ export default function ReviewPane({ type, targetId }: Props) {
     const average = Math.round((sum / votes.length) * 10) / 10;
     return average || 0;
   }, [votes]);
-
-  const isHavePermission = useMemo(() => {
-    return true;
-  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleCreate = async (values: any) => {

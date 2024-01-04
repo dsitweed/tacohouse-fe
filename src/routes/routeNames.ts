@@ -9,7 +9,7 @@ export const FACILITIES_PATH = '/facilities';
 export const MANAGERS_PATH = '/managers';
 export const INVOICES_PATH = '/invoices';
 export const FILE_PATH = '/file';
-export const USER_PATH = '/user';
+export const USERS_PATH = '/users';
 export const ME_PATH = '/me';
 export const VOTES_PATH = '/votes';
 

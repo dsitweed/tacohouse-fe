@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './slices/auth.slice';
 import languageSlice from './slices/language.slice';
+import messageSlice from './slices/message.slice';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     language: languageSlice.reducer,
+    message: messageSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

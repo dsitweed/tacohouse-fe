@@ -1,7 +1,13 @@
 import { Avatar, Badge, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { BsDoorClosedFill, BsFilePersonFill } from 'react-icons/bs';
-import { FaBuilding, FaHome, FaFileInvoiceDollar } from 'react-icons/fa';
+import {
+  FaBuilding,
+  FaHome,
+  FaFileInvoiceDollar,
+  FaFacebookMessenger,
+} from 'react-icons/fa';
+import cn from 'classnames';
 
 import { useNavigate } from 'react-router-dom';
 // images
@@ -48,6 +54,12 @@ export default function ManagerSider() {
       icon: <FaFileInvoiceDollar size={21} />,
       children: null,
     },
+    {
+      key: '/managers/messages',
+      label: t('routes.messages'),
+      icon: <FaFacebookMessenger size={21} />,
+      children: null,
+    },
   ];
 
   console.log({
@@ -73,14 +85,13 @@ export default function ManagerSider() {
         {siderItems.map((item) => (
           <div
             key={item.key}
-            className={
-              item.key === location.pathname
-                ? 'flex gap-2 items-center p-2 rounded-lg cursor-pointer font-bold bg-blue-300'
-                : 'flex gap-2 items-center p-2 rounded-lg cursor-pointer'
-            }
+            className={cn(
+              'flex gap-2 items-center p-2 rounded-lg cursor-pointer',
+              item.key === location.pathname && 'font-bold bg-blue-300',
+            )}
             onClick={() => navigate(item.key)}
           >
-            <div className="py-1">{item.icon}</div>
+            <div className="py-1 px-[3px]">{item.icon}</div>
             <p className="group-hover:block hidden whitespace-nowrap text-lg">
               {item.label}
             </p>
