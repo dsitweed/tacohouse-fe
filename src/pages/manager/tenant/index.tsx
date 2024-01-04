@@ -1,6 +1,7 @@
 import { TenantEntity } from '@/models';
 import { MANAGERS_PATH, routes } from '@/routes/routeNames';
 import { useApiClient } from '@/shared/hooks/api';
+import { TableParams } from '@/types/antd';
 import {
   App,
   Button,
@@ -20,13 +21,6 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Record<string, FilterValue | null>;
-}
 
 export default function Tenant() {
   const { notification } = App.useApp();

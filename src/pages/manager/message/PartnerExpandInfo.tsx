@@ -1,6 +1,6 @@
 import { getFullUserName } from '@/models';
 import { useAppSelector } from '@/store/hooks';
-import { Avatar, Card, Divider, Empty } from 'antd';
+import { Avatar, Divider, Empty } from 'antd';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -10,9 +10,9 @@ export default function PartnerExpandInfo() {
 
   if (!currentPartner) {
     return (
-      <Card>
+      <div className="h-full flex items-center justify-center p-8">
         <Empty />
-      </Card>
+      </div>
     );
   }
 

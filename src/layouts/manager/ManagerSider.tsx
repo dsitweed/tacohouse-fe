@@ -62,10 +62,6 @@ export default function ManagerSider() {
     },
   ];
 
-  console.log({
-    location: location.pathname,
-  });
-
   return (
     <div className="group transition-all duration-500 w-[76px] hover:w-[250px] relative">
       <div

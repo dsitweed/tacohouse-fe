@@ -20,13 +20,7 @@ import { useApiClient } from '@/shared/hooks/api';
 import { MANAGERS_PATH, ROOMS_PATH } from '@/routes/routeNames';
 import RoomGridItem from './RoomGridItem';
 import { FaPlus } from 'react-icons/fa6';
-
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Record<string, FilterValue | null>;
-}
+import { TableParams } from '@/types/antd';
 
 export default function ManagerRoom() {
   const { notification } = App.useApp();

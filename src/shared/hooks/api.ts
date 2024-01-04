@@ -1,7 +1,10 @@
+import { App } from 'antd';
 import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useApiClient = <T = any>(url: string) => {
+  const { notification } = App.useApp();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async function getAll(params?: any) {
     const response = await axios.get<Response.IPaginationResult<T>>(url, {
@@ -9,6 +12,7 @@ export const useApiClient = <T = any>(url: string) => {
     });
 
     if (response.success) return response;
+    notification.error({ message: response.message });
   }
 
   async function getById(id: number, suffix?: string) {
@@ -24,18 +28,21 @@ export const useApiClient = <T = any>(url: string) => {
     }
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function create(data?: T) {
     const response = await axios.post(url, data);
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function update(id: number, data: T) {
     const response = await axios.patch(`${url}/${id}`, data);
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function deleteById(id: number) {
@@ -43,6 +50,7 @@ export const useApiClient = <T = any>(url: string) => {
 
     if (response.success) return response;
     else {
+      notification.error({ message: response.message });
       throw new Error();
     }
   }
@@ -57,6 +65,7 @@ export const useApiClient = <T = any>(url: string) => {
     );
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function getByIdExtend(extendUrl: string, id: number) {
@@ -65,18 +74,21 @@ export const useApiClient = <T = any>(url: string) => {
     );
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function createExtend(extendUrl: string, data?: T) {
     const response = await axios.post(`${url}${extendUrl}`, data);
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function updateExtend(extendUrl: string, id: number, data: T) {
     const response = await axios.patch(`${url}${extendUrl}/${id}`, data);
 
     if (response.success) return response;
+    else notification.error({ message: response.message });
   }
 
   async function deleteByIdExtend(extendUrl: string, id: number) {
@@ -84,6 +96,7 @@ export const useApiClient = <T = any>(url: string) => {
 
     if (response.success) return response;
     else {
+      notification.error({ message: response.message });
       throw new Error();
     }
   }

@@ -1,9 +1,9 @@
 import { getFullUserName } from '@/models';
 import { useAppSelector } from '@/store/hooks';
-import { Avatar, Card, Empty, Input } from 'antd';
-import { FaVideo, FaPhoneAlt } from 'react-icons/fa';
-import { IoSend } from 'react-icons/io5';
+import { Avatar, Empty, Input } from 'antd';
 import cn from 'classnames';
+import { FaPhoneAlt, FaVideo } from 'react-icons/fa';
+import { IoSend } from 'react-icons/io5';
 
 const listMessage = [
   {
@@ -42,9 +42,9 @@ export default function ChatBox() {
 
   if (!currentPartner) {
     return (
-      <Card>
+      <div className="h-full border-x flex justify-center items-center">
         <Empty />
-      </Card>
+      </div>
     );
   }
 
