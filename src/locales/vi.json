@@ -11,7 +11,8 @@
     "buildings": "Tòa nhà",
     "rooms": "Các phòng",
     "tenants": "Người thuê",
-    "invoices": "Hóa đơn"
+    "invoices": "Hóa đơn",
+    "messages": "Tin nhắn"
   },
   "common": {
     "pleaseEnter": "Vui lòng nhập",
@@ -41,7 +42,8 @@
     "room": "Phòng",
     "building": "Tòa nhà",
     "citizenNumber": "Số CCCD",
-    "phoneNumber": "Số điện thoại"
+    "phoneNumber": "Số điện thoại",
+    "age": "Tuổi"
   },
   "auth": {
     "footer": {
@@ -66,20 +68,22 @@
     "inviteSentence": "Chưa có tài khoản?",
     "forgotPassword": "Quên mật khẩu",
     "hadAccount": "Nếu bạn đã có tài khoản",
+    "signInFailed": "Sai mật khẩu hoặc email",
     "signInSuccess": "Đăng nhập thành công. Chúc bạn ngày mới vui vẻ!",
-    "signUpSuccess": "Sign up successful!",
-    "signOutSuccess": "Sign out successful!",
-    "signInRequired": "Please sign in with an account have valid permissions!"
+    "signUpSuccess": "Đăng ký tài khoản thành công!",
+    "signOutSuccess": "Đăng xuất thành công!",
+    "signInRequired": "Vui lòng đăng nhập bằng tài khoản có quyền hợp lệ!"
   },
   "building": {
     "buildingName": "Building name",
     "buildingType": "Building type",
     "buildingAddress": "Building Address",
     "buildingLogo": "Logo of building",
+    "notExits": "Tòa nhà không tồn tại",
     "new": {
-      "create": "Create new building",
-      "success": "Create new building success",
-      "failed": "Create new building failed"
+      "create": "Tạo tòa nhà mới",
+      "success": "Tạo tòa nhà mới thành công",
+      "failed": "Tạo tòa nhà mới không thành công"
     },
     "edit": {
       "success": "Edit building {{name}} success",

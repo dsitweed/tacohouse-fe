@@ -186,6 +186,9 @@ yarn add react-helmet-async
 
 # FlowiseAI React library to display flowise chatbot on website
 yarn add flowise-embed flowise-embed-react
+
+# A simple JavaScript utility for conditionally joining classNames together.
+yarn add classnames
 ```
 
 ### `Firebase`

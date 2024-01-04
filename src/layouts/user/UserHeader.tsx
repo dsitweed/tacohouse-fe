@@ -72,7 +72,8 @@ export default function UserHeader() {
         ) : (
           <>
             <Button
-              className="border border-primary font-bold"
+              type="primary"
+              className="font-bold"
               onClick={() => navigate('/auth/sign-in')}
             >
               {t('auth.signIn')}

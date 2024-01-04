@@ -8,6 +8,7 @@ export default {
         'light-green': '#52c41a',
         'light-pink': '#FF5A5F',
         primary: 'rgba(52, 86, 139, 1)',
+        'primary-container': '#d6e3ff',
       },
     },
   },

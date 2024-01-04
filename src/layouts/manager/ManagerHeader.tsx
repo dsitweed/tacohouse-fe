@@ -100,7 +100,7 @@ export default function ManagerHeader() {
       </div>
       <div className="flex items-center gap-3">
         <Input
-          className="h w-80 hidden lg:flex"
+          className="w-80 hidden lg:flex"
           prefix={<SearchOutlined className="mr-1" />}
           placeholder={`${t('common.search')}`}
         />

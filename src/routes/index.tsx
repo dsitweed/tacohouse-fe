@@ -21,6 +21,8 @@ import EditRoom from '@/pages/manager/room/EditRoom';
 import EditTenant from '@/pages/manager/tenant/EditTenant';
 import i18n from '@/locales/i18n';
 import Profile from '@/components/person/Profile';
+import ManagerInvoice from '@/pages/manager/invoice';
+import ManagerMessage from '@/pages/manager/message';
 
 const router = createBrowserRouter([
   {
@@ -151,6 +153,30 @@ const router = createBrowserRouter([
             handle: {
               crumb: () => <p>{i18n.t('common.edit')}</p>,
             },
+          },
+        ],
+      },
+      {
+        path: 'invoices',
+        handle: {
+          crumb: () => <Link to={'invoices'}>{i18n.t('routes.invoices')}</Link>,
+        },
+        children: [
+          {
+            index: true,
+            element: <ManagerInvoice />,
+          },
+        ],
+      },
+      {
+        path: 'messages',
+        handle: {
+          crumb: () => <Link to={'messages'}>{i18n.t('routes.messages')}</Link>,
+        },
+        children: [
+          {
+            index: true,
+            element: <ManagerMessage />,
           },
         ],
       },

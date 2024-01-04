@@ -32,7 +32,7 @@ export default function SignIn() {
         password,
       });
 
-      if (response) {
+      if (response?.status) {
         const { data } = response.data;
         // Save state => redux + show notification + redirect
         dispatch(authActions.signIn(data));
@@ -42,6 +42,8 @@ export default function SignIn() {
         });
 
         navigate('/');
+      } else {
+        notification.error({ message: t('auth.signInFailed') });
       }
     } catch (error) {
       console.error(error);
