@@ -1,10 +1,10 @@
-import { Col, Pagination, Row, Skeleton } from 'antd';
-import type { PaginationProps } from 'antd';
-import RoomGridItem from './RoomGridItem';
-import { useApiClient } from '@/shared/hooks/api';
-import { ROOMS_PATH } from '@/routes/routeNames';
-import { useEffect, useState } from 'react';
 import { RoomEntity } from '@/models';
+import { ROOMS_PATH } from '@/routes/routeNames';
+import { useApiClient } from '@/shared/hooks/api';
+import type { PaginationProps } from 'antd';
+import { Col, Pagination, Row, Skeleton } from 'antd';
+import { useEffect, useState } from 'react';
+import RoomGridItem from './RoomGridItem';
 
 interface IRoomsResponse {
   total: number;

@@ -9,10 +9,10 @@ export default function ManagerMessage() {
       <Col md={12} lg={5} className="h-full overflow-y-scroll scrollbar">
         <ListPartner />
       </Col>
-      <Col md={12} lg={13}>
+      <Col md={12} lg={13} className="h-full">
         <ChatBox />
       </Col>
-      <Col md={12} lg={6} className="hidden lg:block">
+      <Col md={12} lg={6} className="h-full hidden lg:block">
         <PartnerExpandInfo />
       </Col>
     </Row>

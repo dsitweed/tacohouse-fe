@@ -1,12 +1,14 @@
-import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
-import { App, Button, Typography } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
 import ChangeLanguage from '@/components/common/ChangeLanguage';
-import { authActions, selectUser } from '@/store/slices/auth.slice';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { useApiClient } from '@/shared/hooks/api';
 import { UserRole } from '@/shared/constants';
+import { useApiClient } from '@/shared/hooks/api';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { authActions, selectUser } from '@/store/slices/auth.slice';
+import { App, Avatar, Button, Dropdown, MenuProps, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { FaUserCircle } from 'react-icons/fa';
+import { MdOutlineLogout } from 'react-icons/md';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function UserHeader() {
   const { t } = useTranslation();
@@ -32,6 +34,30 @@ export default function UserHeader() {
       console.error(error);
     }
   };
+
+  const menuDropdownItems: MenuProps['items'] = [
+    {
+      label: (
+        <Link to={'/me'} className="flex items-center gap-2">
+          <FaUserCircle />
+          {t('me.profile')}
+        </Link>
+      ),
+      key: '1',
+    },
+    {
+      label: (
+        <Typography.Text
+          onClick={() => handleSignOut()}
+          className="flex items-center gap-2"
+        >
+          <MdOutlineLogout />
+          {t('auth.signOut')}
+        </Typography.Text>
+      ),
+      key: '0',
+    },
+  ];
 
   return (
     <div className="flex justify-between">
@@ -63,24 +89,29 @@ export default function UserHeader() {
       <div className="flex items-center justify-end gap-3">
         <ChangeLanguage />
         {currentUser ? (
-          <Button
-            className="border border-primary font-bold"
-            onClick={() => handleSignOut()}
+          <Dropdown
+            className="flex"
+            trigger={['click']}
+            menu={{
+              items: menuDropdownItems,
+            }}
           >
-            {t('auth.signOut')}
-          </Button>
+            <a onClick={(e) => e.preventDefault()}>
+              <Avatar src={currentUser.avatarUrl} />
+            </a>
+          </Dropdown>
         ) : (
           <>
             <Button
               type="primary"
               className="font-bold"
-              onClick={() => navigate('/auth/sign-in')}
+              onClick={() => navigate('/sign-in')}
             >
               {t('auth.signIn')}
             </Button>
             <Button
               className="border border-primary font-bold"
-              onClick={() => navigate('/auth/sign-up')}
+              onClick={() => navigate('/sign-up')}
             >
               {t('auth.signUp')}
             </Button>

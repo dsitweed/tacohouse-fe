@@ -5,8 +5,8 @@ import UserFooter from './UserFooter';
 
 export default function UserLayout() {
   return (
-    <Layout>
-      <Layout.Header className="pt-2" style={{ backgroundColor: '#fafafa' }}>
+    <Layout className="min-h-[100vh]">
+      <Layout.Header className="pt-2 bg-[#fafafa]">
         <UserHeader />
       </Layout.Header>
       <Layout.Content className="h-full px-10 py-4">

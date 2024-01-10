@@ -27,6 +27,7 @@
     "delete": "Xóa",
     "save": "Lưu",
     "cancel": "Hủy",
+    "ok": "Đồng ý",
     "cancelToolTipTitle": "Chắc chắn muốn hủy?",
     "submit": "Gửi",
     "loading": "Đang tải...",
@@ -138,7 +139,19 @@
   },
   "invoice": {
     "status": {
-      "PENDING": "Chưa thanh toán"
+      "PENDING": "Chưa thanh toán",
+      "OVERDUE": "Quá hạn thanh toán",
+      "PAID": "Hoàn thành"
+    },
+    "create": {
+      "success": "Tạo hóa đơn mới thành công"
+    },
+    "update": {
+      "success": "Chỉnh sửa hóa đơn thành công"
+    },
+    "delete": {
+      "title": "Xóa hóa đơn",
+      "success": "Xóa hóa đơn thành công"
     }
   },
   "uploadImage": {

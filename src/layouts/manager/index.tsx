@@ -23,7 +23,7 @@ export default function ManagerLayout() {
       notification.error({
         message: t('auth.signInRequired'),
       });
-      navigate('/auth/sign-in');
+      navigate('/sign-in');
     }
   }, [navigate]);
 

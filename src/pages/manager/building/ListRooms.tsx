@@ -30,6 +30,7 @@ import { ColumnsType } from 'antd/es/table';
 import { FaDownload } from 'react-icons/fa';
 import { IoPrint } from 'react-icons/io5';
 import { useReactToPrint } from 'react-to-print';
+import dayjs from 'dayjs';
 
 interface ListRoomsProps {
   buildingId: number;
@@ -212,6 +213,11 @@ export default function ListRooms({
 
       // UPDATE INVOICE
       if (newRowReCalculate.invoice === null) {
+        const dueDate = dayjs().set(
+          'day',
+          item.dueDate ? Number(item.dueDate) : 31,
+        );
+
         updatedInvoice = await apiInvoice.createExtend(
           `/${newRowReCalculate.id}/current-month`,
           {
@@ -219,6 +225,7 @@ export default function ListRooms({
             tenantIds: newRowReCalculate.tenants.map((tenant) => tenant.id),
             roomId: newRowReCalculate.id,
             buildingId: newRowReCalculate.buildingId,
+            dueDate,
           },
         );
       } else {

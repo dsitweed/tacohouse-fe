@@ -28,14 +28,18 @@ export default function SignUp() {
         notification.success({
           message: t('auth.signUpSuccess'),
         });
-        navigate('/auth/sign-in');
+        navigate('/sign-in');
       }
     } catch (error) {
       console.error(error);
     }
   };
   return (
-    <Row gutter={[0, 24]} justify="center" className="px-6 bg-white h-full">
+    <Row
+      gutter={[0, 24]}
+      justify="center"
+      className="bg-white h-full py-8 rounded-md"
+    >
       <Col
         xs={{ span: 24, offset: 0 }}
         md={{ span: 12 }}
@@ -147,7 +151,7 @@ export default function SignUp() {
 
           <Text className="font-semibold">
             {t('auth.hadAccount')}{' '}
-            <Link to={'/auth/sign-in'}>{t('auth.signIn')}</Link>
+            <Link to={'/sign-in'}>{t('auth.signIn')}</Link>
           </Text>
         </Form>
       </Col>

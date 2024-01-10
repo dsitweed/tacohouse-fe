@@ -27,7 +27,14 @@ export default function ListPartner() {
     try {
       setIsLoading(true);
       const response = await apiUser.getAll();
-      setListPartner(response?.data.data);
+      const partners: UserEntity[] = response?.data.data || [];
+
+      // set default partner
+      if (partners.length > 0 && !selectedPartner) {
+        dispatch(messageActions.selectPartner(partners[0]));
+      }
+      // set state
+      setListPartner(partners);
       setIsLoading(false);
     } catch (error) {
       console.error(error);

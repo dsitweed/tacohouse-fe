@@ -9,8 +9,8 @@ import facebookLogo from '@/assets/images/Facebook_logo.png';
 import githubLogo from '@/assets/images/Github_logo.png';
 import { useEffect } from 'react';
 import { useApiClient } from '@/shared/hooks/api';
-import { useAppDispatch } from '@/store/hooks';
-import { authActions } from '@/store/slices/auth.slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { authActions, selectUser } from '@/store/slices/auth.slice';
 const { Title, Text } = Typography;
 
 export default function SignIn() {
@@ -18,9 +18,14 @@ export default function SignIn() {
   const navigate = useNavigate();
   const { notification } = App.useApp();
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser);
   const apiSignIn = useApiClient('/auth/sign-in');
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/');
+    }
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const signIn = async (values: any) => {
@@ -52,7 +57,11 @@ export default function SignIn() {
   };
 
   return (
-    <Row gutter={[0, 24]} justify="center" className="h-full px-6 bg-white">
+    <Row
+      gutter={[0, 24]}
+      justify="center"
+      className="h-full bg-white py-8 rounded-md"
+    >
       <Col
         xs={{ span: 24, offset: 0 }}
         md={{ span: 12 }}
@@ -87,7 +96,14 @@ export default function SignIn() {
             className="w-8 h-8 cursor-pointer"
           />
         </div>
-        <Form layout="vertical" onFinish={signIn}>
+        <Form
+          layout="vertical"
+          onFinish={signIn}
+          initialValues={{
+            email: 'tenant@gmail.com',
+            password: '123456',
+          }}
+        >
           <Form.Item
             label="Email"
             name="email"
@@ -147,7 +163,7 @@ export default function SignIn() {
 
           <Text className="font-semibold">
             {t('auth.inviteSentence')}{' '}
-            <Link to={'/auth/sign-up'}>{t('auth.signUp')}</Link>
+            <Link to={'/sign-up'}>{t('auth.signUp')}</Link>
           </Text>
           <br />
           <Link to={'#'}>{t('auth.forgotPassword')}</Link>
