@@ -10,7 +10,7 @@ import {
   FaParking,
   FaWifi,
 } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // images
 import aboutHotel from '@/assets/images/about-hotel.jpg';
 import bgImg from '@/assets/images/mountain_2.jpg';
@@ -109,7 +109,12 @@ export default function UserDashboard() {
           loading="lazy"
         />
       </Row>
-      <RoomGrid />
+      <div>
+        <div className="flex justify-end pr-12">
+          <Link to={'/filter'}>{`Xem tất cả >>`}</Link>
+        </div>
+        <RoomGrid />
+      </div>
       {/* OVERVIEW INFORMATION */}
       <Row gutter={[24, 24]}>
         <Col md={24} lg={12}>

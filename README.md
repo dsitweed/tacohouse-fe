@@ -189,6 +189,9 @@ yarn add flowise-embed flowise-embed-react
 
 # A simple JavaScript utility for conditionally joining classNames together.
 yarn add classnames
+
+# Socketio client for FE
+yarn add socket.io-client
 ```
 
 ### `Firebase`

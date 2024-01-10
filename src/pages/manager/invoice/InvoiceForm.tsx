@@ -171,6 +171,10 @@ export default function InvoiceForm() {
           ]}
         >
           <InputNumber
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            parser={(value) => value!.replace(/,/g, '')}
             className="w-full"
             placeholder={t('common.requiredTrue')}
           />

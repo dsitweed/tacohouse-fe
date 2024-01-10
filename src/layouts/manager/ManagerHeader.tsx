@@ -68,7 +68,7 @@ export default function ManagerHeader() {
   const menuDropdownItems: MenuProps['items'] = [
     {
       label: (
-        <Link to={'/managers/me'} className="flex items-center gap-2">
+        <Link to={'/me'} className="flex items-center gap-2">
           <FaUserCircle />
           {t('me.profile')}
         </Link>

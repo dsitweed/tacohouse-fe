@@ -8,7 +8,6 @@ import ManagerDashboard from '@/pages/manager/dashboard';
 import ManagerBuilding from '@/pages/manager/building';
 import ManagerRoom from '@/pages/manager/room';
 import UserDashboard from '@/pages/user/dashboard';
-import AuthLayout from '@/layouts/user/AuthLayout';
 import Dev from '../pages/Dev';
 import CreateBuilding from '@/pages/manager/building/CreateBuilding';
 import CreateRoom from '@/pages/manager/room/CreateRoom';
@@ -23,17 +22,17 @@ import i18n from '@/locales/i18n';
 import Profile from '@/components/person/Profile';
 import ManagerInvoice from '@/pages/manager/invoice';
 import ManagerMessage from '@/pages/manager/message';
+import FilterRoomPage from '@/pages/user/filter/FilterRoomPage';
 
 const router = createBrowserRouter([
   {
-    path: '/auth',
-    element: <AuthLayout />,
+    path: '/',
+    element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        // To prevent user accesses the /auth path
         index: true,
-        element: <SignIn />,
+        element: <UserDashboard />,
       },
       {
         path: 'sign-in',
@@ -43,21 +42,17 @@ const router = createBrowserRouter([
         path: 'sign-up',
         element: <SignUp />,
       },
-    ],
-  },
-  {
-    path: '/',
-    element: <UserLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        // Public routes
-        index: true,
-        element: <UserDashboard />,
-      },
       {
         path: 'rooms/:roomId',
         element: <SingleRoom />,
+      },
+      {
+        path: 'filter',
+        element: <FilterRoomPage />,
+      },
+      {
+        path: 'me',
+        element: <Profile />,
       },
     ],
   },
@@ -179,10 +174,6 @@ const router = createBrowserRouter([
             element: <ManagerMessage />,
           },
         ],
-      },
-      {
-        path: 'me',
-        element: <Profile />,
       },
       {
         path: 'dev',
